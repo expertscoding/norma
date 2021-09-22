@@ -1,0 +1,14 @@
+﻿@model int
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Edit A</h1>
+
+You would be editing the record with id = @Model
+<br />
+<br />
+<p>
+    We don't let you modify imaginary records but you can try to delete it <a asp-action="delete" asp-route-id="@Model">Delete</a>
+     or <a asp-action="details" asp-route-id="@Model">CANCEL</a>
+</p>

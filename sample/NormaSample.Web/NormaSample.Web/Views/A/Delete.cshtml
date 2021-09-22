@@ -1,0 +1,15 @@
+﻿@model int
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete A</h1>
+
+Only an administrator should see this page.
+
+You would be deleting the record with id = @Model 
+<br />
+<br />
+<p>
+    We don't let you delete imaginary records. Better go to<a asp-action="details" asp-route-id="@Model">DETAILS</a>
+</p>

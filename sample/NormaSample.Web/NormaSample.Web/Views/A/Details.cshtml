@@ -1,0 +1,13 @@
+﻿@model int
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details A</h1>
+
+Has pulsado el id = @Model
+<br />
+<br />
+<p>
+    <a asp-action="Edit" asp-route-id="@Model">Edit</a> or <a asp-action="Index">BACK</a>
+</p>

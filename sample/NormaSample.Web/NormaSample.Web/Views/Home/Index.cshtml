@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>This is the Sample application for <a href="https://docs.microsoft.com/aspnet/core">Norma</a>.</p>
+    <p>
+        The original permissions set in Db project are:
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th> App Resource </th>
+                    <th> App Action </th>
+                    <th> MVC Controller - Action </th>
+                    <th> Comments </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> N/A </td>
+                    <td> Initial Screen </td>
+                    <td> Home - Index </td>
+                    <td> Every body should see this view due to BypassNorma Attribute in Index Action</td>
+                </tr>
+                <tr>
+                    <td> A </td>
+                    <td> Lista </td>
+                    <td> A - Index </td>
+                    <td>
+                        Only 'user' and 'Admin' profiles can acces this view.
+                        'A' resource is taken from controller name. 'List' action is taken from NormaAction Attribute in inex action
+                    </td>
+                </tr>
+                <tr>
+                    <td> A </td>
+                    <td> Consultar </td>
+                    <td> A - Index </td>
+                    <td>
+                        Both, 'user' and 'Admin' profiles can acces this view.
+                        'A' resource is taken from controller name. 'Listar' action is taken from NormaAction Attribute in mvc action
+                    </td>
+                </tr>
+                <tr>
+                    <td> A </td>
+                    <td> Detalles </td>
+                    <td> A - Details </td>
+                    <td>
+                        every profile can acces this view.
+                        'A' resource is taken from controller name. 'Detalles' action is taken from NormaAction Attribute in mvc action.
+                        As no action has that name, Norma evaluates to pass due to default behaviour in option NoPermissionAction.
+                    </td>
+                </tr>
+                <tr>
+                    <td> A </td>
+                    <td> Edit </td>
+                    <td> A - Edit </td>
+                    <td>
+                        Only 'user' and 'Admin' profiles can acces this view.
+                        'A' resource is taken from controller name. 'Edit' action is taken from action name in mvc routing pattern.
+                    </td>
+                </tr>
+                <tr>
+                    <td> A </td>
+                    <td> Delete </td>
+                    <td> A - Delete </td>
+                    <td>
+                        Only 'Admin' profile can acces this view.
+                        'A' resource is taken from controller name. 'Delete' action is taken from action name in mvc routing pattern.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </p>
+    <p>
+        Menu S is intended for Json provider (comment area in Norma configuration at startup class) as permissions defined in appsettings.Development.json defines
+        <br />
+        Please, note that with EF Provider, Menu S is totally accesible with default configuration as no permissions are present in database with the name given in code.
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th> App Permission </th>
+                    <th> MVC Controller - Action </th>
+                    <th> Comments </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> Initial Screen </td>
+                    <td> Home - Index </td>
+                    <td> Every body should see this view due to BypassNorma Attribute in Index Action</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td> ListarS </td>
+                    <td> S - Index </td>
+                    <td> Both, 'user' and 'Admin' profiles can acces this view as they have ListarS permission and NormaAction attribute marks Index action with tah permission</td>
+                </tr>
+                <tr>
+                    <td> ConsultarS </td>
+                    <td> S - Details </td>
+                    <td> Both, 'user' and 'Admin' profiles can acces this view as they have ConsultarS permission and NormaAction attribute marks Index action with tah permission</td>
+                </tr>
+                <tr>
+                    <td> EditarS </td>
+                    <td> S - Edit </td>
+                    <td> Only 'Admin' profile can acces this view as it has EditarS permission and NormaAction attribute marks Index action with tah permission</td>
+                </tr>
+            </tbody>
+        </table>
+    </p>
+</div>
