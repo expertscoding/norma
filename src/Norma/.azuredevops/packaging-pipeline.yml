@@ -8,7 +8,7 @@ trigger:
 
 variables:
   buildConfiguration: 'Release'
-  packageVersion: $[ format('0.0.{0}-beta', variables['build.BuildNumber'])]
+  packageVersion: $[ format('1.0.{0}-RC', variables['build.BuildNumber'])]
 
 pool:
   vmImage: windows-latest
