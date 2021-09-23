@@ -4,11 +4,11 @@
 # https://aka.ms/yaml
 
 trigger:
-  - master
+  - main
 
 variables:
   buildConfiguration: 'Release'
-  packageVersion: $[ format('1.0.{0}-RC', variables['build.BuildNumber'])]
+  packageVersion: $[ format('0.0.{0}-RC', variables['build.BuildNumber'])]
 
 pool:
   vmImage: windows-latest
@@ -45,5 +45,5 @@ steps:
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'ff1db77c-8194-423e-a516-c0673806353f/34e0ef95-924d-448d-abc2-17b77c51f1fc'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Nuget'
