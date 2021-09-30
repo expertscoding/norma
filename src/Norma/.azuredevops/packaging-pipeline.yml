@@ -4,11 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-  - master
+  - main
 
 variables:
   buildConfiguration: 'Release'
-  packageVersion: $[ format('0.0.{0}-beta', variables['build.BuildNumber'])]
 
 pool:
   vmImage: windows-latest
@@ -41,9 +40,9 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'packageVersion'
 
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'ff1db77c-8194-423e-a516-c0673806353f/34e0ef95-924d-448d-abc2-17b77c51f1fc'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Nuget'
