@@ -16,7 +16,8 @@ steps:
 - task: UseDotNet@2
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: '3.1.412'
+    packageType: 'sdk'
+    version: '6.0.x'
     
 - task: NuGetCommand@2
   inputs:
@@ -46,3 +47,4 @@ steps:
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'Nuget'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
