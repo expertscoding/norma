@@ -17,7 +17,7 @@ steps:
   displayName: 'Use .NET Core sdk'
   inputs:
     packageType: 'sdk'
-    version: '6.0.x'
+    useGlobalJson: true
     
 - task: NuGetCommand@2
   inputs:
@@ -30,8 +30,9 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
   inputs:
     command: 'build'
-    projects: '**/*.csproj'
+    projects: '**/EC.Norma.csproj;**/Ec.Norma.Json.csproj;**/EC.Norma.EF.csproj'
     arguments: '--configuration $(buildConfiguration)'
+
 
 - task: DotNetCoreCLI@2
   inputs:
