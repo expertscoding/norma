@@ -13,24 +13,44 @@ pool:
   vmImage: windows-latest
 
 steps:
+
 - task: UseDotNet@2
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: '3.1.412'
+    packageType: 'sdk'
+    version: '3.1.x'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/Ec.Norma.Db.Build.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
     
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    restoreSolution: '**/*.sln'
+    projects: |
+      **/EC.Norma.csproj
+      **/Ec.Norma.Json.csproj
+      **/EC.Norma.EF.csproj
     feedsToUse: 'select'
-    vstsFeed: '277be0a5-355d-4526-ae4c-59ebf68fc8ca'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build $(buildConfiguration)'
   inputs:
     command: 'build'
-    projects: '**/*.csproj'
+    projects: |
+      **/EC.Norma.csproj
+      **/Ec.Norma.Json.csproj
+      **/EC.Norma.EF.csproj
     arguments: '--configuration $(buildConfiguration)'
+
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -46,3 +66,4 @@ steps:
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'Nuget'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
