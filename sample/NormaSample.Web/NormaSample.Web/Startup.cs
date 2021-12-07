@@ -81,12 +81,14 @@ namespace NormaSample.Web
                 {
                     opt.MissingRequirementAction = MissingRequirementBehaviour.LogOnly;
                 })
-                /*.AddNormaEFStore(opt =>
-                {
-                    opt.UseSqlServer(Configuration.GetConnectionString("Norma"));
-                    opt.EnableSensitiveDataLogging();
-                });*/
+                //.AddNormaEFStore(opt =>
+                //{
+                //    opt.UseSqlServer(Configuration.GetConnectionString("Norma"));
+                //    opt.EnableSensitiveDataLogging();
+                //});
                 .AddNormaJsonStore(Configuration.GetSection("profiles").Get<List<Profile>>());
+
+            services.AddMemoryCache();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
