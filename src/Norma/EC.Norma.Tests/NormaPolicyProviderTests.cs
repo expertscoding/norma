@@ -63,29 +63,38 @@ namespace EC.Norma.Tests
         }
 
         [Fact]
-        public async void GetPolicyAsync_WithData_HasCacheKeys()
+        public async void GetPolicyAsync_WithData_HasPermissionCacheKeys()
         {   
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
-            
+            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();            
             var cacheService = (IMemoryCache)fixture.WebAppFactory.Services.GetService<IMemoryCache>();
-
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
             policy.Should().NotBeNull();
 
-            string cachekeyPermissions = string.IsNullOrWhiteSpace(TestController.Name) ? $"{CacheKeys.NormaPermissions}|{nameof(TestController.PlainAction)}" : $"{CacheKeys.NormaPermissions}|{nameof(TestController.PlainAction)}|{TestController.Name}";
+            string cacheKeyPermissions = $"{CacheKeys.NormaPermissions}|{nameof(TestController.PlainAction)}|{TestController.Name}";
             
-            string cachekeyPolicies = string.IsNullOrWhiteSpace(TestController.Name) ? $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}" : $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}|{TestController.Name}";
-            
+            cacheService.Should().NotBeNull();
+
+            cacheService.Get<ICollection<Permission>>(cacheKeyPermissions).Should().NotBeNull();
+            cacheService.Get<ICollection<Permission>>(cacheKeyPermissions).Count().Should().Be(1);  
+        }
+
+        [Fact]
+        public async void GetPolicyAsync_WithData_HasPolicyCacheKeys()
+        {
+            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var cacheService = (IMemoryCache)fixture.WebAppFactory.Services.GetService<IMemoryCache>();
+            var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
+
+            policy.Should().NotBeNull();
+
+            string cacheKeyPolicies = $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}|{TestController.Name}";
 
             cacheService.Should().NotBeNull();
 
-            cacheService.Get<ICollection<Permission>>(cachekeyPermissions).Should().NotBeNull();
-            cacheService.Get<ICollection<Permission>>(cachekeyPermissions).Count().Should().Be(1);
-           
-            cacheService.Get<ICollection<Policy>>(cachekeyPolicies).Should().NotBeNull();
-            cacheService.Get<ICollection<Policy>>(cachekeyPolicies).Count().Should().Be(1);           
-            
+            cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Should().NotBeNull();
+            cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Count().Should().Be(1);
+
         }
 
         [Fact]
@@ -99,16 +108,16 @@ namespace EC.Norma.Tests
 
             policy.Should().NotBeNull();
 
-            string cachekeyPermissions = string.IsNullOrWhiteSpace(TestController.Name) ? $"{CacheKeys.NormaPermissions}|{nameof(TestController.PlainAction)}" : $"{CacheKeys.NormaPermissions}|{nameof(TestController.PlainAction)}|{TestController.Name}";
-            string cachekeyPolicies = string.IsNullOrWhiteSpace(TestController.Name) ? $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}" : $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}|{TestController.Name}";
-            
+            string cacheKeyPermissions = $"{CacheKeys.NormaPermissions}|{nameof(TestController.PlainAction)}|{TestController.Name}";
+            string cacheKeyPolicies = $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}|{TestController.Name}";
+
             //este tiempo se configura en el startUp del proyecto de test
             Thread.Sleep(10001);
 
             cacheService.Should().NotBeNull();
 
-            cacheService.Get<ICollection<Policy>>(cachekeyPermissions).Should().BeNull();
-            cacheService.Get<ICollection<Policy>>(cachekeyPolicies).Should().BeNull();
+            cacheService.Get<ICollection<Policy>>(cacheKeyPermissions).Should().BeNull();
+            cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Should().BeNull();
         }
     }
 }

@@ -70,13 +70,13 @@ namespace EC.Norma.Core
                     {
                         logger.LogTrace("  Requirement acquired. Getting Permissions.");
                         
-                        string cachekey = string.IsNullOrWhiteSpace(resource) ? $"{CacheKeys.NormaPermissions}|{action}" : $"{CacheKeys.NormaPermissions}|{action}|{resource}";  
-                      
-                        var permissions = cache.Get<ICollection<Permission>>(cachekey);
+                        string cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";
+
+                        var permissions = cache.Get<ICollection<Permission>>(cacheKey);
                         if (permissions == null)
                         {
                             permissions = string.IsNullOrWhiteSpace(resource) ? provider.GetPermissions(action) : provider.GetPermissions(action, resource);
-                            cache.Set(cachekey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
+                            cache.Set(cacheKey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
                         }
 
                         requirement.Action = action;
@@ -116,13 +116,13 @@ namespace EC.Norma.Core
 
         private IEnumerable<Policy> GetNormaPolicies(string action, string resource)
         {
-            string cachekey = string.IsNullOrWhiteSpace(resource) ? $"{CacheKeys.NormaPolicies}|{action}" : $"{CacheKeys.NormaPolicies}|{action}|{resource}";
+            string cacheKey = $"{CacheKeys.NormaPolicies}|{action}|{resource ?? ""}";
 
-            var policies = cache.Get<ICollection<Policy>>(cachekey);
+            var policies = cache.Get<ICollection<Policy>>(cacheKey);
             if (policies == null)
             {
                 policies = string.IsNullOrWhiteSpace(resource) ? provider.GetPoliciesForPermission(action) : provider.GetPoliciesForActionResource(action, resource);
-                cache.Set(cachekey, policies, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
+                cache.Set(cacheKey, policies, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
             }
 
             return policies;
