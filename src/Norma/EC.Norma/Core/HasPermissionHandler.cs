@@ -22,11 +22,11 @@ namespace EC.Norma.Core
 
             var profiles = context.User.Claims.Where(c => c.Type == "role").Select(c => c.Value).Distinct().ToArray();
 
-            logger.LogTrace("  Got profiles [{profiles} ]", profiles.Aggregate("", (s,p) => string.Concat(s," ", p)));
+            logger.LogTrace("Got profiles [{profiles} ]", profiles.Aggregate("", (s,p) => string.Concat(s," ", p)));
 
             var assignments = provider.GetAssignmentsForRoles(requirement.Permission, profiles);
 
-            logger.LogTrace("  Got permissions for profiles  [{permissions} ]", assignments.Select(a=>a.Permission.Name).Aggregate("", (s, p) => string.Concat(s, " ", p)));
+            logger.LogTrace("Got permissions for profiles  [{permissions} ]", assignments.Select(a=>a.Permission.Name).Aggregate("", (s, p) => string.Concat(s, " ", p)));
 
             if (assignments.Any())
             {
@@ -37,7 +37,7 @@ namespace EC.Norma.Core
                 context.Fail();
             }
 
-            logger.LogTrace("  Requirement result is {result}", context.HasSucceeded);
+            logger.LogTrace("Requirement result is {result}", context.HasSucceeded);
 
             return Task.CompletedTask;
         }
