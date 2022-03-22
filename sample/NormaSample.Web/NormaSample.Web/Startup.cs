@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using EC.Norma;
-using EC.Norma.EF;
 using EC.Norma.Json;
 using EC.Norma.Json.Entities;
 using EC.Norma.Options;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -76,7 +74,6 @@ namespace NormaSample.Web
                 };
             });
 
-
             services.AddNorma(opt =>
                 {
                     opt.MissingRequirementAction = MissingRequirementBehaviour.LogOnly;
@@ -87,6 +84,8 @@ namespace NormaSample.Web
                     opt.EnableSensitiveDataLogging();
                 });*/
                 .AddNormaJsonStore(Configuration.GetSection("profiles").Get<List<Profile>>());
+
+            services.AddMemoryCache();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
