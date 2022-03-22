@@ -69,8 +69,15 @@ namespace EC.Norma.Core
                     if (services.GetService(type) is NormaRequirement requirement)
                     {
                         logger.LogTrace("  Requirement acquired. Getting Permissions.");
+                        
+                        string cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";
 
-                        var permissions = string.IsNullOrWhiteSpace(resource) ? provider.GetPermissions(action) : provider.GetPermissions(action, resource);
+                        var permissions = cache.Get<ICollection<Permission>>(cacheKey);
+                        if (permissions == null)
+                        {
+                            permissions = string.IsNullOrWhiteSpace(resource) ? provider.GetPermissions(action) : provider.GetPermissions(action, resource);
+                            cache.Set(cacheKey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
+                        }
 
                         requirement.Action = action;
                         requirement.Resource = resource;
@@ -109,13 +116,16 @@ namespace EC.Norma.Core
 
         private IEnumerable<Policy> GetNormaPolicies(string action, string resource)
         {
-            if (string.IsNullOrWhiteSpace(resource))
+            string cacheKey = $"{CacheKeys.NormaPolicies}|{action}|{resource ?? ""}";
+
+            var policies = cache.Get<ICollection<Policy>>(cacheKey);
+            if (policies == null)
             {
-                // if no resource present, action is actually permission name
-                return provider.GetPoliciesForPermission(action);
+                policies = string.IsNullOrWhiteSpace(resource) ? provider.GetPoliciesForPermission(action) : provider.GetPoliciesForActionResource(action, resource);
+                cache.Set(cacheKey, policies, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
             }
 
-            return provider.GetPoliciesForActionResource(action, resource);
+            return policies;
         }
 
 

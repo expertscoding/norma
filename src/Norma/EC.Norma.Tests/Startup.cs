@@ -47,9 +47,11 @@ namespace EC.Norma.Tests
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
             });
 
-            services.AddNorma();
+            services.AddNorma(config => config.CacheExpiration = 10);
             services.AddTransient<INormaProvider, EFNormaProvider>();
             services.AddDbContext<NormaContext>(options => options.UseInMemoryDatabase("TestNorma"));
+
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
