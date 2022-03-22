@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
+using System;
 
 namespace NormaSample.Web
 {
@@ -10,7 +11,14 @@ namespace NormaSample.Web
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "The application failed");
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

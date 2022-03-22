@@ -26,7 +26,7 @@ namespace EC.Norma.Core
 
         protected INormaProvider provider;
 
-        public NormaPolicyProvider(IOptions<AuthorizationOptions> options, INormaProvider provider, 
+        public NormaPolicyProvider(IOptions<AuthorizationOptions> options, INormaProvider provider,
             IOptionsMonitor<NormaOptions> normaOptions,
             IMemoryCache cache, IServiceProvider serviceProvider, ILogger<NormaPolicyProvider> logger)
         {
@@ -51,9 +51,14 @@ namespace EC.Norma.Core
             var policies = GetNormaPolicies(action, resource).ToArray();
             var policyBuilder = new AuthorizationPolicyBuilder();
 
-            logger.LogTrace("  Got policies: [{policies} ]", policies.Select(p=> p.Name).Aggregate("",(s,p)=> string.Concat(s," ",p)));
+            logger.LogTrace("Got policies: [{policies} ]", policies.Select(p => p.Name).Aggregate("", (s, p) => string.Concat(s, " ", p)));
 
-            if (!policies.Any()) return FallbackPolicyProvider.GetPolicyAsync(policyName);
+            if (!policies.Any())
+            {
+                logger.LogTrace("No Norma policy found, requesting fallback provider");
+
+                return FallbackPolicyProvider.GetPolicyAsync(policyName);
+            }
 
 
             foreach (var policy in policies)
@@ -62,13 +67,13 @@ namespace EC.Norma.Core
                 {
                     var requirementName = SPACENAME + policy.Name + REQ_SUFFIX;
 
-                    logger.LogTrace("  Getting requirement {requirement}", requirementName);
+                    logger.LogTrace("Getting requirement {requirement}", requirementName);
 
                     var type = GetRequirementType(requirementName);
 
                     if (services.GetService(type) is NormaRequirement requirement)
                     {
-                        logger.LogTrace("  Requirement acquired. Getting Permissions.");
+                        logger.LogTrace("Requirement acquired. Getting Permissions.");
                         
                         string cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";
 
@@ -84,7 +89,7 @@ namespace EC.Norma.Core
                         requirement.Permission = permissions.First().Name;
                         policyBuilder.AddRequirements(requirement);
 
-                        logger.LogTrace("  Requirement Added (Action: {action}, Resource: {resource}, Permission: {permission})", action, resource, requirement.Permission);
+                        logger.LogTrace("Requirement Added (Action: {action}, Resource: {resource}, Permission: {permission})", action, resource, requirement.Permission);
                     }
                     else
                     {
@@ -93,12 +98,12 @@ namespace EC.Norma.Core
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError("  No requirement located for policy {policy}.", policy.Name);
+                    logger.LogError("No requirement located for policy {policy}.", policy.Name);
                     if (normaOptions.MissingRequirementAction == MissingRequirementBehaviour.ThrowException)
                     {
                         throw new TypeLoadException($"NormaRequirement for {policy} not found", ex);
                     }
-                        
+
                 }
             }
 
@@ -116,6 +121,7 @@ namespace EC.Norma.Core
 
         private IEnumerable<Policy> GetNormaPolicies(string action, string resource)
         {
+            logger.LogTrace("Getting Norma Policies");
             string cacheKey = $"{CacheKeys.NormaPolicies}|{action}|{resource ?? ""}";
 
             var policies = cache.Get<ICollection<Policy>>(cacheKey);
@@ -155,7 +161,7 @@ namespace EC.Norma.Core
 
                 cache.Set(className, requirementType, DateTimeOffset.MaxValue);
             }
- 
+
             return requirementType;
         }
     }
