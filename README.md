@@ -22,17 +22,17 @@ Other auxiliary concepts in **Norma** are:
 
 If we adapt the concepts to a normal LOB web application, in this case a small application to manage the projects an employee is assigned to in a consultancy firm, you will have:
 - Resources: typically, each business entity is a resource. Employees, Projects...
-- Actions: Search, ReadDetail, Modify, Create anddelete are the usual actions. 
-- Permissions: here is the relations between every resource with every employee. Depending on other company applications, you may lack the permissions about create, modify and delete employees that will be read directly from this other sources.
+- Actions: Search, ReadDetail, Modify, Create and delete are the usual actions. 
+- Permissions: here is the relations between every resource with every employee. Depending on other company applications, you may lack the permissions about create, modify and delete employees that will be read directly from these other sources.
 - Profile: Read and Management will be the two profiles for this app.
 - Assignments: Read profile only will have assignments to permissions with Search and ReadDetail actions. Management profile will have   assignment to all the permissions. All assignments allow access to resource.
 - Policies: Only one policy is needed. This Policy will check that the user has a profile that has an assigment to the permission that relates the performed action over the selected resource. This policy is built-in **Norma**.
 
-#What Norma doesn´t do
+# What Norma doesn´t do
 
 **Norma** doesn´t care about Authentication, so has no methods to know the user that is acceding to your application. You have to rely on the Authentication middleware provided by Microsoft or another third party.
 
-#What Norma actually do
+# What Norma actually do
 
 Once you have an Authenticated user, Norma validates if it is allowed to access the resource that is requested.
 
@@ -41,13 +41,13 @@ In .Net Core terms, is a middleware that goes after the authentication middlewar
 # How to use it?
 This section is for a typical .Net MVC application (it doesn´t matter if it is a Rest Api or an application with server-side rendering views) that has controllers an actions within them.
 
-##Download the nuget package
+## Download the nuget package
 
 First of all, you have to download the nuget package.
 
 `$ dotnet add package Norma`
 
-##Using Norma in your application
+## Using Norma in your application
 In the ConfigureService method, in your startup.cs file:
 
         public void ConfigureServices(IServiceCollection services)
@@ -98,7 +98,7 @@ In the method _AddNorma_ you can configure some defaults responses from Norma.
 
 - MissingRequirementAction: What Norma will do when no requirement class is found through reflection. The requirement class is the foundational class in .Net Core Authorization system. Each Policy in **Norma** is traduced in, at least, one requirement that is loaded onto memory through reflection. The behavior is marked by the members of the enum _MissingRequirementBehaviour_ : ThrowException (dafault) or LogObnly.
 
-##Configure Permission repository
+## Configure Permission repository
 
 Before you can use **Norma**, you have to make an important decision, where to save the Permission data that **Norma** use to validate user`s access.
 -  **Json**: You can have a section in the appsettings.json file to configure permissions. This is only recommended for demo purposes in this stage, because for simplification, json setup only recognizes profiles, permissions and assignments. No resources nor actions nor policies are configured.
@@ -154,7 +154,7 @@ To use this provider add it in the _ConfigureServices_ method:
         }
 ``` 
 
-##Working with Norma
+## Working with Norma
 
 For each request in your MVC application, Norma will try to acquire a resource and action or, alternatively, a Permission.
 
@@ -186,7 +186,7 @@ If any permission is found, Norma search if any of the user`s profiles has that 
 
 Out of the box, Norma only checks if a user has a permission (if any of the profiles of an user has the permission) with the built-in Requirement _HasPermissionRequirement_
 
-#Extending Norma
+# Extending Norma
 Currently, only with database provider is possible to create your own Requirements and RequirementHandlers (as is described in Microsoft [documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-5.0) to be used by **Norma**
 
 You have to inherit from _NormaRequirement_ and Resource and Action are passed by **Norma**.
@@ -200,7 +200,7 @@ In order to evaluate the requirement, you have to register the requirement handl
 services.AddTransient<IAuthorizationHandler, HasPermissionHandler>();
 ```
 
-#Future features
+# Future features
 
 We have a lot of plans about **Norma** and we will very pleased to hear from you about your desires about **Norma** evolution.
 
