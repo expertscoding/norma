@@ -6,14 +6,14 @@ using System.Text;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class ActionTypeConfiguration : IEntityTypeConfiguration<Action>
+    public class ApplicationTypeConfiguration : IEntityTypeConfiguration<Application>
     {
-        public void Configure(EntityTypeBuilder<Action> builder)
+        public void Configure(EntityTypeBuilder<Application> builder)
         {
-            builder.ToTable("Actions");
+            builder.ToTable("Applications");
             builder.HasKey(a => a.Id);
 
-            builder.HasOne(a => a.Module).WithMany().HasForeignKey(a => a.IdModule);
+
         }
     }
 }

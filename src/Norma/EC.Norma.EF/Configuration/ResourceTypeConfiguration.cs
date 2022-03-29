@@ -11,7 +11,7 @@ namespace EC.Norma.EF.Configuration
             builder.ToTable("Resources");
             builder.HasKey(a => a.Id);
 
-
+            builder.HasOne(a => a.Module).WithMany().HasForeignKey(a => a.IdModule);
         }
     }
 }
