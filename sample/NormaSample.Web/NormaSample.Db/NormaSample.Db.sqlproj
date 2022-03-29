@@ -71,4 +71,8 @@
   <ItemGroup>
     <PostDeploy Include="PostDeployment.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Applications.sql" />
+    <None Include="Scripts\Modules.sql" />
+  </ItemGroup>
 </Project>

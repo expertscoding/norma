@@ -1,14 +1,14 @@
 ﻿MERGE INTO [norma].[Resources] AS Target
 USING ( VALUES 
-	('A'),
-	('B'),
-	('VentanaAdmin'),
-	('MenuA'),
-	('MenuB'),
-	('MenuAdmin')
+	('A', (Select Id from norma.Modules where Name='DefaultModule')),
+	('B', (Select Id from norma.Modules where Name='DefaultModule')),
+	('VentanaAdmin', (Select Id from norma.Modules where Name='DefaultModule')),
+	('MenuA', (Select Id from norma.Modules where Name='DefaultModule')),
+	('MenuB', (Select Id from norma.Modules where Name='DefaultModule')),
+	('MenuAdmin', (Select Id from norma.Modules where Name='DefaultModule'))
 )
-AS Source (Name)
+AS Source (Name,[IdModule])
 ON Target.[Name] = Source.[Name]
 WHEN NOT MATCHED BY TARGET THEN
-	INSERT ([Name])
-	VALUES ([Name]);
+	INSERT ([Name],[IdModule])
+	VALUES ([Name],[IdModule]);

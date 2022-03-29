@@ -9,6 +9,11 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+
+:r ./Scripts/Applications.sql
+
+:r ./Scripts/Modules.sql
+
 :r ./Scripts/Profiles.sql
 
 :r ./Scripts/Resources.sql
