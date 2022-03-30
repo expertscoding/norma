@@ -74,6 +74,8 @@
     <Build Include="Tables\Applications.sql" />
     <Build Include="Tables\Modules.sql" />
     <None Include="Scripts\Policies.sql" />
-    <PostDeploy Include="01.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\01.PostDeployment.sql" />
   </ItemGroup>
 </Project>

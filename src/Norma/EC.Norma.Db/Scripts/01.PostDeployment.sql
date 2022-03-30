@@ -11,4 +11,4 @@ Post-Deployment Script Template
 */
 
 
-:r ./Scripts/Policies.sql
+:r ./Policies.sql
