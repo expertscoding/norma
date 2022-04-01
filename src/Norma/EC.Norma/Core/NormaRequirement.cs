@@ -13,6 +13,8 @@ namespace EC.Norma.Core
 
         public string Permission { get; set; }
 
+        public int Priority { get; set; }
+
         public NormaRequirement()
         {
 
