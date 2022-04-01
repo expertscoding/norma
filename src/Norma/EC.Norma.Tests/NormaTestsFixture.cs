@@ -23,6 +23,12 @@ namespace EC.Norma.Tests
         {
             var db = WebAppFactory.Services.GetService<NormaContext>();
 
+            var application1 = new Application { Id = Sequencer.GetId(), Name = "application1", ApplicationId = "application1" };
+            db.Applications.Add(application1);
+
+            var application2 = new Application { Id = Sequencer.GetId(),Name="application2", ApplicationId= "application2" };
+            db.Applications.Add(application1);
+
             var policy = new Policy { Id = Sequencer.GetId(), Name = "HasPermission" };
             db.Policies.Add(policy);
 
@@ -32,29 +38,48 @@ namespace EC.Norma.Tests
             var policyWithOutConfiguredClass = new Policy { Id = Sequencer.GetId(), Name = "NonConfigured" };
             db.Policies.Add(policyWithOutConfiguredClass);
 
-            var resource = new Resource { Id = Sequencer.GetId(), Name = TestController.Name };
+            var module1 = new Module { Id = Sequencer.GetId(), Name = "module1", Application=application1, IdApplication = application1.Id };
+            db.Modules.Add(module1);
+            
+            var module2 = new Module { Id = Sequencer.GetId(), Name = "module2", Application = application2, IdApplication = application2.Id };
+            db.Modules.Add(module2);
+
+
+            var resource = new Resource { Id = Sequencer.GetId(), Name = TestController.Name, Module= module1, IdModule=module1.Id };
             db.Resources.Add(resource);
 
+
+            var resource2 = new Resource { Id = Sequencer.GetId(), Name = TestController.Name, Module = module2, IdModule = module2.Id };
+            db.Resources.Add(resource2);
+
+           
+
             // PlainAction
-            ConfigureAction(db, nameof(TestController.PlainAction), policy, resource, "User", true);
+            ConfigureAction(db, nameof(TestController.PlainAction), policy, resource, "User", true, module1);
 
             // AnnotatedAction Action -> The action name is redefined to List
-            ConfigureAction(db, "List", policy, resource, "User", false);
+            ConfigureAction(db, "List", policy, resource, "User", false, module1);
             
             // WithoutPermissions Action
-            ConfigureAction(db, nameof(TestController.WithoutConfiguredRequirement), policyWithOutConfiguredClass, null, null, false);
+            ConfigureAction(db, nameof(TestController.WithoutConfiguredRequirement), policyWithOutConfiguredClass, null, null, false, module1);
 
             // WithoutPermissions Action
-            ConfigureAction(db, nameof(TestController.WithoutRequirement), policyWithOutClass, null, null, false);
+            ConfigureAction(db, nameof(TestController.WithoutRequirement), policyWithOutClass, null, null, false, module1);
+
+            //PlainActionApplication2
+            ConfigureAction(db, nameof(TestController.PlainActionApplication2), policy, resource, "User", true, module2);
+
+            // PlainAction Module2
+            ConfigureAction(db, nameof(TestController.PlainAction), policy, resource2, "User", true, module2);
 
             db.SaveChanges();
         }
 
 
-        protected void ConfigureAction(NormaContext db, string actionName, Policy policy, Resource resource, string profileName, bool assign)
+        protected void ConfigureAction(NormaContext db, string actionName, Policy policy, Resource resource, string profileName, bool assign, Module module)
         {
             // PlainAction
-            var action = new Action { Id = Sequencer.GetId(), Name = actionName };
+            var action = new Action { Id = Sequencer.GetId(), Name = actionName, Module = module, IdModule= module.Id };
             db.Actions.Add(action);
 
             db.ActionsPolicies.Add(new ActionsPolicy { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Policy = policy, IdPolicy = policy.Id });

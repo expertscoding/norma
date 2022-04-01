@@ -8,6 +8,7 @@ namespace EC.Norma.Tests
         public const string Name = "Test";
 
         public IActionResult PlainAction() => Ok();
+        public IActionResult PlainActionApplication2() => Ok();
 
         [ByPassNorma]
         public IActionResult ByPassedAction() => Ok();

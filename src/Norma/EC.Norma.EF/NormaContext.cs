@@ -43,7 +43,11 @@ namespace EC.Norma.EF
 
         public virtual DbSet<ActionsPolicy> ActionsPolicies { get; set; }
 
+        public virtual DbSet<Application> Applications { get; set; }
+
         public virtual DbSet<Assignment> Assignments { get; set; }
+
+        public virtual DbSet<Module> Modules { get; set; }
 
         public virtual DbSet<Permission> Permissions { get; set; }
 
