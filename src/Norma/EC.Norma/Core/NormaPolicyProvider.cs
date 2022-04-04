@@ -71,7 +71,6 @@ namespace EC.Norma.Core
 
                     var type = GetRequirementType(requirementName);
 
-
                     logger.LogTrace("Requirement acquired. Getting Permissions.");
 
                     string cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";

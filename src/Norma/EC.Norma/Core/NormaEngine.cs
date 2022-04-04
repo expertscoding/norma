@@ -80,73 +80,34 @@ namespace EC.Norma.Core
             }
             else
             {
-                result = await AuthorizeAsync(context.User, policy);
+                result = AuthorizeGroupedPrioritizedPolicies(context.User, policy);
             }
 
             return result;
         }
 
 
-
-        private async Task<AuthorizationResult> Authorize2Async(ClaimsPrincipal user, AuthorizationPolicy policy)
-        {
-            if (policy.Requirements?.Any() == true && policy.Requirements.Count() > 1)
-            {
-                AuthorizationResult result = null;
-
-                var priorizedPolicies = policy.Requirements.Select(x => x as NormaRequirement).GroupBy(x => x.Priority).OrderBy(x => x.Key).Select(g => new
-                {
-                    g.Key,
-                    policy = new AuthorizationPolicyBuilder().AddRequirements(g.Select(x => x as IAuthorizationRequirement).ToArray()).Build()
-                });
-                               
-                foreach(var priorizedPolicy in priorizedPolicies)
-                {
-                   result = await authorizationService.AuthorizeAsync(user, priorizedPolicy.policy);
-                   if (result.Succeeded)
-                        break;
-                }
-
-                return result;
-            }
-
-            return await authorizationService.AuthorizeAsync(user, policy);
-        }
-
-        private async Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, AuthorizationPolicy policy)
-        {
-            if ( policy.Requirements?.Any() == true && policy.Requirements.Count() > 1)
-            {
-                var priorities = policy.Requirements.Select(x => (x as NormaRequirement).Priority).Distinct();
-
-                if (priorities.Count() > 1)
-                {
-                    return await AuthorizeByPriorityAsync(user, policy, priorities);
-                }
-            }
-
-            return await authorizationService.AuthorizeAsync(user, policy);
-        }
-
-        private async Task<AuthorizationResult> AuthorizeByPriorityAsync(ClaimsPrincipal user, AuthorizationPolicy policy, IEnumerable<int> priorities)
+        private AuthorizationResult AuthorizeGroupedPrioritizedPolicies(ClaimsPrincipal user, AuthorizationPolicy policy)
         {
             AuthorizationResult result = null;
 
-            foreach(var priority in priorities.OrderBy(x => x))
-            {
-                var prioricedPolicyBuilder = new AuthorizationPolicyBuilder();
-                var prioricedRequirements = (policy.Requirements as NormaRequirement[]).Where(x => x.Priority == priority);
-
-                prioricedPolicyBuilder.AddRequirements(prioricedRequirements as IAuthorizationRequirement);
-
-                var prioricedPolicy = prioricedPolicyBuilder.Build();
-
-                result = await authorizationService.AuthorizeAsync(user, prioricedPolicy);
-
-                if (result.Succeeded)
-                    break;
-            }
-
+            policy.Requirements
+                .Select(x => x as NormaRequirement)
+                .GroupBy(x => x.Priority)
+                .OrderBy(x => x.Key)
+                .Select(g => new
+                {
+                    g.Key,
+                    policy = new AuthorizationPolicyBuilder().AddRequirements(g.Select(x => x as IAuthorizationRequirement).ToArray()).Build()
+                })
+                .ToList()
+                .ForEach(async x =>
+                {
+                    result = await authorizationService.AuthorizeAsync(user, x.policy);
+                    if (result.Succeeded)
+                        return;
+                });
+              
             return result;
         }
 
