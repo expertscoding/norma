@@ -22,50 +22,58 @@ namespace EC.Norma.Tests
      
 
         [Fact]
-        public void GetGetPermissions_WithName_ReturnsPermissionForApplication()
+        public void GetGetPermissions_WithNameForApplication1_ReturnsPermissionForApplication()
         {            
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
             var permissions = provider.GetPermissions($"{nameof(TestController.PlainAction)}-{TestController.Name}");
 
-            permissions.Count.Should().Be(1);         
+            permissions.Count.Should().Be(1); 
+            permissions.FirstOrDefault().Action.Name.Should().Be(nameof(TestController.PlainAction));
+            permissions.FirstOrDefault().Resource.Name.Should().Be(TestController.Name);
+            permissions.FirstOrDefault().Action.Module.Application.Name.Should().Be("application1");
 
         }
 
         [Fact]
-        public void GetGetPermissions_WithActionAndResource_ReturnsPermissionForApplication()
+        public void GetPermissions_WithActionAndResourceForApplication1_ReturnsPermissionForApplication()
         {
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
             var permissions = provider.GetPermissions(nameof(TestController.PlainAction), TestController.Name);
 
             permissions.Count.Should().Be(1);
+            permissions.FirstOrDefault().Action.Name.Should().Be(nameof(TestController.PlainAction));
+            permissions.FirstOrDefault().Resource.Name.Should().Be(TestController.Name);
+            permissions.FirstOrDefault().Action.Module.Application.Name.Should().Be("application1");
         }
 
         [Fact]
-        public void GetPoliciesForPermission_WithName_ReturnsPermissionForApplication()
+        public void GetPoliciesForPermission_WithNameForApplication1_ReturnsPermissionForApplication()
         {
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
-            var permissions = provider.GetPoliciesForPermission($"{nameof(TestController.PlainAction)}-{TestController.Name}");
+            var policies = provider.GetPoliciesForPermission($"{nameof(TestController.PlainAction)}-{TestController.Name}");
 
-            permissions.Count.Should().Be(1);
+            policies.Count.Should().Be(1);
+            policies.FirstOrDefault().Name.Should().Be("HasPermission");
 
         }
 
         [Fact]
-        public void GetPoliciesForActionResource_WithActionAndResource_ReturnsPermissionForApplication()
+        public void GetPoliciesForActionResource_WithActionAndResourceForApplication1_ReturnsPermissionForApplication()
         {
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
-            var permissions = provider.GetPoliciesForActionResource(nameof(TestController.PlainAction), TestController.Name);
+            var policies = provider.GetPoliciesForActionResource(nameof(TestController.PlainAction), TestController.Name);
 
-            permissions.Count.Should().Be(1);
+            policies.Count.Should().Be(1);
+            policies.FirstOrDefault().Name.Should().Be("HasPermission");
         }
 
 
         [Fact]
-        public async void GetAssignmentsForRoles_WithPermissionsAndProfiles_ReturnsAssignmentsForApplication()
+        public async void GetAssignmentsForRoles_WithPermissionsAndProfilesForApplication1_ReturnsAssignmentsForApplication()
         {
             var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
@@ -80,6 +88,10 @@ namespace EC.Norma.Tests
             var assignments = provider.GetAssignmentsForRoles(permission, profiles);
 
             assignments.Count.Should().Be(1);
+            assignments.FirstOrDefault().Permission.Name.Should().Be("PlainAction-Test");
+            assignments.FirstOrDefault().Permission.Action.Name.Should().Be(nameof(TestController.PlainAction));
+            assignments.FirstOrDefault().Permission.Resource.Name.Should().Be(TestController.Name);
+            assignments.FirstOrDefault().Profile.Name.Should().Be("User");
         }
 
     }
