@@ -12,7 +12,7 @@ namespace EC.Norma.EF.Configuration
             builder.HasKey(a => a.Id);
 
             builder.HasOne(a => a.PriorityGroup).WithMany().HasForeignKey(a => a.IdPriorityGroup);
-            builder.HasOne(a => a.Policy).WithMany().HasForeignKey(a => a.IdPolicy);
+            builder.HasOne(a => a.Policy).WithMany(b => b.PoliciesPriorityGroups).HasForeignKey(a => a.IdPolicy);
         }
     }
 }

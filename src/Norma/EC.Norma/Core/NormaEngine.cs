@@ -103,9 +103,8 @@ namespace EC.Norma.Core
                 .ToList()
                 .ForEach(async x =>
                 {
-                    result = await authorizationService.AuthorizeAsync(user, x.policy);
-                    if (result.Succeeded)
-                        return;
+                    if(result == null || !result.Succeeded)
+                        result = await authorizationService.AuthorizeAsync(user, x.policy);
                 });
               
             return result;
