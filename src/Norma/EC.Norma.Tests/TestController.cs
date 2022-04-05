@@ -15,6 +15,9 @@ namespace EC.Norma.Tests
         [NormaAction("List")]
         public IActionResult AnnotatedAction() => Ok();
 
+        [NormaAction("TwoPoliciesAction")]
+        public IActionResult TwoPoliciesAction() => Ok();
+
         [ByPassNorma]
         [NormaAction("List")]
         public IActionResult ByPassedAnnotatedAction() => Ok();

@@ -35,7 +35,7 @@ namespace EC.Norma.Tests
            
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
-            policy.Should().NotBeNull();
+             policy.Should().NotBeNull();
             policy.Requirements.Count.Should().Be(1);
             var requirement = policy.Requirements.First();
             requirement.Should().BeOfType<HasPermissionRequirement>();
@@ -118,6 +118,34 @@ namespace EC.Norma.Tests
 
             cacheService.Get<ICollection<Policy>>(cacheKeyPermissions).Should().BeNull();
             cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Should().BeNull();
+        }
+
+
+        [Fact]
+        public async void GetPolicyAsync_WithData_ReturnsAPolicyWithRequirementsOfDiferentPriority()
+        {
+            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+
+            var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.TwoPoliciesAction)}|{TestController.Name}");
+
+            policy.Should().NotBeNull();
+            policy.Requirements.Count.Should().Be(2);
+
+            var requirementHasPermission = policy.Requirements[0];
+            requirementHasPermission.Should().BeOfType<HasPermissionRequirement>();
+
+            var isAdminRequirement = policy.Requirements[1];
+            isAdminRequirement.Should().BeOfType<IsAdminRequirement>();
+
+
+            ((HasPermissionRequirement)requirementHasPermission).Action.Should().Be(nameof(TestController.TwoPoliciesAction));
+            ((HasPermissionRequirement)requirementHasPermission).Resource.Should().Be(TestController.Name);
+            ((HasPermissionRequirement)requirementHasPermission).Priority.Should().Be(2);
+
+            ((IsAdminRequirement)isAdminRequirement).Action.Should().Be(nameof(TestController.TwoPoliciesAction));
+            ((IsAdminRequirement)isAdminRequirement).Resource.Should().Be(TestController.Name);
+            ((IsAdminRequirement)isAdminRequirement).Priority.Should().Be(1);
+
         }
     }
 }

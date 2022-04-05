@@ -162,7 +162,8 @@ namespace EC.Norma.Core
                         //ignored. Requirement type checked on caller method
                     }
 
-                    if (requirementType != null) break;
+                    if (requirementType != null) 
+                        break;
                 }
 
                 cache.Set(className, requirementType, DateTimeOffset.MaxValue);

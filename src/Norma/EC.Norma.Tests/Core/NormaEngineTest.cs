@@ -234,6 +234,7 @@ namespace EC.Norma.Tests.Core
 
             var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new HasPermissionRequirement())
+                .AddRequirements(new IsAdminRequirement())
                 .Build();
 
 
