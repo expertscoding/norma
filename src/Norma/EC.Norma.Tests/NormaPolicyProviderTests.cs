@@ -5,13 +5,11 @@ using System.Threading;
 using EC.Norma.Core;
 using EC.Norma.Entities;
 using EC.Norma.Options;
-using EC.Norma.TestUtils;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Moq;
 using Xunit;
 using NormaPolicyProvider = EC.Norma.Core.NormaPolicyProvider;
 
@@ -23,6 +21,7 @@ namespace EC.Norma.Tests
         private readonly NormaTestsFixture<Startup> fixture;
         protected IAuthorizationPolicyProvider mPolicyProvider;
         protected IOptionsMonitor<NormaOptions> mNormaOptions;
+
         public NormaPolicyProviderTests(NormaTestsFixture<Startup> fixture)
         {
             this.fixture = fixture;
@@ -119,5 +118,19 @@ namespace EC.Norma.Tests
             cacheService.Get<ICollection<Policy>>(cacheKeyPermissions).Should().BeNull();
             cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Should().BeNull();
         }
+
+
+        [Fact]
+        public async void GetPolicyAsync_WithData_ReturnsNullAPolicyWithOtherApplication()
+        {
+            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+
+            var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainActionApplication2)}|{TestController.Name}");
+
+            policy.Should().BeNull();            
+
+        }
+
+        
     }
 }

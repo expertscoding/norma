@@ -47,7 +47,11 @@ namespace EC.Norma.Tests
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
             });
 
-            services.AddNorma(config => config.CacheExpiration = 10);
+            services.AddNorma(config =>
+                {
+                    config.CacheExpiration = 10;
+                    config.ApplicationId = "application1";
+                });
             services.AddTransient<INormaProvider, EFNormaProvider>();
             services.AddDbContext<NormaContext>(options => options.UseInMemoryDatabase("TestNorma"));
 

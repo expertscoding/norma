@@ -12,7 +12,7 @@
         /// This property is the cache expiration time in seconds. Default value is 300 seconds (5 min)
         /// </summary>
         public int CacheExpiration { get; set; } = 300;
-        
-    
+
+        public string ApplicationId { get; set; } = string.Empty;
     }
 }
