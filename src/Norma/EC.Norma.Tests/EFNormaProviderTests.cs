@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using EC.Norma.Core;
+﻿using EC.Norma.Core;
 using EC.Norma.EF.Providers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using NormaPolicyProvider = EC.Norma.Core.NormaPolicyProvider;
 
@@ -19,20 +19,18 @@ namespace EC.Norma.Tests
         {
             this.fixture = fixture;
         }
-     
 
         [Fact]
-        public void GetGetPermissions_WithNameForApplication1_ReturnsPermissionForApplication()
-        {            
+        public void GetPermissions_WithNameForApplication1_ReturnsPermissionForApplication()
+        {
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
             var permissions = provider.GetPermissions($"{nameof(TestController.PlainAction)}-{TestController.Name}");
 
-            permissions.Count.Should().Be(1); 
+            permissions.Count.Should().Be(1);
             permissions.FirstOrDefault().Action.Name.Should().Be(nameof(TestController.PlainAction));
             permissions.FirstOrDefault().Resource.Name.Should().Be(TestController.Name);
             permissions.FirstOrDefault().Action.Module.Application.Name.Should().Be("application1");
-
         }
 
         [Fact]
@@ -57,7 +55,6 @@ namespace EC.Norma.Tests
 
             policies.Count.Should().Be(1);
             policies.FirstOrDefault().Name.Should().Be("HasPermission");
-
         }
 
         [Fact]
@@ -81,7 +78,7 @@ namespace EC.Norma.Tests
             var requirement = policy.Requirements.First();
 
             var permission = ((HasPermissionRequirement)requirement).Permission;
-            
+
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
             IEnumerable<string> profiles = new List<string> { "User" };
