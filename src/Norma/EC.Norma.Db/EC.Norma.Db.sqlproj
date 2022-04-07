@@ -71,6 +71,8 @@
     <Build Include="Tables\ActionsPolicies.sql" />
     <Build Include="Tables\Profiles.sql" />
     <Build Include="Tables\Assignments.sql" />
+    <Build Include="Tables\PriorityGroups.sql" />
+    <Build Include="Tables\PoliciesPriorityGroups.sql" />
     <Build Include="Tables\Applications.sql" />
     <Build Include="Tables\Modules.sql" />
     <None Include="Scripts\Policies.sql" />

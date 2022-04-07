@@ -59,6 +59,11 @@ namespace EC.Norma.EF
 
         public virtual DbSet<Resource> Resources { get; set; }
 
+        public virtual DbSet<PriorityGroup> PriorityGroups { get; set; }
+
+        public virtual DbSet<PolicyPriorityGroup> PoliciesPriorityGroups { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -75,6 +80,8 @@ namespace EC.Norma.EF
             modelBuilder.ApplyConfiguration(new PolicyTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration(ApplicationId));
+            modelBuilder.ApplyConfiguration(new PriorityGroupTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new PolicyPriorityGroupTypeConfiguration());
 
         }
 

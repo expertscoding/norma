@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 [assembly: InternalsVisibleTo("EC.Norma.Tests")]
 
@@ -79,9 +80,33 @@ namespace EC.Norma.Core
             }
             else
             {
-                result = await authorizationService.AuthorizeAsync(context.User, policy);
+                result = AuthorizeGroupedPrioritizedPolicies(context.User, policy);
             }
 
+            return result;
+        }
+
+
+        private AuthorizationResult AuthorizeGroupedPrioritizedPolicies(ClaimsPrincipal user, AuthorizationPolicy policy)
+        {
+            AuthorizationResult result = null;
+
+            policy.Requirements
+                .Select(x => x as NormaRequirement)
+                .GroupBy(x => x.Priority)
+                .OrderBy(x => x.Key)
+                .Select(g => new
+                {
+                    g.Key,
+                    policy = new AuthorizationPolicyBuilder().AddRequirements(g.Select(x => x as IAuthorizationRequirement).ToArray()).Build()
+                })
+                .ToList()
+                .ForEach(async x =>
+                {
+                    if(result == null || !result.Succeeded)
+                        result = await authorizationService.AuthorizeAsync(user, x.policy);
+                });
+              
             return result;
         }
 

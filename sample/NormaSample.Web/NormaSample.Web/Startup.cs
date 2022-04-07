@@ -17,6 +17,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
+using EC.Norma.EF;
+using Microsoft.EntityFrameworkCore;
+
 namespace NormaSample.Web
 {
     public class Startup
@@ -68,7 +71,7 @@ namespace NormaSample.Web
                 options.ClientSecret = Configuration.GetValue<string>("AppGlobal:Oidc:ClientSecret");
                 options.GetClaimsFromUserInfoEndpoint = true;
 
-                
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = IdentityModel.JwtClaimTypes.Name,
@@ -77,17 +80,17 @@ namespace NormaSample.Web
             });
 
             services.AddNorma(opt =>
-                {
-                    opt.MissingRequirementAction = MissingRequirementBehaviour.LogOnly;
+            {
+                opt.MissingRequirementAction = MissingRequirementBehaviour.LogOnly;
                     opt.NoPermissionAction = NoPermissionsBehaviour.Failure;
                     opt.ApplicationId = Configuration.GetValue<string>("AppGlobal:ApplicationId");
-                })
-                .AddNormaEFStore(opt =>
-                {
-                    opt.UseSqlServer(Configuration.GetConnectionString("Norma"));
-                    opt.EnableSensitiveDataLogging();
-                });
-                //.AddNormaJsonStore(Configuration.GetSection("profiles").Get<List<Profile>>());
+            })
+                /*.AddNormaEFStore(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("Norma"));
+                opt.EnableSensitiveDataLogging();
+                });*/
+                .AddNormaJsonStore(Configuration.GetSection("profiles").Get<List<Profile>>());
 
             services.AddMemoryCache();
         }

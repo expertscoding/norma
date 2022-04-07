@@ -71,30 +71,36 @@ namespace EC.Norma.Core
 
                     var type = GetRequirementType(requirementName);
 
-                    if (services.GetService(type) is NormaRequirement requirement)
-                    {
-                        logger.LogTrace("Requirement acquired. Getting Permissions.");
-                        
-                        string cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";
+                    logger.LogTrace("Requirement acquired. Getting Permissions.");
 
-                        var permissions = cache.Get<ICollection<Permission>>(cacheKey);
-                        if (permissions == null)
+                    string cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";
+
+                    var permissions = cache.Get<ICollection<Permission>>(cacheKey);
+                    if (permissions == null)
+                    {
+                        permissions = string.IsNullOrWhiteSpace(resource) ? provider.GetPermissions(action) : provider.GetPermissions(action, resource);
+                        cache.Set(cacheKey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
+                    }
+
+                    foreach (var priority in GetPriorities(policy))
+                    {
+                        if (services.GetService(type) is NormaRequirement requirement)
                         {
-                            permissions = string.IsNullOrWhiteSpace(resource) ? provider.GetPermissions(action) : provider.GetPermissions(action, resource);
-                            cache.Set(cacheKey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
+                            requirement.Action = action;
+                            requirement.Resource = resource;
+                            requirement.Permission = permissions.First().Name;
+                            requirement.Priority = priority;
+                            policyBuilder.AddRequirements(requirement);
+
+                            logger.LogTrace("Requirement Added (Action: {action}, Resource: {resource}, Permission: {permission}, Priority: {priority})", action, resource, requirement.Permission, priority);
                         }
-
-                        requirement.Action = action;
-                        requirement.Resource = resource;
-                        requirement.Permission = permissions.First().Name;
-                        policyBuilder.AddRequirements(requirement);
-
-                        logger.LogTrace("Requirement Added (Action: {action}, Resource: {resource}, Permission: {permission})", action, resource, requirement.Permission);
+                        else
+                        {
+                            throw new Exception("No requirement located.");
+                        }
                     }
-                    else
-                    {
-                        throw new Exception("No requirement located.");
-                    }
+
+
                 }
                 catch (Exception ex)
                 {
@@ -156,13 +162,28 @@ namespace EC.Norma.Core
                         //ignored. Requirement type checked on caller method
                     }
 
-                    if (requirementType != null) break;
+                    if (requirementType != null) 
+                        break;
                 }
 
                 cache.Set(className, requirementType, DateTimeOffset.MaxValue);
             }
 
             return requirementType;
+        }
+
+        private ICollection<int> GetPriorities (Policy policy)
+        {
+            if(policy.PoliciesPriorityGroups != null && policy.PoliciesPriorityGroups.Any())
+            {
+                logger.LogTrace("Getting priorities from Policy's PriorityGroups");
+                return policy.PoliciesPriorityGroups.Select(x => x.PriorityGroup.Priority).Distinct().ToArray();
+            }
+            else
+            {
+                logger.LogTrace("No priorities defined");
+                return new[] { 0 };
+            }
         }
     }
 }

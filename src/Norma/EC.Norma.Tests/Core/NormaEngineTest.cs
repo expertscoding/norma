@@ -21,7 +21,7 @@ using Xunit;
 namespace EC.Norma.Tests.Core
 {
     [Collection("TestServer collection")]
-    public class NormaEngineTest 
+    public class NormaEngineTest
     {
 
         private Mock<NormaEngine> cut;
@@ -33,7 +33,7 @@ namespace EC.Norma.Tests.Core
 
         private readonly NormaTestsFixture<Startup> fixture;
 
-        public NormaEngineTest(NormaTestsFixture<Startup> fixture) 
+        public NormaEngineTest(NormaTestsFixture<Startup> fixture)
         {
             this.fixture = fixture;
 
@@ -53,7 +53,7 @@ namespace EC.Norma.Tests.Core
             mNormaOptions = Mock.Of<IOptionsMonitor<NormaOptions>>(opt => opt.CurrentValue == normaOptions);
             mLogger = NoOpLoggerFactory.Instance.CreateLogger("");
 
-            cut = new Mock<NormaEngine>(mPolicyProvider, mAuthorizationService, mProvider, mNormaOptions, mLogger) {CallBase = true};
+            cut = new Mock<NormaEngine>(mPolicyProvider, mAuthorizationService, mProvider, mNormaOptions, mLogger) { CallBase = true };
         }
 
         [Fact]
@@ -234,6 +234,7 @@ namespace EC.Norma.Tests.Core
 
             var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new HasPermissionRequirement())
+                .AddRequirements(new IsAdminRequirement())
                 .Build();
 
 
@@ -245,7 +246,7 @@ namespace EC.Norma.Tests.Core
                 .Returns(Task.FromResult(policy));
 
             var authService = Mock.Get(mAuthorizationService);
-            
+
             // Act
             await cut.Object.EvalPermissions(context);
 
@@ -285,7 +286,7 @@ namespace EC.Norma.Tests.Core
 
 
         [Fact]
-        public async void EvalPermissions_CombinedPolicyIsNotNullAndAuthorizeAsyncFails_ReturnsFailure()
+        public async void EvalPermissions_CombinedPolicyWithTwoPriorities_MIN_PriorityRequirement_ReturnsSuccess()
         {
             Endpoint endpoint = CreateEndpoint();
             HttpContext context = GetHttpContext(endpoint: endpoint);
@@ -310,6 +311,81 @@ namespace EC.Norma.Tests.Core
 
             // Assert
             result.Succeeded.Should().BeFalse();
+        }
+
+        [Fact]
+        public async void EvalPermissions_CombinedPolicyWithTwoPriorities_MAX_PriorityRequirement_ReturnsSuccess()
+        {
+            // Arrange
+            CreateCUT(false);
+
+            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoPoliciesAction-Test") });
+            HttpContext context = GetHttpContext(endpoint: endpoint);
+
+            var policy = new AuthorizationPolicyBuilder()
+                .AddRequirements(new HasPermissionRequirement() { Priority = 2 })
+                .AddRequirements(new IsAdminRequirement() { Priority = 1 })
+                .Build();
+
+            cut.Protected()
+                .Setup<Task<AuthorizationPolicy>>("GetCombinedPolicyAsync"
+                                                        , ItExpr.IsAny<IEnumerable<string>>()
+                                                        , ItExpr.IsNull<string>()
+                                                        , ItExpr.IsAny<IEnumerable<string>>())
+                .Returns(Task.FromResult(policy));
+
+            var authService = Mock.Get(mAuthorizationService);
+            authService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<IEnumerable<IAuthorizationRequirement>>()))
+                .Returns(Task.FromResult(AuthorizationResult.Success()));
+
+            // Act
+            var result = await cut.Object.EvalPermissions(context);
+
+            // Act
+            result.Succeeded.Should().BeTrue();
+
+            // Assert
+            authService.Verify(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<IEnumerable<IAuthorizationRequirement>>()), Times.Once);
+        }
+
+
+        [Fact]
+        public async void EvalPermissions_CombinedPolicyWithTwoPriorities_ReturnsSuccess2()
+        {
+            // Arrange
+            CreateCUT(false);
+
+            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoPoliciesAction-Test") });
+            HttpContext context = GetHttpContext(endpoint: endpoint);
+
+            var policy = new AuthorizationPolicyBuilder()
+                .AddRequirements(new HasPermissionRequirement() { Priority = 2 })
+                .AddRequirements(new IsAdminRequirement() { Priority = 1 })
+                .Build();
+
+            cut.Protected()
+                .Setup<Task<AuthorizationPolicy>>("GetCombinedPolicyAsync"
+                                                        , ItExpr.IsAny<IEnumerable<string>>()
+                                                        , ItExpr.IsNull<string>()
+                                                        , ItExpr.IsAny<IEnumerable<string>>())
+                .Returns(Task.FromResult(policy));
+
+            var authService = Mock.Get(mAuthorizationService);
+
+            authService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.Is<IEnumerable<IAuthorizationRequirement>>(x => x.Any(r => (r as NormaRequirement).Priority == 2))))
+                .Returns(Task.FromResult(AuthorizationResult.Success()));
+
+            authService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.Is<IEnumerable<IAuthorizationRequirement>>(x => x.Any(r => (r as NormaRequirement).Priority == 1))))
+                .Returns(Task.FromResult(AuthorizationResult.Failed()));
+
+            // Act
+            var result = await cut.Object.EvalPermissions(context);
+
+            // Act
+            result.Succeeded.Should().BeTrue();
+
+            // Assert
+            authService.Verify(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<IEnumerable<IAuthorizationRequirement>>()), Times.Exactly(2));
         }
 
 
@@ -379,7 +455,7 @@ namespace EC.Norma.Tests.Core
             private readonly int statusCode;
 
             public bool Called => CalledCount > 0;
-            
+
             public int CalledCount { get; private set; }
 
             public TestRequestDelegate(int statusCode = 200)
