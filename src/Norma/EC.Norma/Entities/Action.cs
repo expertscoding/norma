@@ -9,5 +9,8 @@ namespace EC.Norma.Entities
         public string Name { get; set; }
 
         public virtual ICollection<ActionsPolicy> ActionPolicies { get; set; }
+
+        public int IdModule { get; set; }
+        public virtual Module Module{ get; set; }
     }
 }

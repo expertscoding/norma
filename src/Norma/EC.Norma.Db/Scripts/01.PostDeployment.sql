@@ -10,20 +10,5 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-:r ./Scripts/Applications.sql
 
-:r ./Scripts/Modules.sql
-
-:r ./Scripts/Profiles.sql
-
-:r ./Scripts/Resources.sql
-
-:r ./Scripts/Actions.sql
-
-:r ./Scripts/Policies.sql
-
-:r ./Scripts/Permissions.sql
-
-:r ./Scripts/Assignments.sql
-
-:r ./Scripts/ActionsPolicies.sql
+:r ./Policies.sql
