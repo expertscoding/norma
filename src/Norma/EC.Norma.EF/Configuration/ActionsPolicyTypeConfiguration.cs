@@ -5,22 +5,22 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class ActionsPolicyTypeConfiguration : IEntityTypeConfiguration<ActionsPolicy>
+    public class ActionsRequirementTypeConfiguration : IEntityTypeConfiguration<ActionsRequirement>
     {
         private string applicationId;
 
-        public ActionsPolicyTypeConfiguration(string applicationId)
+        public ActionsRequirementTypeConfiguration(string applicationId)
         {
             this.applicationId = applicationId;
         }
 
-        public void Configure(EntityTypeBuilder<ActionsPolicy> builder)
+        public void Configure(EntityTypeBuilder<ActionsRequirement> builder)
         {
-            builder.ToTable("ActionsPolicies");
+            builder.ToTable("ActionsRequirements");
             builder.HasKey(a => a.Id);
 
-            builder.HasOne(a => a.Action).WithMany(b=>b.ActionPolicies).HasForeignKey(a => a.IdAction);
-            builder.HasOne(a => a.Policy).WithMany().HasForeignKey(a => a.IdPolicy);
+            builder.HasOne(a => a.Action).WithMany(b=>b.ActionRequirements).HasForeignKey(a => a.IdAction);
+            builder.HasOne(a => a.Requirement).WithMany().HasForeignKey(a => a.IdRequirement);
 
             builder.HasQueryFilter(a => a.Action.Module.Application.ApplicationId == applicationId);
         }

@@ -69,9 +69,9 @@ namespace EC.Norma.Core
             var resource = GetResource(endpoint);
             logger.LogInformation("Queried Resources");
 
-            logger.LogTrace("Getting Policies");
+            logger.LogTrace("Getting Requirements");
             var policy = await GetCombinedPolicyAsync(permissions, resource, actions);
-            logger.LogInformation("Getting Policies");
+            logger.LogInformation("Getting Requirements");
 
             if (policy == null)
             {
@@ -80,14 +80,14 @@ namespace EC.Norma.Core
             }
             else
             {
-                result = AuthorizeGroupedPrioritizedPolicies(context.User, policy);
+                result = AuthorizeGroupedPrioritizedRequirements(context.User, policy);
             }
 
             return result;
         }
 
 
-        private AuthorizationResult AuthorizeGroupedPrioritizedPolicies(ClaimsPrincipal user, AuthorizationPolicy policy)
+        private AuthorizationResult AuthorizeGroupedPrioritizedRequirements(ClaimsPrincipal user, AuthorizationPolicy policy)
         {
             AuthorizationResult result = null;
 

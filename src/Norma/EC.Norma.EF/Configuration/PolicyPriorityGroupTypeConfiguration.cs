@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class PolicyPriorityGroupTypeConfiguration : IEntityTypeConfiguration<PolicyPriorityGroup>
+    public class RequirementPriorityGroupTypeConfiguration : IEntityTypeConfiguration<RequirementPriorityGroup>
     {
-        public void Configure(EntityTypeBuilder<PolicyPriorityGroup> builder)
+        public void Configure(EntityTypeBuilder<RequirementPriorityGroup> builder)
         {
-            builder.ToTable("PoliciesPriorityGroups");
+            builder.ToTable("RequirementsPriorityGroups");
             builder.HasKey(a => a.Id);
 
             builder.HasOne(a => a.PriorityGroup).WithMany().HasForeignKey(a => a.IdPriorityGroup);
-            builder.HasOne(a => a.Policy).WithMany(b => b.PoliciesPriorityGroups).HasForeignKey(a => a.IdPolicy);
+            builder.HasOne(a => a.Requirement).WithMany(b => b.RequirementsPriorityGroups).HasForeignKey(a => a.IdRequirement);
         }
     }
 }

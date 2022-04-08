@@ -1,4 +1,4 @@
-using EC.Norma.Metadata;
+﻿using EC.Norma.Metadata;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EC.Norma.Tests
@@ -16,8 +16,8 @@ namespace EC.Norma.Tests
         [NormaAction("List")]
         public IActionResult AnnotatedAction() => Ok();
 
-        [NormaAction("TwoPoliciesAction")]
-        public IActionResult TwoPoliciesAction() => Ok();
+        [NormaAction("TwoRequirementsAction")]
+        public IActionResult TwoRequirementsAction() => Ok();
 
         [ByPassNorma]
         [NormaAction("List")]

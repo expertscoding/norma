@@ -30,35 +30,35 @@ namespace EC.Norma.EF.Providers
             return db.Permissions.Where(p => p.Name == permissionName).ToList();
         }
 
-        public ICollection<Policy> GetPoliciesForAction(string action)
+        public ICollection<Requirement> GetRequirementsForAction(string action)
         {
-            return db.ActionsPolicies.Where(ap => ap.Action.Name == action).Select(ap => ap.Policy).ToList();
+            return db.ActionsRequirements.Where(ap => ap.Action.Name == action).Select(ap => ap.Requirement).ToList();
         }
 
-        public ICollection<Policy> GetPoliciesForActionResource(string actionName, string resourceName)
+        public ICollection<Requirement> GetRequirementsForActionResource(string actionName, string resourceName)
         {
             var permissions = db.Permissions
                 .Where(p => p.Action.Name == actionName && p.Resource.Name == resourceName)
                 .Select(p => p.Id);
 
-            var list = db.PermissionsPolicies.Where(pp => permissions.Contains(pp.IdPermission))
-                        .Select(pp => pp.Policy);
+            var list = db.PermissionsRequirements.Where(pp => permissions.Contains(pp.IdPermission))
+                        .Select(pp => pp.Requirement);
 
 
-            list = list.Union(db.ActionsPolicies.Where(ap => ap.Action.Name == actionName).Select(ap => ap.Policy));
+            list = list.Union(db.ActionsRequirements.Where(ap => ap.Action.Name == actionName).Select(ap => ap.Requirement));
 
             return list.ToList();
         }
 
 
-        public ICollection<Policy> GetPoliciesForPermission(string permissionName)
+        public ICollection<Requirement> GetRequirementsForPermission(string permissionName)
         {
-            var list = db.PermissionsPolicies.Where(pp => pp.Permission.Name == permissionName)
-                        .Select(pp => pp.Policy);
+            var list = db.PermissionsRequirements.Where(pp => pp.Permission.Name == permissionName)
+                        .Select(pp => pp.Requirement);
 
             var actions = db.Permissions.Where(p => p.Name == permissionName).Select(p => p.Action);
 
-            list = list.Union(db.ActionsPolicies.Where(ap => actions.Contains(ap.Action)).Select(ap => ap.Policy));
+            list = list.Union(db.ActionsRequirements.Where(ap => actions.Contains(ap.Action)).Select(ap => ap.Requirement));
 
             return list.ToList();
         }

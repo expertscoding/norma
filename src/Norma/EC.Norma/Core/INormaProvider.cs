@@ -5,9 +5,9 @@ namespace EC.Norma.Core
 {
     public interface INormaProvider
     {
-        ICollection<Policy> GetPoliciesForPermission(string permissionName);
+        ICollection<Requirement> GetRequirementsForPermission(string permissionName);
 
-        ICollection<Policy> GetPoliciesForActionResource(string actionName, string resourceName);
+        ICollection<Requirement> GetRequirementsForActionResource(string actionName, string resourceName);
 
         ICollection<Permission> GetPermissions(string action, string resource);
 

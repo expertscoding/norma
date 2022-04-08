@@ -65,7 +65,7 @@
     <Build Include="Tables\Actions.sql" />
     <Build Include="Schemas\norma.sql" />
     <Build Include="Tables\Resources.sql" />
-    <Build Include="Tables\Policies.sql" />
+    <Build Include="Tables\Requirements.sql" />
     <Build Include="Tables\Permissions.sql" />
     <Build Include="Tables\PermissionsPolicies.sql" />
     <Build Include="Tables\ActionsPolicies.sql" />
@@ -75,7 +75,7 @@
     <Build Include="Tables\PoliciesPriorityGroups.sql" />
     <Build Include="Tables\Applications.sql" />
     <Build Include="Tables\Modules.sql" />
-    <None Include="Scripts\Policies.sql" />
+    <None Include="Scripts\Requirements.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\01.PostDeployment.sql" />

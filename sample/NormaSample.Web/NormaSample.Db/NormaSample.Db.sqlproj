@@ -65,8 +65,8 @@
     <None Include="Scripts\Actions.sql" />
     <None Include="Scripts\Permissions.sql" />
     <None Include="Scripts\Assignments.sql" />
-    <None Include="Scripts\Policies.sql" />
-    <None Include="Scripts\ActionsPolicies.sql" />
+    <None Include="Scripts\Requirements.sql" />
+    <None Include="Scripts\ActionsRequirements.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment.sql" />

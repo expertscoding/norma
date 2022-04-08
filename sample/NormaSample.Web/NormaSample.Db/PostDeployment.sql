@@ -20,10 +20,10 @@ Post-Deployment Script Template
 
 :r ./Scripts/Actions.sql
 
-:r ./Scripts/Policies.sql
+:r ./Scripts/Requirements.sql
 
 :r ./Scripts/Permissions.sql
 
 :r ./Scripts/Assignments.sql
 
-:r ./Scripts/ActionsPolicies.sql
+:r ./Scripts/ActionsRequirements.sql
