@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class ActionsRequirementTypeConfiguration : IEntityTypeConfiguration<ActionsRequirement>
+    public class ActionRequirementTypeConfiguration : IEntityTypeConfiguration<ActionsRequirement>
     {
         private string applicationId;
 
-        public ActionsRequirementTypeConfiguration(string applicationId)
+        public ActionRequirementTypeConfiguration(string applicationId)
         {
             this.applicationId = applicationId;
         }

@@ -71,11 +71,11 @@ namespace EC.Norma.EF
             modelBuilder.HasDefaultSchema("norma");
 
             modelBuilder.ApplyConfiguration(new ActionTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new ActionsRequirementTypeConfiguration(ApplicationId));
+            modelBuilder.ApplyConfiguration(new ActionRequirementTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new ApplicationTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new ModuleTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new PermissionsRequirementTypeConfiguration(ApplicationId));
+            modelBuilder.ApplyConfiguration(new PermissionRequirementTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new PermissionTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new RequirementTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileTypeConfiguration());

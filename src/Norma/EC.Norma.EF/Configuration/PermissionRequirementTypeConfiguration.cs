@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class PermissionsRequirementTypeConfiguration : IEntityTypeConfiguration<PermissionsRequirement>
+    public class PermissionRequirementTypeConfiguration : IEntityTypeConfiguration<PermissionsRequirement>
     {
         private string applicationId;
 
-        public PermissionsRequirementTypeConfiguration(string applicationId)
+        public PermissionRequirementTypeConfiguration(string applicationId)
         {
             this.applicationId = applicationId;
         }
