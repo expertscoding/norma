@@ -80,4 +80,10 @@
   <ItemGroup>
     <PostDeploy Include="Scripts\01.PostDeployment.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="EC.Norma.Db.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\ApplicationAndModule.sql" />
+  </ItemGroup>
 </Project>
