@@ -8,7 +8,7 @@ indent_style = space
 trim_trailing_whitespace = true
 
 # XML project files
-[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,refactorlog}]
 indent_size = 2
 
 # XML config files
