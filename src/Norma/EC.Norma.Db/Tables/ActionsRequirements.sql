@@ -11,4 +11,3 @@
 GO
 
 CREATE INDEX [IX_ActionsRequirements] ON [norma].[ActionsRequirements] ([IdAction], [IdRequirement])
-

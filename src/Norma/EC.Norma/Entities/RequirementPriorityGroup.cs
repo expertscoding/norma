@@ -1,6 +1,6 @@
 ﻿namespace EC.Norma.Entities
 {
-    public class PolicyPriorityGroup
+    public class RequirementPriorityGroup
     {
         public int Id { get; set; }
 
@@ -8,8 +8,8 @@
         public virtual PriorityGroup PriorityGroup { get; set; }
 
 
-        public int IdPolicy { get; set; }
-        public virtual Policy Policy { get; set; }
+        public int IdRequirement { get; set; }
+        public virtual Requirement Requirement { get; set; }
 
     }
 }

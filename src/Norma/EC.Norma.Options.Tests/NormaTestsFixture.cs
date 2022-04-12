@@ -23,14 +23,14 @@ namespace EC.Norma.Options.Tests
         {
             var db = WebAppFactory.Services.GetService<NormaContext>();
 
-            var policy = new Policy { Id = Sequencer.GetId(), Name = "HasPermission" };
-            db.Policies.Add(policy);
+            var requirement = new Requirement { Id = Sequencer.GetId(), Name = "HasPermission" };
+            db.Requirements.Add(requirement);
 
-            var policyWithOutClass = new Policy { Id = Sequencer.GetId(), Name = "NoClass" };
-            db.Policies.Add(policyWithOutClass);
+            var requirementWithOutClass = new Requirement { Id = Sequencer.GetId(), Name = "NoClass" };
+            db.Requirements.Add(requirementWithOutClass);
 
-            var policyWithOutConfiguredClass = new Policy { Id = Sequencer.GetId(), Name = "NonConfigured" };
-            db.Policies.Add(policyWithOutConfiguredClass);
+            var requirementWithOutConfiguredClass = new Requirement { Id = Sequencer.GetId(), Name = "NonConfigured" };
+            db.Requirements.Add(requirementWithOutConfiguredClass);
 
             var resource = new Resource { Id = Sequencer.GetId(), Name = TestController.Name };
             db.Resources.Add(resource);
@@ -39,7 +39,7 @@ namespace EC.Norma.Options.Tests
             var action = new Action { Id = Sequencer.GetId(), Name = nameof(TestController.PlainAction) };
             db.Actions.Add(action);
             
-            db.ActionsPolicies.Add(new ActionsPolicy { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Policy = policy, IdPolicy = policy.Id });
+            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             var profile = new Profile { Id = Sequencer.GetId(), Name = "User" };
             db.Profiles.Add(profile);
@@ -68,7 +68,7 @@ namespace EC.Norma.Options.Tests
             action = new Action { Id = Sequencer.GetId(), Name = "List" };
             db.Actions.Add(action);
 
-            db.ActionsPolicies.Add(new ActionsPolicy { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Policy = policy, IdPolicy = policy.Id });
+            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             permission = new Permission
             {
@@ -86,14 +86,14 @@ namespace EC.Norma.Options.Tests
             action = new Action { Id = Sequencer.GetId(), Name = nameof(TestController.WithoutConfiguredRequirement) };
             db.Actions.Add(action);
 
-            db.ActionsPolicies.Add(new ActionsPolicy { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Policy = policyWithOutConfiguredClass, IdPolicy = policyWithOutConfiguredClass.Id });
+            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirementWithOutConfiguredClass, IdRequirement = requirementWithOutConfiguredClass.Id });
 
 
             // WithoutPermissions Action
             action = new Action { Id = Sequencer.GetId(), Name = nameof(TestController.WithoutRequirement) };
             db.Actions.Add(action);
 
-            db.ActionsPolicies.Add(new ActionsPolicy { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Policy = policyWithOutClass, IdPolicy = policyWithOutClass.Id });
+            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirementWithOutClass, IdRequirement = requirementWithOutClass.Id });
 
             db.SaveChanges();
         }

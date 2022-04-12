@@ -319,7 +319,7 @@ namespace EC.Norma.Tests.Core
             // Arrange
             CreateCUT(false);
 
-            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoPoliciesAction-Test") });
+            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoRequirementsAction-Test") });
             HttpContext context = GetHttpContext(endpoint: endpoint);
 
             var policy = new AuthorizationPolicyBuilder()
@@ -355,7 +355,7 @@ namespace EC.Norma.Tests.Core
             // Arrange
             CreateCUT(false);
 
-            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoPoliciesAction-Test") });
+            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoRequirementsAction-Test") });
             HttpContext context = GetHttpContext(endpoint: endpoint);
 
             var policy = new AuthorizationPolicyBuilder()

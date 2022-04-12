@@ -1,6 +1,6 @@
 ﻿namespace EC.Norma.Entities
 {
-    public class PermissionsPolicy
+    public class PermissionsRequirement
     {
         public int Id { get; set; }
 
@@ -8,8 +8,8 @@
         public virtual Permission Permission { get; set; }
 
 
-        public int IdPolicy { get; set; }
-        public virtual Policy Policy { get; set; }
+        public int IdRequirement { get; set; }
+        public virtual Requirement Requirement { get; set; }
 
     }
 }

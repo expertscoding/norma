@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class PolicyTypeConfiguration : IEntityTypeConfiguration<Policy>
+    public class RequirementTypeConfiguration : IEntityTypeConfiguration<Requirement>
     {
-        public void Configure(EntityTypeBuilder<Policy> builder)
+        public void Configure(EntityTypeBuilder<Requirement> builder)
         {
-            builder.ToTable("Policies");
+            builder.ToTable("Requirements");
             builder.HasKey(a => a.Id);
 
 

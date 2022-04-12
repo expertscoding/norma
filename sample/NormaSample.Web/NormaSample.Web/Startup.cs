@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using EC.Norma;
@@ -85,12 +85,12 @@ namespace NormaSample.Web
                     opt.NoPermissionAction = NoPermissionsBehaviour.Failure;
                     opt.ApplicationId = Configuration.GetValue<string>("AppGlobal:ApplicationId");
             })
-                /*.AddNormaEFStore(opt =>
-            {
+                .AddNormaEFStore(opt =>
+                {
                 opt.UseSqlServer(Configuration.GetConnectionString("Norma"));
                 opt.EnableSensitiveDataLogging();
-                });*/
-                .AddNormaJsonStore(Configuration.GetSection("profiles").Get<List<Profile>>());
+                });
+                /*.AddNormaJsonStore(Configuration.GetSection("profiles").Get<List<Profile>>());*/
 
             services.AddMemoryCache();
         }

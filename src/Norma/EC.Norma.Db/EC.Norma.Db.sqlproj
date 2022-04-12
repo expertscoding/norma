@@ -65,19 +65,25 @@
     <Build Include="Tables\Actions.sql" />
     <Build Include="Schemas\norma.sql" />
     <Build Include="Tables\Resources.sql" />
-    <Build Include="Tables\Policies.sql" />
+    <Build Include="Tables\Requirements.sql" />
     <Build Include="Tables\Permissions.sql" />
-    <Build Include="Tables\PermissionsPolicies.sql" />
-    <Build Include="Tables\ActionsPolicies.sql" />
     <Build Include="Tables\Profiles.sql" />
     <Build Include="Tables\Assignments.sql" />
     <Build Include="Tables\PriorityGroups.sql" />
-    <Build Include="Tables\PoliciesPriorityGroups.sql" />
     <Build Include="Tables\Applications.sql" />
     <Build Include="Tables\Modules.sql" />
-    <None Include="Scripts\Policies.sql" />
+    <None Include="Scripts\Requirements.sql" />
+    <Build Include="Tables\PermissionsRequirements.sql" />
+    <Build Include="Tables\RequirementsPriorityGroups.sql" />
+    <Build Include="Tables\ActionsRequirements.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\01.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="EC.Norma.Db.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\ApplicationAndModule.sql" />
   </ItemGroup>
 </Project>

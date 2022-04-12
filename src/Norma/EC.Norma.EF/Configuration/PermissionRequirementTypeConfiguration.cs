@@ -4,22 +4,22 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class PermissionsPolicyTypeConfiguration : IEntityTypeConfiguration<PermissionsPolicy>
+    public class PermissionRequirementTypeConfiguration : IEntityTypeConfiguration<PermissionsRequirement>
     {
         private string applicationId;
 
-        public PermissionsPolicyTypeConfiguration(string applicationId)
+        public PermissionRequirementTypeConfiguration(string applicationId)
         {
             this.applicationId = applicationId;
         }
 
-        public void Configure(EntityTypeBuilder<PermissionsPolicy> builder)
+        public void Configure(EntityTypeBuilder<PermissionsRequirement> builder)
         {
-            builder.ToTable("PermissionsPolicies");
+            builder.ToTable("PermissionsRequirements");
             builder.HasKey(a => a.Id);
 
             builder.HasOne(a => a.Permission).WithMany().HasForeignKey(a => a.IdPermission);
-            builder.HasOne(a => a.Policy).WithMany().HasForeignKey(a => a.IdPolicy);
+            builder.HasOne(a => a.Requirement).WithMany().HasForeignKey(a => a.IdRequirement);
 
             builder.HasQueryFilter(a => a.Permission.Action.Module.Application.ApplicationId == applicationId);
         }

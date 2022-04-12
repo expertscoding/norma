@@ -1,4 +1,4 @@
-﻿MERGE INTO [norma].[Policies] AS Target
+﻿MERGE INTO [norma].[Requirements] AS Target
 USING ( VALUES 
 	('HasPermission'),
 	('IsAdmin')

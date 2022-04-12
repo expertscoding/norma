@@ -36,26 +36,26 @@ namespace EC.Norma.Tests
             #endregion
 
 
-            #region Policies
-            var policyHasPermissionsId = Sequencer.GetId();
-            var policyHasPermission = new Policy { Id = policyHasPermissionsId, Name = "HasPermission" };
-            var ppgHasPermissions = new PolicyPriorityGroup() { Id = Sequencer.GetId(), Policy = policyHasPermission, PriorityGroup = group2, IdPolicy = policyHasPermission.Id, IdPriorityGroup = group2.Id };
-            db.PoliciesPriorityGroups.Add(ppgHasPermissions);
-            db.Policies.Add(policyHasPermission);
+            #region Requirements
+            var requirementHasPermissionsId = Sequencer.GetId();
+            var requirementHasPermission = new Requirement { Id = requirementHasPermissionsId, Name = "HasPermission" };
+            var ppgHasPermissions = new RequirementPriorityGroup() { Id = Sequencer.GetId(), Requirement = requirementHasPermission, PriorityGroup = group2, IdRequirement = requirementHasPermission.Id, IdPriorityGroup = group2.Id };
+            db.RequirementsPriorityGroups.Add(ppgHasPermissions);
+            db.Requirements.Add(requirementHasPermission);
 
 
-            var policyAdminId = Sequencer.GetId();
-            var policyAdmin = new Policy { Id = policyAdminId, Name = "IsAdmin" };
-            var ppgAdmin = new PolicyPriorityGroup() { Id = Sequencer.GetId(), Policy = policyAdmin, PriorityGroup = group1, IdPolicy = policyAdmin.Id, IdPriorityGroup = group1.Id };
-            db.PoliciesPriorityGroups.Add(ppgAdmin);
-            db.Policies.Add(policyAdmin);
+            var requirementAdminId = Sequencer.GetId();
+            var requirementAdmin = new Requirement { Id = requirementAdminId, Name = "IsAdmin" };
+            var ppgAdmin = new RequirementPriorityGroup() { Id = Sequencer.GetId(), Requirement = requirementAdmin, PriorityGroup = group1, IdRequirement = requirementAdmin.Id, IdPriorityGroup = group1.Id };
+            db.RequirementsPriorityGroups.Add(ppgAdmin);
+            db.Requirements.Add(requirementAdmin);
 
 
-            var policyWithOutClass = new Policy { Id = Sequencer.GetId(), Name = "NoClass" };
-            db.Policies.Add(policyWithOutClass);
+            var requirementWithOutClass = new Requirement { Id = Sequencer.GetId(), Name = "NoClass" };
+            db.Requirements.Add(requirementWithOutClass);
 
-            var policyWithOutConfiguredClass = new Policy { Id = Sequencer.GetId(), Name = "NonConfigured" };
-            db.Policies.Add(policyWithOutConfiguredClass);
+            var requirementWithOutConfiguredClass = new Requirement { Id = Sequencer.GetId(), Name = "NonConfigured" };
+            db.Requirements.Add(requirementWithOutConfiguredClass);
             #endregion
 
 
@@ -89,41 +89,41 @@ namespace EC.Norma.Tests
 
 
             // PlainAction
-            ConfigureAction(db, nameof(TestController.PlainAction), policyHasPermission, resource, "User", true, module1);
+            ConfigureAction(db, nameof(TestController.PlainAction), requirementHasPermission, resource, "User", true, module1);
 
             // AnnotatedAction Action -> The action name is redefined to List
-            ConfigureAction(db, "List", policyHasPermission, resource, "User", false, module1);
+            ConfigureAction(db, "List", requirementHasPermission, resource, "User", false, module1);
 
             // WithoutPermissions Action
-            ConfigureAction(db, nameof(TestController.WithoutConfiguredRequirement), policyWithOutConfiguredClass, null, null, false, module1);
+            ConfigureAction(db, nameof(TestController.WithoutConfiguredRequirement), requirementWithOutConfiguredClass, null, null, false, module1);
 
             // WithoutPermissions Action
-            ConfigureAction(db, nameof(TestController.WithoutRequirement), policyWithOutClass, null, null, false, module1);
+            ConfigureAction(db, nameof(TestController.WithoutRequirement), requirementWithOutClass, null, null, false, module1);
 
             //PlainActionApplication2
-            ConfigureAction(db, nameof(TestController.PlainActionApplication2), policyHasPermission, resource, "User", true, module2);
+            ConfigureAction(db, nameof(TestController.PlainActionApplication2), requirementHasPermission, resource, "User", true, module2);
 
             // PlainAction Module2
-            ConfigureAction(db, nameof(TestController.PlainAction), policyHasPermission, resource2, "User", true, module2);
+            ConfigureAction(db, nameof(TestController.PlainAction), requirementHasPermission, resource2, "User", true, module2);
 
-            // Two policies action 
-            ConfigureAction(db, "TwoPoliciesAction", policyHasPermission, resource, "User", false, module1);
+            // Two Requirements action 
+            ConfigureAction(db, "TwoRequirementsAction", requirementHasPermission, resource, "User", false, module1);
 
-            // Two policies action: configuring second policy and profile 
-            ConfigureActionWithSecondPolicy(db, "TwoPoliciesAction", policyAdmin, resource, "Admin");
+            // Two Requirements action: configuring second requirement and profile 
+            ConfigureActionWithSecondRequirement(db, "TwoRequirementsAction", requirementAdmin, resource, "Admin");
 
 
             db.SaveChanges();
         }
 
 
-        protected void ConfigureAction( NormaContext db, string actionName, Policy policy, Resource resource, string profileName, bool assign, Module module )
+        protected void ConfigureAction( NormaContext db, string actionName, Requirement requirement, Resource resource, string profileName, bool assign, Module module )
         {
             // PlainAction
             var action = new Action { Id = Sequencer.GetId(), Name = actionName, Module = module, IdModule = module.Id };
             db.Actions.Add(action);
 
-            db.ActionsPolicies.Add(new ActionsPolicy { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Policy = policy, IdPolicy = policy.Id });
+            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             var profile = GetOrCreateProfile(db, profileName);
 
@@ -175,13 +175,13 @@ namespace EC.Norma.Tests
             return null;
         }
 
-        protected void ConfigureActionWithSecondPolicy( NormaContext db, string actionName, Policy policy, Resource resource, string profileName )
+        protected void ConfigureActionWithSecondRequirement( NormaContext db, string actionName, Requirement requirement, Resource resource, string profileName )
         {
             db.SaveChanges();
 
             var action = db.Actions.Single(x => x.Name == actionName);
 
-            db.ActionsPolicies.Add(new ActionsPolicy { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Policy = policy, IdPolicy = policy.Id });
+            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             var profile = GetOrCreateProfile(db, profileName);
 

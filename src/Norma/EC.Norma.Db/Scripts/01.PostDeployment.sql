@@ -10,5 +10,6 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+:r ./ApplicationAndModule.sql
 
-:r ./Policies.sql
+:r ./Requirements.sql

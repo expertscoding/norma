@@ -47,22 +47,22 @@ namespace EC.Norma.Tests
         }
 
         [Fact]
-        public void GetPoliciesForPermission_WithNameForApplication1_ReturnsPermissionForApplication()
+        public void GetRequirementsForPermission_WithNameForApplication1_ReturnsPermissionForApplication()
         {
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
-            var policies = provider.GetPoliciesForPermission($"{nameof(TestController.PlainAction)}-{TestController.Name}");
+            var policies = provider.GetRequirementsForPermission($"{nameof(TestController.PlainAction)}-{TestController.Name}");
 
             policies.Count.Should().Be(1);
             policies.FirstOrDefault().Name.Should().Be("HasPermission");
         }
 
         [Fact]
-        public void GetPoliciesForActionResource_WithActionAndResourceForApplication1_ReturnsPermissionForApplication()
+        public void GetRequirementsForActionResource_WithActionAndResourceForApplication1_ReturnsPermissionForApplication()
         {
             EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
 
-            var policies = provider.GetPoliciesForActionResource(nameof(TestController.PlainAction), TestController.Name);
+            var policies = provider.GetRequirementsForActionResource(nameof(TestController.PlainAction), TestController.Name);
 
             policies.Count.Should().Be(1);
             policies.FirstOrDefault().Name.Should().Be("HasPermission");

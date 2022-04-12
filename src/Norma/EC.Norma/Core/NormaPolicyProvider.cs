@@ -48,24 +48,24 @@ namespace EC.Norma.Core
             var action = reqParams[0];
             var resource = reqParams.Length > 1 ? reqParams[1] : "";
 
-            var policies = GetNormaPolicies(action, resource).ToArray();
+            var requirements = GetNormaRequirements(action, resource).ToArray();
             var policyBuilder = new AuthorizationPolicyBuilder();
 
-            logger.LogTrace("Got policies: [{policies} ]", policies.Select(p => p.Name).Aggregate("", (s, p) => string.Concat(s, " ", p)));
+            logger.LogTrace("Got policies: [{policies} ]", requirements.Select(p => p.Name).Aggregate("", (s, p) => string.Concat(s, " ", p)));
 
-            if (!policies.Any())
+            if (!requirements.Any())
             {
-                logger.LogTrace("No Norma policy found, requesting fallback provider");
+                logger.LogTrace("No Norma requirement found, requesting fallback provider");
 
                 return FallbackPolicyProvider.GetPolicyAsync(policyName);
             }
 
 
-            foreach (var policy in policies)
+            foreach (var requirement in requirements)
             {
                 try
                 {
-                    var requirementName = SPACENAME + policy.Name + REQ_SUFFIX;
+                    var requirementName = SPACENAME + requirement.Name + REQ_SUFFIX;
 
                     logger.LogTrace("Getting requirement {requirement}", requirementName);
 
@@ -82,17 +82,17 @@ namespace EC.Norma.Core
                         cache.Set(cacheKey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
                     }
 
-                    foreach (var priority in GetPriorities(policy))
+                    foreach (var priority in GetPriorities(requirement))
                     {
-                        if (services.GetService(type) is NormaRequirement requirement)
+                        if (services.GetService(type) is NormaRequirement normaRequirement)
                         {
-                            requirement.Action = action;
-                            requirement.Resource = resource;
-                            requirement.Permission = permissions.First().Name;
-                            requirement.Priority = priority;
-                            policyBuilder.AddRequirements(requirement);
+                            normaRequirement.Action = action;
+                            normaRequirement.Resource = resource;
+                            normaRequirement.Permission = permissions.First().Name;
+                            normaRequirement.Priority = priority;
+                            policyBuilder.AddRequirements(normaRequirement);
 
-                            logger.LogTrace("Requirement Added (Action: {action}, Resource: {resource}, Permission: {permission}, Priority: {priority})", action, resource, requirement.Permission, priority);
+                            logger.LogTrace("Requirement Added (Action: {action}, Resource: {resource}, Permission: {permission}, Priority: {priority})", action, resource, normaRequirement.Permission, priority);
                         }
                         else
                         {
@@ -104,10 +104,10 @@ namespace EC.Norma.Core
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError("No requirement located for policy {policy}.", policy.Name);
+                    logger.LogError("No requirement located for requirement {requirement}.", requirement.Name);
                     if (normaOptions.MissingRequirementAction == MissingRequirementBehaviour.ThrowException)
                     {
-                        throw new TypeLoadException($"NormaRequirement for {policy} not found", ex);
+                        throw new TypeLoadException($"NormaRequirement for {requirement} not found", ex);
                     }
 
                 }
@@ -125,15 +125,15 @@ namespace EC.Norma.Core
             return Task.FromResult(policyBuilder.Build());
         }
 
-        private IEnumerable<Policy> GetNormaPolicies(string action, string resource)
+        private IEnumerable<Requirement> GetNormaRequirements(string action, string resource)
         {
-            logger.LogTrace("Getting Norma Policies");
-            string cacheKey = $"{CacheKeys.NormaPolicies}|{action}|{resource ?? ""}";
+            logger.LogTrace("Getting Norma Requirements");
+            string cacheKey = $"{CacheKeys.NormaRequirements}|{action}|{resource ?? ""}";
 
-            var policies = cache.Get<ICollection<Policy>>(cacheKey);
+            var policies = cache.Get<ICollection<Requirement>>(cacheKey);
             if (policies == null)
             {
-                policies = string.IsNullOrWhiteSpace(resource) ? provider.GetPoliciesForPermission(action) : provider.GetPoliciesForActionResource(action, resource);
+                policies = string.IsNullOrWhiteSpace(resource) ? provider.GetRequirementsForPermission(action) : provider.GetRequirementsForActionResource(action, resource);
                 cache.Set(cacheKey, policies, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
             }
 
@@ -172,12 +172,12 @@ namespace EC.Norma.Core
             return requirementType;
         }
 
-        private ICollection<int> GetPriorities (Policy policy)
+        private ICollection<int> GetPriorities (Requirement requirement)
         {
-            if(policy.PoliciesPriorityGroups != null && policy.PoliciesPriorityGroups.Any())
+            if(requirement.RequirementsPriorityGroups != null && requirement.RequirementsPriorityGroups.Any())
             {
-                logger.LogTrace("Getting priorities from Policy's PriorityGroups");
-                return policy.PoliciesPriorityGroups.Select(x => x.PriorityGroup.Priority).Distinct().ToArray();
+                logger.LogTrace("Getting priorities from Requirement's PriorityGroups");
+                return requirement.RequirementsPriorityGroups.Select(x => x.PriorityGroup.Priority).Distinct().ToArray();
             }
             else
             {

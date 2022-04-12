@@ -87,12 +87,12 @@ namespace EC.Norma.Tests
 
             policy.Should().NotBeNull();
 
-            string cacheKeyPolicies = $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}|{TestController.Name}";
+            string cacheKeyRequirements = $"{CacheKeys.NormaRequirements}|{nameof(TestController.PlainAction)}|{TestController.Name}";
 
             cacheService.Should().NotBeNull();
 
-            cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Should().NotBeNull();
-            cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Count().Should().Be(1);
+            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Should().NotBeNull();
+            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Count().Should().Be(1);
 
         }
 
@@ -108,15 +108,15 @@ namespace EC.Norma.Tests
             policy.Should().NotBeNull();
 
             string cacheKeyPermissions = $"{CacheKeys.NormaPermissions}|{nameof(TestController.PlainAction)}|{TestController.Name}";
-            string cacheKeyPolicies = $"{CacheKeys.NormaPolicies}|{nameof(TestController.PlainAction)}|{TestController.Name}";
+            string cacheKeyRequirements = $"{CacheKeys.NormaRequirements}|{nameof(TestController.PlainAction)}|{TestController.Name}";
 
             //este tiempo se configura en el startUp del proyecto de test
             Thread.Sleep(10001);
 
             cacheService.Should().NotBeNull();
 
-            cacheService.Get<ICollection<Policy>>(cacheKeyPermissions).Should().BeNull();
-            cacheService.Get<ICollection<Policy>>(cacheKeyPolicies).Should().BeNull();
+            cacheService.Get<ICollection<Requirement>>(cacheKeyPermissions).Should().BeNull();
+            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Should().BeNull();
         }
 
 
@@ -125,7 +125,7 @@ namespace EC.Norma.Tests
         {
             var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
-            var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.TwoPoliciesAction)}|{TestController.Name}");
+            var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.TwoRequirementsAction)}|{TestController.Name}");
 
             policy.Should().NotBeNull();
             policy.Requirements.Count.Should().Be(2);
@@ -137,11 +137,11 @@ namespace EC.Norma.Tests
             isAdminRequirement.Should().BeOfType<IsAdminRequirement>();
 
 
-            ((HasPermissionRequirement)requirementHasPermission).Action.Should().Be(nameof(TestController.TwoPoliciesAction));
+            ((HasPermissionRequirement)requirementHasPermission).Action.Should().Be(nameof(TestController.TwoRequirementsAction));
             ((HasPermissionRequirement)requirementHasPermission).Resource.Should().Be(TestController.Name);
             ((HasPermissionRequirement)requirementHasPermission).Priority.Should().Be(2);
 
-            ((IsAdminRequirement)isAdminRequirement).Action.Should().Be(nameof(TestController.TwoPoliciesAction));
+            ((IsAdminRequirement)isAdminRequirement).Action.Should().Be(nameof(TestController.TwoRequirementsAction));
             ((IsAdminRequirement)isAdminRequirement).Resource.Should().Be(TestController.Name);
             ((IsAdminRequirement)isAdminRequirement).Priority.Should().Be(1);
 
@@ -149,7 +149,7 @@ namespace EC.Norma.Tests
 
 
         [Fact]
-        public async void GetPolicyAsync_WithData_ReturnsNullAPolicyWithOtherApplication()
+        public async void GetRequirementAsync_WithData_ReturnsNullARequirementWithOtherApplication()
         {
             var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 

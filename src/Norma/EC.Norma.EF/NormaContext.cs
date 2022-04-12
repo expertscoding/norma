@@ -41,7 +41,7 @@ namespace EC.Norma.EF
 
         public virtual DbSet<Action> Actions { get; set; }
 
-        public virtual DbSet<ActionsPolicy> ActionsPolicies { get; set; }
+        public virtual DbSet<ActionsRequirement> ActionsRequirements { get; set; }
 
         public virtual DbSet<Application> Applications { get; set; }
 
@@ -51,9 +51,9 @@ namespace EC.Norma.EF
 
         public virtual DbSet<Permission> Permissions { get; set; }
 
-        public virtual DbSet<PermissionsPolicy> PermissionsPolicies { get; set; }
+        public virtual DbSet<PermissionsRequirement> PermissionsRequirements { get; set; }
 
-        public virtual DbSet<Policy> Policies { get; set; }
+        public virtual DbSet<Requirement> Requirements { get; set; }
 
         public virtual DbSet<Profile> Profiles { get; set; }
 
@@ -61,7 +61,7 @@ namespace EC.Norma.EF
 
         public virtual DbSet<PriorityGroup> PriorityGroups { get; set; }
 
-        public virtual DbSet<PolicyPriorityGroup> PoliciesPriorityGroups { get; set; }
+        public virtual DbSet<RequirementPriorityGroup> RequirementsPriorityGroups { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,17 +71,17 @@ namespace EC.Norma.EF
             modelBuilder.HasDefaultSchema("norma");
 
             modelBuilder.ApplyConfiguration(new ActionTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new ActionsPolicyTypeConfiguration(ApplicationId));
+            modelBuilder.ApplyConfiguration(new ActionRequirementTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new ApplicationTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new ModuleTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new PermissionsPolicyTypeConfiguration(ApplicationId));
+            modelBuilder.ApplyConfiguration(new PermissionRequirementTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new PermissionTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new PolicyTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RequirementTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration(ApplicationId));
             modelBuilder.ApplyConfiguration(new PriorityGroupTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new PolicyPriorityGroupTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RequirementPriorityGroupTypeConfiguration());
 
         }
 

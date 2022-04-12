@@ -9,15 +9,15 @@ namespace EC.Norma.Json
     {
         public virtual List<Action> Actions { get; set; } = new List<EC.Norma.Entities.Action>();
 
-        public virtual List<ActionsPolicy> ActionsPolicies { get; set; } = new List<ActionsPolicy>();
+        public virtual List<ActionsRequirement> ActionsRequirements { get; set; } = new List<ActionsRequirement>();
 
         public virtual List<Assignment> Assignments { get; set; } = new List<Assignment>();
 
         public virtual List<Permission> Permissions { get; set; } = new List<Permission>();
 
-        public virtual List<PermissionsPolicy> PermissionsPolicies { get; set; } = new List<PermissionsPolicy>();
+        public virtual List<PermissionsRequirement> PermissionsRequirements { get; set; } = new List<PermissionsRequirement>();
 
-        public virtual List<Policy> Policies { get; set; } = new List<Policy>();
+        public virtual List<Requirement> Requirements { get; set; } = new List<Requirement>();
 
         public virtual List<Profile> Profiles { get; set; } = new List<Profile>();
 
@@ -33,7 +33,7 @@ namespace EC.Norma.Json
 
         private void InitializeDefaults()
         {
-            Policies.Add(new Policy
+            Requirements.Add(new Requirement
             {
                 Id = 1,
                 Name = "HasPermission"
@@ -51,16 +51,16 @@ namespace EC.Norma.Json
                 Name = "defaultResource"
             });
 
-            var ap = new ActionsPolicy
+            var ap = new ActionsRequirement
             {
                 Id=1,
                 Action = Actions[0],
-                Policy=Policies[0],
-                IdPolicy = Policies[0].Id
+                Requirement=Requirements[0],
+                IdRequirement = Requirements[0].Id
             };
 
-            ActionsPolicies.Add(ap);
-            Actions[0].ActionPolicies = new List<ActionsPolicy> { ap };
+            ActionsRequirements.Add(ap);
+            Actions[0].ActionRequirements = new List<ActionsRequirement> { ap };
             
         }
 
