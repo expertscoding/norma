@@ -6,11 +6,11 @@
 trigger:
   - develop
   
-name: dev-$(Year:yy)-$(DayOfYear)-$(Rev:.r)
+name: dev-$(Year:yy)$(DayOfYear)-$(Rev:r)
 
 variables:
   buildConfiguration: 'Debug'
-  packageVersion: $[ format('{0}-dev-{1}', variables['NormaPackageVersion'], variables['build.BuildNumber'])]
+  packageVersion: $[ format('{0}-{1}', variables['NormaPackageVersion'], variables['build.BuildNumber'])]
   #$(NormaPackageVersion)-dev-$(Year:yy)$(DayOfYear)-$(Rev:r')
 
 pool:
