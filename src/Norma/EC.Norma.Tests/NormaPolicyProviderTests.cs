@@ -92,7 +92,7 @@ namespace EC.Norma.Tests
             cacheService.Should().NotBeNull();
 
             cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Should().NotBeNull();
-            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Count().Should().Be(1);
+            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Count().Should().Be(2);
 
         }
 
