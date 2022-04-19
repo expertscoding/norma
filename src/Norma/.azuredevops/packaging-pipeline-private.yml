@@ -8,7 +8,7 @@ trigger:
 
 variables:
   buildConfiguration: 'Debug'
-  normaPackagesVersion: '$(packageVersion)-dev-$(Year:yy)$(DayOfYear)-$(Rev:r)'
+  normaPackagesVersion: $[ format('$(packageVersion)-dev-{0}{1}-{2}', variables['Year:yy'], variables['DayOfYear'], variables['Rev:r'])]
 
 pool:
   vmImage: windows-latest
