@@ -8,8 +8,7 @@ trigger:
 
 variables:
   buildConfiguration: 'Debug'
-  name: $(Year:yy)_$(DayOfYear)_$(Rev:.r)
-  packageVersion: $[ format('{0}-dev-{1}', variables['NormaPackageVersion'], variables['build.BuildNumber'])]
+  packageVersion: $[ format('{0}-dev-{1}', variables['NormaPackageVersion'], variables['postVersion'])]
   #$(NormaPackageVersion)-dev-$(Year:yy)$(DayOfYear)-$(Rev:r')
 
 pool:
