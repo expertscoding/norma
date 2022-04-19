@@ -9,7 +9,7 @@ namespace EC.Norma.Tests
 
         public IActionResult PlainAction() => Ok();
         public IActionResult PlainActionApplication2() => Ok();
-        public IActionResult AnotherAction() => Ok();
+        public IActionResult DefaultAction() => Ok();
 
         [ByPassNorma]
         public IActionResult ByPassedAction() => Ok();
