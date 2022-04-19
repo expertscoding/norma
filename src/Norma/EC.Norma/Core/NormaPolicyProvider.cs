@@ -88,8 +88,10 @@ namespace EC.Norma.Core
                         {
                             normaRequirement.Action = action;
                             normaRequirement.Resource = resource;
-                            normaRequirement.Permission = permissions.First().Name;
+                            normaRequirement.Permission = requirement.IsDefault ? $"DefaultRequirement for {resource}/{action}" : permissions.First().Name;
                             normaRequirement.Priority = priority;
+                            normaRequirement.IsDefault = requirement.IsDefault;
+
                             policyBuilder.AddRequirements(normaRequirement);
 
                             logger.LogTrace("Requirement Added (Action: {action}, Resource: {resource}, Permission: {permission}, Priority: {priority})", action, resource, normaRequirement.Permission, priority);
@@ -133,7 +135,16 @@ namespace EC.Norma.Core
             var policies = cache.Get<ICollection<Requirement>>(cacheKey);
             if (policies == null)
             {
-                policies = string.IsNullOrWhiteSpace(resource) ? provider.GetRequirementsForPermission(action) : provider.GetRequirementsForActionResource(action, resource);
+                if (string.IsNullOrWhiteSpace(resource))
+                    policies = provider.GetRequirementsForPermission(action);
+                else
+                {
+                    //var list = new List<Requirement>();
+                    //list.AddRange(provider.GetRequirementsForActionResource(action, resource));
+                    //list.AddRange(provider.GetDefaultRequirements().Select(x => { x.IsDefault = true; return x; }));
+                    policies = provider.GetRequirementsForActionResource(action, resource).Union(provider.GetDefaultRequirements().Select(x => { x.IsDefault = true; return x; })).ToArray();
+                    //policies = list;
+                }
                 cache.Set(cacheKey, policies, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
             }
 
@@ -174,7 +185,7 @@ namespace EC.Norma.Core
 
         private ICollection<int> GetPriorities (Requirement requirement)
         {
-            if(requirement.RequirementsPriorityGroups != null && requirement.RequirementsPriorityGroups.Any())
+            if(!requirement.IsDefault && requirement.RequirementsPriorityGroups != null && requirement.RequirementsPriorityGroups.Any())
             {
                 logger.LogTrace("Getting priorities from Requirement's PriorityGroups");
                 return requirement.RequirementsPriorityGroups.Select(x => x.PriorityGroup.Priority).Distinct().ToArray();
@@ -182,7 +193,7 @@ namespace EC.Norma.Core
             else
             {
                 logger.LogTrace("No priorities defined");
-                return new[] { 0 };
+                return new[] { requirement.RequirementsApplications != null && requirement.RequirementsApplications.Any(x => x.IsDefault) ? int.MaxValue : 0 };
             }
         }
     }

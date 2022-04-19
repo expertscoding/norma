@@ -8,11 +8,11 @@ namespace EC.Norma.EF.Configuration
 {
     public class AssignmentTypeConfiguration : IEntityTypeConfiguration<Assignment>
     {
-        private string applicationId;
+        private string applicationKey;
 
-        public AssignmentTypeConfiguration(string applicationId)
+        public AssignmentTypeConfiguration(string applicationKey)
         {
-            this.applicationId = applicationId;
+            this.applicationKey = applicationKey;
         }
 
         public void Configure(EntityTypeBuilder<Assignment> builder)
@@ -23,8 +23,8 @@ namespace EC.Norma.EF.Configuration
             builder.HasOne(a => a.Permission).WithMany().HasForeignKey(a => a.IdPermission);
             builder.HasOne(a => a.Profile).WithMany().HasForeignKey(a => a.IdProfile);
 
-            builder.HasQueryFilter(a => a.Permission.Action.Module.Application.ApplicationId == applicationId);
-            builder.HasQueryFilter(a => a.Permission.Resource.Module.Application.ApplicationId == applicationId);
+            builder.HasQueryFilter(a => a.Permission.Action.Module.Application.Key == applicationKey);
+            builder.HasQueryFilter(a => a.Permission.Resource.Module.Application.Key == applicationKey);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace EC.Norma.Core
 
         public int Priority { get; set; }
 
+        public bool IsDefault { get; set; }
+
         public NormaRequirement()
         {
 

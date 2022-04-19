@@ -50,7 +50,7 @@ namespace EC.Norma.Tests
             services.AddNorma(config =>
                 {
                     config.CacheExpiration = 10;
-                    config.ApplicationId = "application1";
+                    config.ApplicationKey = "application1";
                 });
             services.AddTransient<INormaProvider, EFNormaProvider>();
             services.AddDbContext<NormaContext>(options => options.UseInMemoryDatabase("TestNorma"));

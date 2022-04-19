@@ -6,11 +6,11 @@ namespace EC.Norma.EF.Configuration
 {
     public class PermissionTypeConfiguration : IEntityTypeConfiguration<Permission>
     {
-        private string applicationId;
+        private string applicationKey;
 
-        public PermissionTypeConfiguration(string applicationId)
+        public PermissionTypeConfiguration(string applicationKey)
         {
-            this.applicationId = applicationId;
+            this.applicationKey = applicationKey;
         }
 
         public void Configure(EntityTypeBuilder<Permission> builder)
@@ -22,10 +22,9 @@ namespace EC.Norma.EF.Configuration
             builder.HasOne(a => a.Resource).WithMany().HasForeignKey(a => a.IdResource);
 
 
-            builder.HasQueryFilter(a => a.Action.Module.Application.ApplicationId == applicationId);
+            builder.HasQueryFilter(a => a.Action.Module.Application.Key == applicationKey);
 
-            builder.HasQueryFilter(a => a.Action.Module.Application.ApplicationId == applicationId);
-            builder.HasQueryFilter(a => a.Resource.Module.Application.ApplicationId == applicationId);
+            builder.HasQueryFilter(a => a.Resource.Module.Application.Key == applicationKey);
 
         }
     

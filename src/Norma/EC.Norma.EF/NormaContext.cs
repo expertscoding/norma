@@ -12,14 +12,14 @@ namespace EC.Norma.EF
     {
         readonly ILoggerFactory loggerFactory;
         readonly NormaOptions normaOptions;
-        readonly string ApplicationId;
+        readonly string ApplicationKey;
 
         public NormaContext(IOptions<NormaOptions> normaOptions, ILoggerFactory loggerFactory = null, DbContextOptions<NormaContext> options = null) : base(options)
         {   
             this.loggerFactory = loggerFactory;
             this.normaOptions = normaOptions.Value;
 
-            ApplicationId = this.normaOptions.ApplicationId;
+            ApplicationKey = this.normaOptions.ApplicationKey;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,7 +41,7 @@ namespace EC.Norma.EF
 
         public virtual DbSet<Action> Actions { get; set; }
 
-        public virtual DbSet<ActionsRequirement> ActionsRequirements { get; set; }
+        public virtual DbSet<ActionRequirement> ActionsRequirements { get; set; }
 
         public virtual DbSet<Application> Applications { get; set; }
 
@@ -51,7 +51,7 @@ namespace EC.Norma.EF
 
         public virtual DbSet<Permission> Permissions { get; set; }
 
-        public virtual DbSet<PermissionsRequirement> PermissionsRequirements { get; set; }
+        public virtual DbSet<PermissionRequirement> PermissionsRequirements { get; set; }
 
         public virtual DbSet<Requirement> Requirements { get; set; }
 
@@ -63,6 +63,8 @@ namespace EC.Norma.EF
 
         public virtual DbSet<RequirementPriorityGroup> RequirementsPriorityGroups { get; set; }
 
+        public virtual DbSet<RequirementApplication> RequirementsApplications { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,18 +72,19 @@ namespace EC.Norma.EF
             base.OnModelCreating(modelBuilder);
             modelBuilder.HasDefaultSchema("norma");
 
-            modelBuilder.ApplyConfiguration(new ActionTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new ActionRequirementTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new ApplicationTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new ModuleTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new PermissionRequirementTypeConfiguration(ApplicationId));
-            modelBuilder.ApplyConfiguration(new PermissionTypeConfiguration(ApplicationId));
+            modelBuilder.ApplyConfiguration(new ActionTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new ActionRequirementTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new ApplicationTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new ModuleTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new PermissionRequirementTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new PermissionTypeConfiguration(ApplicationKey));
             modelBuilder.ApplyConfiguration(new RequirementTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration(ApplicationId));
+            modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration(ApplicationKey));
             modelBuilder.ApplyConfiguration(new PriorityGroupTypeConfiguration());
             modelBuilder.ApplyConfiguration(new RequirementPriorityGroupTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RequirementApplicationTypeConfiguration(ApplicationKey));
 
         }
 

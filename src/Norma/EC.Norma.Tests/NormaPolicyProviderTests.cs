@@ -149,16 +149,38 @@ namespace EC.Norma.Tests
 
 
         [Fact]
-        public async void GetRequirementAsync_WithData_ReturnsNullARequirementWithOtherApplication()
+        public async void GetRequirementAsync_WithData_ReturnsDefaultRequirementWithOtherApplication()
         {
+            //We are in "application1" context, defined in starup and in there is a DefaultRequirement defined for application1. 
+
             var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainActionApplication2)}|{TestController.Name}");
 
-            policy.Should().BeNull();            
+            //Default requeriment
+            policy.Should().NotBeNull();
+            policy.Requirements.Count.Should().Be(1);
 
+            var requirementHasPermission = policy.Requirements[0];
+            ((HasPermissionRequirement)requirementHasPermission).IsDefault.Should().Be(true);
         }
 
-        
+
+        [Fact]
+        public async void GetRequirementAsync_WithData_ReturnsDefaultRequirementWithAnyAction()
+        {
+            //We are in "application1" context, defined in starup and in there is a DefaultRequirement defined for application1. 
+
+            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+
+            var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.AnotherAction)}|{TestController.Name}");
+
+            //Default requeriment
+            policy.Should().NotBeNull();
+            policy.Requirements.Count.Should().Be(1);
+
+            var requirementHasPermission = policy.Requirements[0];
+            ((HasPermissionRequirement)requirementHasPermission).IsDefault.Should().Be(true);
+        }
     }
 }

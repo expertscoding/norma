@@ -8,11 +8,11 @@ namespace EC.Norma.EF.Configuration
 {
     public class ApplicationTypeConfiguration : IEntityTypeConfiguration<Application>
     {
-        private string applicationId;
+        private string applicationKey;
 
-        public ApplicationTypeConfiguration(string applicationId)
+        public ApplicationTypeConfiguration(string applicationKey)
         {
-            this.applicationId = applicationId;
+            this.applicationKey = applicationKey;
         }
 
         public void Configure(EntityTypeBuilder<Application> builder)
@@ -20,7 +20,7 @@ namespace EC.Norma.EF.Configuration
             builder.ToTable("Applications");
             builder.HasKey(a => a.Id);
 
-            builder.HasQueryFilter(a => a.ApplicationId == applicationId);
+            builder.HasQueryFilter(a => a.Key == applicationKey);
         }
     }
 }

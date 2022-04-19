@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EC.Norma.EF.Configuration
 {
-    public class ActionRequirementTypeConfiguration : IEntityTypeConfiguration<ActionsRequirement>
+    public class ActionRequirementTypeConfiguration : IEntityTypeConfiguration<ActionRequirement>
     {
-        private string applicationId;
+        private string applicationKey;
 
-        public ActionRequirementTypeConfiguration(string applicationId)
+        public ActionRequirementTypeConfiguration(string applicationKey)
         {
-            this.applicationId = applicationId;
+            this.applicationKey = applicationKey;
         }
 
-        public void Configure(EntityTypeBuilder<ActionsRequirement> builder)
+        public void Configure(EntityTypeBuilder<ActionRequirement> builder)
         {
             builder.ToTable("ActionsRequirements");
             builder.HasKey(a => a.Id);
@@ -22,7 +22,7 @@ namespace EC.Norma.EF.Configuration
             builder.HasOne(a => a.Action).WithMany(b=>b.ActionRequirements).HasForeignKey(a => a.IdAction);
             builder.HasOne(a => a.Requirement).WithMany().HasForeignKey(a => a.IdRequirement);
 
-            builder.HasQueryFilter(a => a.Action.Module.Application.ApplicationId == applicationId);
+            builder.HasQueryFilter(a => a.Action.Module.Application.Key == applicationKey);
         }
     }
 }
