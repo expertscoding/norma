@@ -8,7 +8,7 @@ trigger:
 
 variables:
   buildConfiguration: 'Debug'
-  packageVersion: '$(packageVersion)-dev-$(Year:yy)$(DayOfYear)-$(Rev:r)'
+  normaPackagesVersion: '$(packageVersion)-dev-$(Year:yy)$(DayOfYear)-$(Rev:r)'
 
 pool:
   vmImage: windows-latest
@@ -59,7 +59,7 @@ steps:
     packagesToPack: '**/EC.Norma.csproj;**/Ec.Norma.Json.csproj;**/EC.Norma.EF.csproj'
     nobuild: true
     versioningScheme: 'byEnvVar'
-    versionEnvVar: 'packageVersion'
+    versionEnvVar: 'normaPackagesVersion'
 
 - task: NuGetCommand@2
   inputs:
