@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -26,12 +26,12 @@ using Xunit;
 
 namespace EC.Norma.Tests
 {
-    [Collection("TestServer collection")]
+    [Collection("TestServer collection Without Default Requirements")]
     public class NormaActionFilterTests
     {
-        private readonly NormaTestsFixture<Startup> fixture;
+        private readonly NormaTestsFixtureWithoutDefaultRequirement<Startup> fixture;
 
-        public NormaActionFilterTests(NormaTestsFixture<Startup> fixture)
+        public NormaActionFilterTests(NormaTestsFixtureWithoutDefaultRequirement<Startup> fixture)
         {
             this.fixture = fixture;
         }

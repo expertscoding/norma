@@ -48,8 +48,7 @@ namespace EC.Norma.EF.Providers
                         .ThenInclude(x => x.PriorityGroup)
                         .Where(pp => permissions.Contains(pp.IdPermission))
                         .Select(pp => pp.Requirement);
-
-
+            
             list = list.Union(db.ActionsRequirements.AsNoTracking()
                         .Include(r => r.Requirement.RequirementsApplications)
                         .Include(x => x.Requirement.RequirementsPriorityGroups)
@@ -57,7 +56,7 @@ namespace EC.Norma.EF.Providers
                         .Where(ap => ap.Action.Name == actionName)
                         .Select(pp => pp.Requirement));
 
-            return list.Cast<Requirement>().ToList();
+            return list.ToList();
         }
 
 
@@ -79,7 +78,7 @@ namespace EC.Norma.EF.Providers
                         .Where(ap => actions.Contains(ap.Action))
                         .Select(ap => ap.Requirement));
 
-            return list.Cast<Requirement>().ToList();
+            return list.ToList();
         }
 
         public ICollection<Requirement> GetDefaultRequirements()
@@ -91,7 +90,7 @@ namespace EC.Norma.EF.Providers
                         .Where(x => x.IsDefault)
                         .Select(x => x.Requirement);
 
-            return list.Cast<Requirement>().ToList();
+            return list.ToList();
         }
     }
 }

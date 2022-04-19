@@ -18,19 +18,19 @@ namespace EC.Norma.Tests
     [Collection("TestServer collection")]
     public class NormaPolicyProviderTests
     {
-        private readonly NormaTestsFixture<Startup> fixture;
+        private readonly NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement;
         protected IAuthorizationPolicyProvider mPolicyProvider;
         protected IOptionsMonitor<NormaOptions> mNormaOptions;
 
-        public NormaPolicyProviderTests(NormaTestsFixture<Startup> fixture)
+        public NormaPolicyProviderTests(NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement)
         {
-            this.fixture = fixture;
+            this.fixtureWithDefaultRequirement = fixtureWithDefaultRequirement;
         }
 
         [Fact]
         public async void GetPolicyAsync_WithData_ReturnsAPolicyWithRequirements()
         {
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
            
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
@@ -45,7 +45,7 @@ namespace EC.Norma.Tests
         [Fact]
         public async void GetPolicyAsync_WithoutPermissionsAndOptionThrowException_ThrowsTypeException()
         {
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
             var exception = await Record.ExceptionAsync(() => policyProvider.GetPolicyAsync($"{nameof(TestController.WithoutRequirement)}|{TestController.Name}"));
 
@@ -55,7 +55,7 @@ namespace EC.Norma.Tests
         [Fact]
         public async void GetPolicyAsync_WithoutConfiguredRequirementAndOptionThrowException_ThrowsTypeException()
         {
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
             var exception = await Record.ExceptionAsync(() => policyProvider.GetPolicyAsync($"{nameof(TestController.WithoutConfiguredRequirement)}|{TestController.Name}"));
 
             exception.Should().BeOfType<TypeLoadException>();
@@ -64,8 +64,8 @@ namespace EC.Norma.Tests
         [Fact]
         public async void GetPolicyAsync_WithData_HasPermissionCacheKeys()
         {   
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();            
-            var cacheService = (IMemoryCache)fixture.WebAppFactory.Services.GetService<IMemoryCache>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();            
+            var cacheService = (IMemoryCache)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IMemoryCache>();
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
             policy.Should().NotBeNull();
@@ -81,8 +81,8 @@ namespace EC.Norma.Tests
         [Fact]
         public async void GetPolicyAsync_WithData_HasPolicyCacheKeys()
         {
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
-            var cacheService = (IMemoryCache)fixture.WebAppFactory.Services.GetService<IMemoryCache>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var cacheService = (IMemoryCache)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IMemoryCache>();
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
             policy.Should().NotBeNull();
@@ -99,9 +99,9 @@ namespace EC.Norma.Tests
         [Fact]
         public async void GetPolicyAsync_WithData_AfterTimeExpiredCleanCacheKeys()
         {
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
-            var cacheService = (IMemoryCache)fixture.WebAppFactory.Services.GetService<IMemoryCache>();
+            var cacheService = (IMemoryCache)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IMemoryCache>();
 
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
@@ -123,7 +123,7 @@ namespace EC.Norma.Tests
         [Fact]
         public async void GetPolicyAsync_WithData_ReturnsAPolicyWithRequirementsOfDiferentPriority()
         {
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.TwoRequirementsAction)}|{TestController.Name}");
 
@@ -153,7 +153,7 @@ namespace EC.Norma.Tests
         {
             //We are in "application1" context, defined in starup and in there is a DefaultRequirement defined for application1. 
 
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainActionApplication2)}|{TestController.Name}");
 
@@ -171,7 +171,7 @@ namespace EC.Norma.Tests
         {
             //We are in "application1" context, defined in starup and in there is a DefaultRequirement defined for application1. 
 
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.AnotherAction)}|{TestController.Name}");
 
