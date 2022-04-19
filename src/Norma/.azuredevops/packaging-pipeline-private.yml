@@ -21,11 +21,11 @@ steps:
     packageType: 'sdk'
     version: '3.1.x'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/Ec.Norma.Db.Build.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+#- task: DotNetCoreCLI@2
+#  inputs:
+#    command: 'build'
+#    projects: '**/Ec.Norma.Db.Build.csproj'
+#    arguments: '--configuration $(buildConfiguration)'
 
 - task: UseDotNet@2
   displayName: 'Use .NET Core sdk'
