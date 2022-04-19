@@ -53,7 +53,8 @@ namespace EC.Norma.Tests
                     config.ApplicationKey = "application1";
                 });
             services.AddTransient<INormaProvider, EFNormaProvider>();
-            services.AddDbContext<NormaContext>(options => options.UseInMemoryDatabase("TestNorma"));
+            var dbName = Configuration.GetValue<string>("dbName") ?? "TestNorma";
+            services.AddDbContext<NormaContext>(options => options.UseInMemoryDatabase(dbName));
 
             services.AddMemoryCache();
         }
@@ -93,6 +94,6 @@ namespace EC.Norma.Tests
     {
         public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder().ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>());
+        public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder();
     }
 }

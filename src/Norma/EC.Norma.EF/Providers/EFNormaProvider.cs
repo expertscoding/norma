@@ -48,8 +48,7 @@ namespace EC.Norma.EF.Providers
                         .ThenInclude(x => x.PriorityGroup)
                         .Where(x => permissions.Contains(x.IdPermission))
                         .Select(x => x.Requirement);
-
-
+            
             list = list.Union(db.ActionsRequirements.AsNoTracking()
                         //.Include(x => x.Requirement.RequirementsApplications)
                         .Include(x => x.Requirement.RequirementsPriorityGroups)

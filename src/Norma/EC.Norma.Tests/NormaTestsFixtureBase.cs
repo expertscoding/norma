@@ -1,28 +1,29 @@
 ﻿using System;
-using System.Threading;
 using EC.Norma.Entities;
 using EC.Norma.EF;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Action = EC.Norma.Entities.Action;
 using System.Linq;
+using EC.Norma.TestUtils;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EC.Norma.Tests
 {
-    public class NormaTestsFixture<T> : IDisposable where T : class
+    public abstract class NormaTestsFixtureBase<T> : IDisposable where T : class
     {
         public WebApplicationFactory<T> WebAppFactory { get; set; }
 
-        public NormaTestsFixture()
+        protected NormaTestsFixtureBase(string dbName = nameof(NormaTestsFixtureBase<T>))
         {
-            WebAppFactory = new WebApplicationFactory<T>();
+            WebAppFactory = (new WebApplicationFactory<T>()).WithWebHostBuilder(builder => builder.UseSetting("dbName", dbName).UseStartup<T>());
 
             CreateTestData();
         }
 
         public void CreateTestData()
         {
-            var db = WebAppFactory.Services.GetService<NormaContext>();
+            var db = WebAppFactory.Services.GetRequiredService<NormaContext>();
 
             #region Priority Groups
             var priorityGroupId1 = Sequencer.GetId();
@@ -193,7 +194,7 @@ namespace EC.Norma.Tests
 
             var permission = db.Permissions.Single(x => x.Name == $"{action.Name}-{resource.Name}");
 
-            if (profile != null && permission != null)
+            if (profile != null)
             {
                 AddProfileToContext(db, permission, profile);
             }
@@ -203,12 +204,5 @@ namespace EC.Norma.Tests
         {
             WebAppFactory?.Dispose();
         }
-    }
-
-    public static class Sequencer
-    {
-        private static int id;
-
-        public static int GetId() => Interlocked.Increment(ref id);
     }
 }
