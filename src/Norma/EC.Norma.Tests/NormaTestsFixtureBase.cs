@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace EC.Norma.Tests
 {
-    public abstract class NormaTestsFixture<T> : IDisposable where T : class
+    public abstract class NormaTestsFixtureBase<T> : IDisposable where T : class
     {
         public WebApplicationFactory<T> WebAppFactory { get; set; }
 
-        protected NormaTestsFixture(string dbName = nameof(NormaTestsFixture<T>))
+        protected NormaTestsFixtureBase(string dbName = nameof(NormaTestsFixtureBase<T>))
         {
             WebAppFactory = (new WebApplicationFactory<T>()).WithWebHostBuilder(builder => builder.UseSetting("dbName", dbName).UseStartup<T>());
 

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EC.Norma.Core;
 using EC.Norma.Filters;
-using EC.Norma.Metadata;
 using EC.Norma.Options;
-using FluentAssertions;
 using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

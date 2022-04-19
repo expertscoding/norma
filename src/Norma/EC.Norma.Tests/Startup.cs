@@ -94,6 +94,6 @@ namespace EC.Norma.Tests
     {
         public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder()/*.ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())*/;
+        public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder();
     }
 }

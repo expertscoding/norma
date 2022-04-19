@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EC.Norma.Tests
 {
-    public class NormaTestsFixtureWithoutDefaultRequirement<T> : NormaTestsFixture<T>, IDisposable where T : class
+    public class NormaTestsFixtureWithoutDefaultRequirement<T> : NormaTestsFixtureBase<T>, IDisposable where T : class
     {
-        public NormaTestsFixtureWithoutDefaultRequirement() : base(nameof(NormaTestsFixture<T>))
+        public NormaTestsFixtureWithoutDefaultRequirement() : base(nameof(NormaTestsFixtureWithoutDefaultRequirement<T>))
         {
             EditTestData();
         }
