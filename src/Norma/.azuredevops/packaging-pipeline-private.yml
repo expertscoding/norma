@@ -22,18 +22,6 @@ steps:
   displayName: 'Use .NET Core sdk'
   inputs:
     packageType: 'sdk'
-    version: '3.1.x'
-
-#- task: DotNetCoreCLI@2
-#  inputs:
-#    command: 'build'
-#    projects: '**/Ec.Norma.Db.Build.csproj'
-#    arguments: '--configuration $(buildConfiguration)'
-
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk'
-  inputs:
-    packageType: 'sdk'
     version: '6.0.x'
     
 - task: DotNetCoreCLI@2
@@ -43,7 +31,14 @@ steps:
       **/EC.Norma.csproj
       **/Ec.Norma.Json.csproj
       **/EC.Norma.EF.csproj
+      **/Ec.Norma.Db.Build.csproj
     feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/Ec.Norma.Db.Build.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build $(buildConfiguration)'
