@@ -36,27 +36,28 @@ namespace EC.Norma.EF.Providers
             return db.ActionsRequirements.Where(ap => ap.Action.Name == action).Select(ap => ap.Requirement).ToList();
         }
 
-        public ICollection<Requirement> GetRequirementsForActionResource(string actionName, string resourceName)
+        public ICollection<Requirement> GetRequirementsForActionResource( string actionName, string resourceName )
         {
             var permissions = db.Permissions
                 .Where(p => p.Action.Name == actionName && p.Resource.Name == resourceName)
-                .Select(p => p.Id);
+                .Select(p => p.Id).ToList();
 
             var list = db.PermissionsRequirements.AsNoTracking()
-                        //.Include(x => x.Requirement.RequirementsApplications)
+                        .Include(x => x.Requirement.RequirementsApplications)
                         .Include(x => x.Requirement.RequirementsPriorityGroups)
                         .ThenInclude(x => x.PriorityGroup)
                         .Where(x => permissions.Contains(x.IdPermission))
-                        .Select(x => x.Requirement);
-            
-            list = list.Union(db.ActionsRequirements.AsNoTracking()
-                        //.Include(x => x.Requirement.RequirementsApplications)
-                        .Include(x => x.Requirement.RequirementsPriorityGroups)
-                        .ThenInclude(x => x.PriorityGroup)
-                        .Where(x => x.Action.Name == actionName)
-                        .Select(x => x.Requirement));
+                        .Select(x => x.Requirement).ToList();
 
-            return list.ToList();
+            var requirements = db.ActionsRequirements.AsNoTracking()
+                .Include(x => x.Requirement.RequirementsApplications)
+                .Include(x => x.Requirement.RequirementsPriorityGroups)
+                .ThenInclude(x => x.PriorityGroup)
+                .Where(x => x.Action.Name == actionName)
+                .Select(x => x.Requirement).ToList();
+            list.AddRange(requirements);
+
+            return list;
         }
 
 
@@ -67,18 +68,20 @@ namespace EC.Norma.EF.Providers
                         .Include(x => x.Requirement.RequirementsPriorityGroups)
                         .ThenInclude(x => x.PriorityGroup)
                         .Where(x => x.Permission.Name == permissionName)
-                        .Select(x => x.Requirement);
+                        .Select(x => x.Requirement).ToList();
 
             var actions = db.Permissions.Where(p => p.Name == permissionName).Select(p => p.Action);
 
-            list = list.Union(db.ActionsRequirements.AsNoTracking()
+            var requirements = db.ActionsRequirements.AsNoTracking()
                         .Include(x => x.Requirement.RequirementsApplications)
                         .Include(x => x.Requirement.RequirementsPriorityGroups)
                         .ThenInclude(x => x.PriorityGroup)
                         .Where(x => actions.Contains(x.Action))
-                        .Select(x => x.Requirement));
+                        .Select(x => x.Requirement).ToList();
 
-            return list.ToList();
+            list.AddRange(requirements);
+
+            return list;
         }
 
         public ICollection<Requirement> GetDefaultRequirements()
