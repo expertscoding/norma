@@ -155,7 +155,7 @@ namespace EC.Norma.Core
                     }
                 }
             }
-
+   
             return policyBuilder?.Build();
 
         }

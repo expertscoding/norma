@@ -18,13 +18,13 @@ namespace EC.Norma.Tests
     [Collection("TestServer collection")]
     public class NormaPolicyProviderTests
     {
-        private readonly NormaTestsFixture<Startup> fixture;
+        private readonly NormaTestsFixtureWithDefaultRequirement<Startup> fixture;
         protected IAuthorizationPolicyProvider mPolicyProvider;
         protected IOptionsMonitor<NormaOptions> mNormaOptions;
 
-        public NormaPolicyProviderTests(NormaTestsFixture<Startup> fixture)
+        public NormaPolicyProviderTests(NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement)
         {
-            this.fixture = fixture;
+            this.fixture = fixtureWithDefaultRequirement;
         }
 
         [Fact]
@@ -35,8 +35,8 @@ namespace EC.Norma.Tests
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
              policy.Should().NotBeNull();
-            policy.Requirements.Count.Should().Be(1);
-            var requirement = policy.Requirements.First();
+            policy.Requirements.Count.Should().Be(2);
+            var requirement = policy.Requirements[0];
             requirement.Should().BeOfType<HasPermissionRequirement>();
             ((HasPermissionRequirement)requirement).Action.Should().Be(nameof(TestController.PlainAction));
             ((HasPermissionRequirement)requirement).Resource.Should().Be(TestController.Name);
@@ -92,7 +92,7 @@ namespace EC.Norma.Tests
             cacheService.Should().NotBeNull();
 
             cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Should().NotBeNull();
-            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Count().Should().Be(1);
+            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Count().Should().Be(2);
 
         }
 
@@ -128,7 +128,7 @@ namespace EC.Norma.Tests
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.TwoRequirementsAction)}|{TestController.Name}");
 
             policy.Should().NotBeNull();
-            policy.Requirements.Count.Should().Be(2);
+            policy.Requirements.Count.Should().Be(3);
 
             var requirementHasPermission = policy.Requirements[0];
             requirementHasPermission.Should().BeOfType<HasPermissionRequirement>();
@@ -149,16 +149,40 @@ namespace EC.Norma.Tests
 
 
         [Fact]
-        public async void GetRequirementAsync_WithData_ReturnsNullARequirementWithOtherApplication()
+        public async void GetRequirementAsync_WithData_ReturnsDefaultRequirementWithOtherApplication()
         {
+            //We are in "application1" context, defined in starup and in there is a DefaultRequirement defined for application1. 
+
             var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainActionApplication2)}|{TestController.Name}");
 
-            policy.Should().BeNull();            
+            //Default requeriment
+            policy.Should().NotBeNull();
+            policy.Requirements.Count.Should().Be(1);
 
+            var requirementHasPermission = policy.Requirements[0];
+            ((HasPermissionRequirement)requirementHasPermission).IsDefault.Should().Be(true);
         }
 
-        
+
+        [Fact]
+        public async void GetRequirementAsync_WithData_ReturnsDefaultRequirementWithAnyAction()
+        {
+            //We are in "application1" context, defined in starup and in there is a DefaultRequirement defined for application1. 
+
+            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+
+            var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.DefaultAction)}|{TestController.Name}");
+
+            //Default requeriment
+            policy.Should().NotBeNull();
+            policy.Requirements.Count.Should().Be(1);
+
+            var requirementHasPermission = policy.Requirements[0];
+            ((HasPermissionRequirement)requirementHasPermission).IsDefault.Should().Be(true);
+            ((HasPermissionRequirement)requirementHasPermission).Priority.Should().Be(int.MaxValue);
+
+        }
     }
 }

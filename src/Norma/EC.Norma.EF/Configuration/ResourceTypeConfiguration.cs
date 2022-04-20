@@ -6,11 +6,11 @@ namespace EC.Norma.EF.Configuration
 {
     public class ResourceTypeConfiguration : IEntityTypeConfiguration<Resource>
     {
-        private string applicationId;
+        private string applicationKey;
 
-        public ResourceTypeConfiguration(string applicationId)
+        public ResourceTypeConfiguration(string applicationKey)
         {
-            this.applicationId = applicationId;
+            this.applicationKey = applicationKey;
         }
 
         public void Configure(EntityTypeBuilder<Resource> builder)
@@ -20,7 +20,7 @@ namespace EC.Norma.EF.Configuration
 
             builder.HasOne(a => a.Module).WithMany().HasForeignKey(a => a.IdModule);
 
-            builder.HasQueryFilter(a => a.Module.Application.ApplicationId == applicationId);
+            builder.HasQueryFilter(a => a.Module.Application.Key == applicationKey);
         }
     }
 }

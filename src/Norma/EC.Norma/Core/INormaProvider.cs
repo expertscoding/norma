@@ -9,6 +9,8 @@ namespace EC.Norma.Core
 
         ICollection<Requirement> GetRequirementsForActionResource(string actionName, string resourceName);
 
+        ICollection<Requirement> GetDefaultRequirements();
+
         ICollection<Permission> GetPermissions(string action, string resource);
 
         ICollection<Permission> GetPermissions(string permissionName);

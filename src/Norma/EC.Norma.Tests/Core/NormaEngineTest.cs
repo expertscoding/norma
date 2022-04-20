@@ -31,11 +31,11 @@ namespace EC.Norma.Tests.Core
         protected IOptionsMonitor<NormaOptions> mNormaOptions;
         protected ILogger mLogger;
 
-        private readonly NormaTestsFixture<Startup> fixture;
+        private readonly NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement;
 
-        public NormaEngineTest(NormaTestsFixture<Startup> fixture)
+        public NormaEngineTest(NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement)
         {
-            this.fixture = fixture;
+            this.fixtureWithDefaultRequirement = fixtureWithDefaultRequirement;
 
             CreateCUT();
         }

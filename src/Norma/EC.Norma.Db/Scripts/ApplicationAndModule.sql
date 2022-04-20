@@ -4,11 +4,11 @@ MERGE INTO [norma].[Applications] AS Target
 USING ( VALUES 
 	(-1, 'Default App', '05FAF113-E8EA-44F1-BDB5-2455B2F18D24')
 )
-AS Source ([Id], [Name], [ApplicationId])
+AS Source ([Id], [Name], [Key])
 ON Target.[Id] = Source.[Id]
 WHEN NOT MATCHED BY TARGET THEN
-	INSERT ([Id], [Name], [ApplicationId])
-	VALUES ([Id], [Name], [ApplicationId]);
+	INSERT ([Id], [Name], [Key])
+	VALUES ([Id], [Name], [Key]);
 
 SET IDENTITY_INSERT [norma].[Applications] OFF
 

@@ -13,17 +13,17 @@ namespace EC.Norma.Tests
     [Collection("TestServer collection")]
     public class EFNormaProviderTests
     {
-        private readonly NormaTestsFixture<Startup> fixture;
+        private readonly NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement;
 
-        public EFNormaProviderTests(NormaTestsFixture<Startup> fixture)
+        public EFNormaProviderTests(NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement)
         {
-            this.fixture = fixture;
+            this.fixtureWithDefaultRequirement = fixtureWithDefaultRequirement;
         }
 
         [Fact]
         public void GetPermissions_WithNameForApplication1_ReturnsPermissionForApplication()
         {
-            EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
+            EFNormaProvider provider = (EFNormaProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<INormaProvider>();
 
             var permissions = provider.GetPermissions($"{nameof(TestController.PlainAction)}-{TestController.Name}");
 
@@ -36,7 +36,7 @@ namespace EC.Norma.Tests
         [Fact]
         public void GetPermissions_WithActionAndResourceForApplication1_ReturnsPermissionForApplication()
         {
-            EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
+            EFNormaProvider provider = (EFNormaProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<INormaProvider>();
 
             var permissions = provider.GetPermissions(nameof(TestController.PlainAction), TestController.Name);
 
@@ -49,7 +49,7 @@ namespace EC.Norma.Tests
         [Fact]
         public void GetRequirementsForPermission_WithNameForApplication1_ReturnsPermissionForApplication()
         {
-            EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
+            EFNormaProvider provider = (EFNormaProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<INormaProvider>();
 
             var policies = provider.GetRequirementsForPermission($"{nameof(TestController.PlainAction)}-{TestController.Name}");
 
@@ -60,7 +60,7 @@ namespace EC.Norma.Tests
         [Fact]
         public void GetRequirementsForActionResource_WithActionAndResourceForApplication1_ReturnsPermissionForApplication()
         {
-            EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
+            EFNormaProvider provider = (EFNormaProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<INormaProvider>();
 
             var policies = provider.GetRequirementsForActionResource(nameof(TestController.PlainAction), TestController.Name);
 
@@ -72,14 +72,14 @@ namespace EC.Norma.Tests
         [Fact]
         public async void GetAssignmentsForRoles_WithPermissionsAndProfilesForApplication1_ReturnsAssignmentsForApplication()
         {
-            var policyProvider = (NormaPolicyProvider)fixture.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
+            var policyProvider = (NormaPolicyProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<IAuthorizationPolicyProvider>();
 
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
             var requirement = policy.Requirements.First();
 
             var permission = ((HasPermissionRequirement)requirement).Permission;
 
-            EFNormaProvider provider = (EFNormaProvider)fixture.WebAppFactory.Services.GetService<INormaProvider>();
+            EFNormaProvider provider = (EFNormaProvider)fixtureWithDefaultRequirement.WebAppFactory.Services.GetService<INormaProvider>();
 
             IEnumerable<string> profiles = new List<string> { "User" };
             var assignments = provider.GetAssignmentsForRoles(permission, profiles);

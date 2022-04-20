@@ -10,4 +10,4 @@
 
 GO
 
-CREATE INDEX [IX_RequirementsPriorityGroups] ON [norma].[PermissionsRequirements] ([IdPermission], [IdRequirement])
+CREATE INDEX [IX_RequirementsPriorityGroups] ON [norma].[RequirementsPriorityGroups] ( [IdRequirement], [IdPriorityGroup])

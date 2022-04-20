@@ -2,8 +2,8 @@
 USING ( VALUES 
 	('DefaultApplication', '1234567890')
 )
-AS Source ([Name], [ApplicationId])
+AS Source ([Name], [Key])
 ON Target.[Name] = Source.[Name]
 WHEN NOT MATCHED BY TARGET THEN
-	INSERT ([Name],[ApplicationId])
-	VALUES ([Name],[ApplicationId]);
+	INSERT ([Name],[Key])
+	VALUES ([Name],[Key]);

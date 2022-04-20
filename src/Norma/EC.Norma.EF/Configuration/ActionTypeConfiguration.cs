@@ -8,11 +8,11 @@ namespace EC.Norma.EF.Configuration
 {
     public class ActionTypeConfiguration : IEntityTypeConfiguration<Action>
     {
-        private string applicationId { get; }
+        private string applicationKey { get; }
 
-        public ActionTypeConfiguration(string applicationId)
+        public ActionTypeConfiguration(string applicationKey)
         {
-            this.applicationId = applicationId;
+            this.applicationKey = applicationKey;
         }       
 
         public void Configure(EntityTypeBuilder<Action> builder)
@@ -22,7 +22,7 @@ namespace EC.Norma.EF.Configuration
 
             builder.HasOne(a => a.Module).WithMany().HasForeignKey(a => a.IdModule);
 
-            builder.HasQueryFilter(a => a.Module.Application.ApplicationId == applicationId);
+            builder.HasQueryFilter(a => a.Module.Application.Key == applicationKey);
         }
     }
 }

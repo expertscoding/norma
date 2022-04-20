@@ -12,6 +12,6 @@ namespace EC.Norma.Entities
 
         public String Name { get; set; }
 
-        public String ApplicationId { get; set; }
+        public String Key { get; set; }
     }
 }
