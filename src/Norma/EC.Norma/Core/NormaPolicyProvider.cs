@@ -138,13 +138,8 @@ namespace EC.Norma.Core
                 if (string.IsNullOrWhiteSpace(resource))
                     policies = provider.GetRequirementsForPermission(action);
                 else
-                {
-                    //var list = new List<Requirement>();
-                    //list.AddRange(provider.GetRequirementsForActionResource(action, resource));
-                    //list.AddRange(provider.GetDefaultRequirements().Select(x => { x.IsDefault = true; return x; }));
                     policies = provider.GetRequirementsForActionResource(action, resource).Union(provider.GetDefaultRequirements().Select(x => { x.IsDefault = true; return x; })).ToArray();
-                    //policies = list;
-                }
+
                 cache.Set(cacheKey, policies, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
             }
 
