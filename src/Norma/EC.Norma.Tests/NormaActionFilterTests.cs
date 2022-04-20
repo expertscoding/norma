@@ -1,14 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EC.Norma.Core;
 using EC.Norma.Filters;
-using EC.Norma.Metadata;
 using EC.Norma.Options;
-using FluentAssertions;
 using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -26,12 +22,12 @@ using Xunit;
 
 namespace EC.Norma.Tests
 {
-    [Collection("TestServer collection")]
+    [Collection("TestServer collection Without Default Requirements")]
     public class NormaActionFilterTests
     {
-        private readonly NormaTestsFixture<Startup> fixture;
+        private readonly NormaTestsFixtureWithoutDefaultRequirement<Startup> fixture;
 
-        public NormaActionFilterTests(NormaTestsFixture<Startup> fixture)
+        public NormaActionFilterTests(NormaTestsFixtureWithoutDefaultRequirement<Startup> fixture)
         {
             this.fixture = fixture;
         }

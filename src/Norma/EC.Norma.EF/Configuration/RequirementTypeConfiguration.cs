@@ -9,9 +9,11 @@ namespace EC.Norma.EF.Configuration
         public void Configure(EntityTypeBuilder<Requirement> builder)
         {
             builder.ToTable("Requirements");
-            builder.HasKey(a => a.Id);
+            builder.HasKey(r => r.Id);
 
 
+            builder.Ignore(r => r.IsDefault);
+            
         }
     }
 }

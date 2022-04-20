@@ -26,7 +26,7 @@ namespace EC.Norma.Filters
                 throw new ArgumentNullException(nameof(context));
             }
 
-            AuthorizationResult result = await base.EvalPermissions(context.HttpContext);
+            var result = await base.EvalPermissions(context.HttpContext);
 
             if (result == null || result.Succeeded)
             {

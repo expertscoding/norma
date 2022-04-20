@@ -1,5 +1,6 @@
 ﻿using EC.Norma.Core;
 using EC.Norma.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,30 +36,62 @@ namespace EC.Norma.EF.Providers
             return db.ActionsRequirements.Where(ap => ap.Action.Name == action).Select(ap => ap.Requirement).ToList();
         }
 
-        public ICollection<Requirement> GetRequirementsForActionResource(string actionName, string resourceName)
+        public ICollection<Requirement> GetRequirementsForActionResource( string actionName, string resourceName )
         {
             var permissions = db.Permissions
                 .Where(p => p.Action.Name == actionName && p.Resource.Name == resourceName)
-                .Select(p => p.Id);
+                .Select(p => p.Id).ToList();
 
-            var list = db.PermissionsRequirements.Where(pp => permissions.Contains(pp.IdPermission))
-                        .Select(pp => pp.Requirement);
+            var list = db.PermissionsRequirements.AsNoTracking()
+                        .Include(x => x.Requirement.RequirementsApplications)
+                        .Include(x => x.Requirement.RequirementsPriorityGroups)
+                        .ThenInclude(x => x.PriorityGroup)
+                        .Where(x => permissions.Contains(x.IdPermission))
+                        .Select(x => x.Requirement).ToList();
 
+            var requirements = db.ActionsRequirements.AsNoTracking()
+                .Include(x => x.Requirement.RequirementsApplications)
+                .Include(x => x.Requirement.RequirementsPriorityGroups)
+                .ThenInclude(x => x.PriorityGroup)
+                .Where(x => x.Action.Name == actionName)
+                .Select(x => x.Requirement).ToList();
+            list.AddRange(requirements);
 
-            list = list.Union(db.ActionsRequirements.Where(ap => ap.Action.Name == actionName).Select(ap => ap.Requirement));
-
-            return list.ToList();
+            return list;
         }
 
 
         public ICollection<Requirement> GetRequirementsForPermission(string permissionName)
         {
-            var list = db.PermissionsRequirements.Where(pp => pp.Permission.Name == permissionName)
-                        .Select(pp => pp.Requirement);
+            var list = db.PermissionsRequirements.AsNoTracking()
+                        .Include(x => x.Requirement.RequirementsApplications)
+                        .Include(x => x.Requirement.RequirementsPriorityGroups)
+                        .ThenInclude(x => x.PriorityGroup)
+                        .Where(x => x.Permission.Name == permissionName)
+                        .Select(x => x.Requirement).ToList();
 
             var actions = db.Permissions.Where(p => p.Name == permissionName).Select(p => p.Action);
 
-            list = list.Union(db.ActionsRequirements.Where(ap => actions.Contains(ap.Action)).Select(ap => ap.Requirement));
+            var requirements = db.ActionsRequirements.AsNoTracking()
+                        .Include(x => x.Requirement.RequirementsApplications)
+                        .Include(x => x.Requirement.RequirementsPriorityGroups)
+                        .ThenInclude(x => x.PriorityGroup)
+                        .Where(x => actions.Contains(x.Action))
+                        .Select(x => x.Requirement).ToList();
+
+            list.AddRange(requirements);
+
+            return list;
+        }
+
+        public ICollection<Requirement> GetDefaultRequirements()
+        {
+            var list = db.RequirementsApplications.AsNoTracking()
+                        .Include(x => x.Requirement.RequirementsApplications)
+                        .Include(x => x.Requirement.RequirementsPriorityGroups)
+                        .ThenInclude(x => x.PriorityGroup)
+                        .Where(x => x.IsDefault)
+                        .Select(x => x.Requirement);
 
             return list.ToList();
         }

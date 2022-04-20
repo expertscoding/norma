@@ -76,6 +76,7 @@
     <Build Include="Tables\PermissionsRequirements.sql" />
     <Build Include="Tables\RequirementsPriorityGroups.sql" />
     <Build Include="Tables\ActionsRequirements.sql" />
+    <Build Include="Tables\RequirementsApplications.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\01.PostDeployment.sql" />

@@ -39,7 +39,7 @@ namespace EC.Norma.Options.Tests
             var action = new Action { Id = Sequencer.GetId(), Name = nameof(TestController.PlainAction) };
             db.Actions.Add(action);
             
-            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
+            db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             var profile = new Profile { Id = Sequencer.GetId(), Name = "User" };
             db.Profiles.Add(profile);
@@ -68,7 +68,7 @@ namespace EC.Norma.Options.Tests
             action = new Action { Id = Sequencer.GetId(), Name = "List" };
             db.Actions.Add(action);
 
-            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
+            db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             permission = new Permission
             {
@@ -86,14 +86,14 @@ namespace EC.Norma.Options.Tests
             action = new Action { Id = Sequencer.GetId(), Name = nameof(TestController.WithoutConfiguredRequirement) };
             db.Actions.Add(action);
 
-            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirementWithOutConfiguredClass, IdRequirement = requirementWithOutConfiguredClass.Id });
+            db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirementWithOutConfiguredClass, IdRequirement = requirementWithOutConfiguredClass.Id });
 
 
             // WithoutPermissions Action
             action = new Action { Id = Sequencer.GetId(), Name = nameof(TestController.WithoutRequirement) };
             db.Actions.Add(action);
 
-            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirementWithOutClass, IdRequirement = requirementWithOutClass.Id });
+            db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirementWithOutClass, IdRequirement = requirementWithOutClass.Id });
 
             db.SaveChanges();
         }

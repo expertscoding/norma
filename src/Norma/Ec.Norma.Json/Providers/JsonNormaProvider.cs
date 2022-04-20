@@ -46,5 +46,12 @@ namespace EC.Norma.Json.Providers
 
             return list.ToList();
         }
+
+        public ICollection<Requirement> GetDefaultRequirements()
+        {
+            var list = context.RequirementsApplications.Where(x => x.IsDefault).Select(x => x.Requirement);
+
+            return list.ToList();
+        }
     }
 }

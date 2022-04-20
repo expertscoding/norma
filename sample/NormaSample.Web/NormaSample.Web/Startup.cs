@@ -83,7 +83,7 @@ namespace NormaSample.Web
             {
                 opt.MissingRequirementAction = MissingRequirementBehaviour.LogOnly;
                     opt.NoPermissionAction = NoPermissionsBehaviour.Failure;
-                    opt.ApplicationId = Configuration.GetValue<string>("AppGlobal:ApplicationId");
+                    opt.ApplicationKey = Configuration.GetValue<string>("AppGlobal:ApplicationKey");
             })
                 .AddNormaEFStore(opt =>
                 {

@@ -1,28 +1,29 @@
 ﻿using System;
-using System.Threading;
 using EC.Norma.Entities;
 using EC.Norma.EF;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Action = EC.Norma.Entities.Action;
 using System.Linq;
+using EC.Norma.TestUtils;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EC.Norma.Tests
 {
-    public class NormaTestsFixture<T> : IDisposable where T : class
+    public abstract class NormaTestsFixtureBase<T> : IDisposable where T : class
     {
         public WebApplicationFactory<T> WebAppFactory { get; set; }
 
-        public NormaTestsFixture()
+        protected NormaTestsFixtureBase(string dbName = nameof(NormaTestsFixtureBase<T>))
         {
-            WebAppFactory = new WebApplicationFactory<T>();
+            WebAppFactory = (new WebApplicationFactory<T>()).WithWebHostBuilder(builder => builder.UseSetting("dbName", dbName).UseStartup<T>());
 
             CreateTestData();
         }
 
         public void CreateTestData()
         {
-            var db = WebAppFactory.Services.GetService<NormaContext>();
+            var db = WebAppFactory.Services.GetRequiredService<NormaContext>();
 
             #region Priority Groups
             var priorityGroupId1 = Sequencer.GetId();
@@ -36,18 +37,33 @@ namespace EC.Norma.Tests
             #endregion
 
 
+            #region Applications
+            var application1 = new Application { Id = Sequencer.GetId(), Name = "application1", Key = "application1" };
+            db.Applications.Add(application1);
+
+            var application2 = new Application { Id = Sequencer.GetId(), Name = "application2", Key = "application2" };
+            db.Applications.Add(application1);
+            #endregion
+
+
             #region Requirements
             var requirementHasPermissionsId = Sequencer.GetId();
-            var requirementHasPermission = new Requirement { Id = requirementHasPermissionsId, Name = "HasPermission" };
-            var ppgHasPermissions = new RequirementPriorityGroup() { Id = Sequencer.GetId(), Requirement = requirementHasPermission, PriorityGroup = group2, IdRequirement = requirementHasPermission.Id, IdPriorityGroup = group2.Id };
-            db.RequirementsPriorityGroups.Add(ppgHasPermissions);
+            var requirementHasPermission = new Requirement { Id = requirementHasPermissionsId, Name = "HasPermission"};
+            var rpgHasPermissions = new RequirementPriorityGroup() { Id = Sequencer.GetId(), Requirement = requirementHasPermission, PriorityGroup = group2, IdRequirement = requirementHasPermission.Id, IdPriorityGroup = group2.Id };       
+            db.RequirementsPriorityGroups.Add(rpgHasPermissions);
+            requirementHasPermission.RequirementsPriorityGroups.Add(rpgHasPermissions);
+
+            var raHasPermissions = new RequirementApplication() { Id = Sequencer.GetId(), Requirement = requirementHasPermission, Application = application1, IdRequirement = requirementHasPermission.Id, IdApplication = application1.Id, IsDefault = true };
+            db.RequirementsApplications.Add(raHasPermissions);
+            requirementHasPermission.RequirementsApplications.Add(raHasPermissions);
+
             db.Requirements.Add(requirementHasPermission);
 
 
             var requirementAdminId = Sequencer.GetId();
             var requirementAdmin = new Requirement { Id = requirementAdminId, Name = "IsAdmin" };
-            var ppgAdmin = new RequirementPriorityGroup() { Id = Sequencer.GetId(), Requirement = requirementAdmin, PriorityGroup = group1, IdRequirement = requirementAdmin.Id, IdPriorityGroup = group1.Id };
-            db.RequirementsPriorityGroups.Add(ppgAdmin);
+            var rpgAdmin = new RequirementPriorityGroup() { Id = Sequencer.GetId(), Requirement = requirementAdmin, PriorityGroup = group1, IdRequirement = requirementAdmin.Id, IdPriorityGroup = group1.Id };
+            db.RequirementsPriorityGroups.Add(rpgAdmin);
             db.Requirements.Add(requirementAdmin);
 
 
@@ -56,15 +72,6 @@ namespace EC.Norma.Tests
 
             var requirementWithOutConfiguredClass = new Requirement { Id = Sequencer.GetId(), Name = "NonConfigured" };
             db.Requirements.Add(requirementWithOutConfiguredClass);
-            #endregion
-
-
-            #region Applications
-            var application1 = new Application { Id = Sequencer.GetId(), Name = "application1", ApplicationId = "application1" };
-            db.Applications.Add(application1);
-
-            var application2 = new Application { Id = Sequencer.GetId(), Name = "application2", ApplicationId = "application2" };
-            db.Applications.Add(application1);
             #endregion
 
 
@@ -83,7 +90,7 @@ namespace EC.Norma.Tests
 
 
             var resource2 = new Resource { Id = Sequencer.GetId(), Name = TestController.Name, Module = module2, IdModule = module2.Id };
-            db.Resources.Add(resource2); 
+            db.Resources.Add(resource2);
             #endregion
 
 
@@ -123,7 +130,7 @@ namespace EC.Norma.Tests
             var action = new Action { Id = Sequencer.GetId(), Name = actionName, Module = module, IdModule = module.Id };
             db.Actions.Add(action);
 
-            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
+            db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             var profile = GetOrCreateProfile(db, profileName);
 
@@ -181,13 +188,13 @@ namespace EC.Norma.Tests
 
             var action = db.Actions.Single(x => x.Name == actionName);
 
-            db.ActionsRequirements.Add(new ActionsRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
+            db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });
 
             var profile = GetOrCreateProfile(db, profileName);
 
             var permission = db.Permissions.Single(x => x.Name == $"{action.Name}-{resource.Name}");
 
-            if (profile != null && permission != null)
+            if (profile != null)
             {
                 AddProfileToContext(db, permission, profile);
             }
@@ -197,12 +204,5 @@ namespace EC.Norma.Tests
         {
             WebAppFactory?.Dispose();
         }
-    }
-
-    public static class Sequencer
-    {
-        private static int id;
-
-        public static int GetId() => Interlocked.Increment(ref id);
     }
 }
