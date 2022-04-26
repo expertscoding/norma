@@ -54,7 +54,6 @@ steps:
     includesymbols: true
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'packageVersion'
-    buildProperties: 'SymbolPackageFormat=snupkg'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
