@@ -51,8 +51,10 @@ steps:
     command: 'pack'
     packagesToPack: '**/EC.Norma.csproj;**/Ec.Norma.Json.csproj;**/EC.Norma.EF.csproj'
     nobuild: true
+    includesymbols: true
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'packageVersion'
+    buildProperties: '-p:SymbolPackageFormat=snupkg'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
