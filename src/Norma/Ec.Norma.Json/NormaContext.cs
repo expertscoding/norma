@@ -92,9 +92,7 @@ namespace EC.Norma.Json
             Actions.Add(new Action
             {
                 Id = 1,
-                Name = "defaultAction",
-                Module = Modules[0],
-                IdModule = Modules[0].Id
+                Name = "defaultAction"
             });
 
             Resources.Add(new Resource

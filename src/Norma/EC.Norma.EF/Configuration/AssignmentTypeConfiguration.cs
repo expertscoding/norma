@@ -23,7 +23,6 @@ namespace EC.Norma.EF.Configuration
             builder.HasOne(a => a.Permission).WithMany().HasForeignKey(a => a.IdPermission);
             builder.HasOne(a => a.Profile).WithMany().HasForeignKey(a => a.IdProfile);
 
-            builder.HasQueryFilter(a => a.Permission.Action.Module.Application.Key == applicationKey);
             builder.HasQueryFilter(a => a.Permission.Resource.Module.Application.Key == applicationKey);
         }
     }

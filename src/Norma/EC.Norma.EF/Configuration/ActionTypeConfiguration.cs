@@ -20,9 +20,7 @@ namespace EC.Norma.EF.Configuration
             builder.ToTable("Actions");
             builder.HasKey(a => a.Id);
 
-            builder.HasOne(a => a.Module).WithMany().HasForeignKey(a => a.IdModule);
 
-            builder.HasQueryFilter(a => a.Module.Application.Key == applicationKey);
         }
     }
 }

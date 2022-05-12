@@ -127,7 +127,7 @@ namespace EC.Norma.Tests
         protected void ConfigureAction( NormaContext db, string actionName, Requirement requirement, Resource resource, string profileName, bool assign, Module module )
         {
             // PlainAction
-            var action = new Action { Id = Sequencer.GetId(), Name = actionName, Module = module, IdModule = module.Id };
+            var action = new Action { Id = Sequencer.GetId(), Name = actionName};
             db.Actions.Add(action);
 
             db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });

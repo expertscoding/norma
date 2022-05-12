@@ -22,7 +22,6 @@ namespace EC.Norma.EF.Configuration
             builder.HasOne(a => a.Action).WithMany(b=>b.ActionRequirements).HasForeignKey(a => a.IdAction);
             builder.HasOne(a => a.Requirement).WithMany().HasForeignKey(a => a.IdRequirement);
 
-            builder.HasQueryFilter(a => a.Action.Module.Application.Key == applicationKey);
         }
     }
 }
