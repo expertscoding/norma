@@ -82,13 +82,13 @@ namespace EC.Norma.Core
                         cache.Set(cacheKey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
                     }
 
-                    if (permissions == null && !requirement.IsDefault)
-                        continue;
-
                     foreach (var priority in GetPriorities(requirement))
                     {
                         if (services.GetService(type) is NormaRequirement normaRequirement)
                         {
+                            if (permissions?.Any() == false && !requirement.IsDefault)
+                                continue;
+
                             normaRequirement.Action = action;
                             normaRequirement.Resource = resource;
                             normaRequirement.Permission = requirement.IsDefault ? $"DefaultRequirement for {resource}/{action}" : permissions.First().Name;
