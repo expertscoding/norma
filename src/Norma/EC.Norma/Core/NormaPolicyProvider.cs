@@ -86,6 +86,9 @@ namespace EC.Norma.Core
                     {
                         if (services.GetService(type) is NormaRequirement normaRequirement)
                         {
+                            if (permissions?.Any() == false && !requirement.IsDefault)
+                                continue;
+
                             normaRequirement.Action = action;
                             normaRequirement.Resource = resource;
                             normaRequirement.Permission = requirement.IsDefault ? $"DefaultRequirement for {resource}/{action}" : permissions.First().Name;
@@ -101,8 +104,6 @@ namespace EC.Norma.Core
                             throw new Exception("No requirement located.");
                         }
                     }
-
-
                 }
                 catch (Exception ex)
                 {

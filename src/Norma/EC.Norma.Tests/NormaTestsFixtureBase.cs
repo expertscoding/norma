@@ -96,25 +96,25 @@ namespace EC.Norma.Tests
 
 
             // PlainAction
-            ConfigureAction(db, nameof(TestController.PlainAction), requirementHasPermission, resource, "User", true, module1);
+            ConfigureAction(db, nameof(TestController.PlainAction), requirementHasPermission, resource, "User", true);
 
             // AnnotatedAction Action -> The action name is redefined to List
-            ConfigureAction(db, "List", requirementHasPermission, resource, "User", false, module1);
+            ConfigureAction(db, "List", requirementHasPermission, resource, "User", false);
 
             // WithoutPermissions Action
-            ConfigureAction(db, nameof(TestController.WithoutConfiguredRequirement), requirementWithOutConfiguredClass, null, null, false, module1);
+            ConfigureAction(db, nameof(TestController.WithoutConfiguredRequirement), requirementWithOutConfiguredClass, null, null, false);
 
             // WithoutPermissions Action
-            ConfigureAction(db, nameof(TestController.WithoutRequirement), requirementWithOutClass, null, null, false, module1);
+            ConfigureAction(db, nameof(TestController.WithoutRequirement), requirementWithOutClass, null, null, false);
 
             //PlainActionApplication2
-            ConfigureAction(db, nameof(TestController.PlainActionApplication2), requirementHasPermission, resource, "User", true, module2);
+            ConfigureAction(db, nameof(TestController.PlainActionApplication2), requirementHasPermission, resource2, "User", true);
 
             // PlainAction Module2
-            ConfigureAction(db, nameof(TestController.PlainAction), requirementHasPermission, resource2, "User", true, module2);
+            ConfigureAction(db, nameof(TestController.PlainAction), requirementHasPermission, resource2, "User", true);
 
             // Two Requirements action 
-            ConfigureAction(db, "TwoRequirementsAction", requirementHasPermission, resource, "User", false, module1);
+            ConfigureAction(db, "TwoRequirementsAction", requirementHasPermission, resource, "User", false);
 
             // Two Requirements action: configuring second requirement and profile 
             ConfigureActionWithSecondRequirement(db, "TwoRequirementsAction", requirementAdmin, resource, "Admin");
@@ -124,10 +124,10 @@ namespace EC.Norma.Tests
         }
 
 
-        protected void ConfigureAction( NormaContext db, string actionName, Requirement requirement, Resource resource, string profileName, bool assign, Module module )
+        protected void ConfigureAction( NormaContext db, string actionName, Requirement requirement, Resource resource, string profileName, bool assign)
         {
             // PlainAction
-            var action = new Action { Id = Sequencer.GetId(), Name = actionName, Module = module, IdModule = module.Id };
+            var action = new Action { Id = Sequencer.GetId(), Name = actionName};
             db.Actions.Add(action);
 
             db.ActionsRequirements.Add(new ActionRequirement { Id = Sequencer.GetId(), Action = action, IdAction = action.Id, Requirement = requirement, IdRequirement = requirement.Id });

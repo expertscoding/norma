@@ -180,7 +180,7 @@ namespace EC.Norma.Tests.Core
 
             var logEntry = ((NoOpLogger)mLogger).LogEvents.LastOrDefault();
             logEntry.Should().NotBeNull();
-            logEntry.Level.Should().Be(LogLevel.Trace);
+            logEntry.Level.Should().Be(LogLevel.Warning);
             logEntry.Message.Should().StartWithEquivalentOf("No Permissions found");
         }
 
