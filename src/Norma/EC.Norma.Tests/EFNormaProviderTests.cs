@@ -64,8 +64,8 @@ namespace EC.Norma.Tests
 
             var policies = provider.GetRequirementsForActionResource(nameof(TestController.PlainAction), TestController.Name);
 
-            policies.Count.Should().Be(1);
-            policies.FirstOrDefault().Name.Should().Be("HasPermission");
+            policies.Count.Should().Be(2);
+            policies.Where(x => x.Name == "HasPermission").Count().Should().Be(2);
         }
 
 

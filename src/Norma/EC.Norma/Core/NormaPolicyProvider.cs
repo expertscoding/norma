@@ -82,6 +82,9 @@ namespace EC.Norma.Core
                         cache.Set(cacheKey, permissions, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
                     }
 
+                    if (permissions == null && !requirement.IsDefault)
+                        continue;
+
                     foreach (var priority in GetPriorities(requirement))
                     {
                         if (services.GetService(type) is NormaRequirement normaRequirement)
@@ -101,8 +104,6 @@ namespace EC.Norma.Core
                             throw new Exception("No requirement located.");
                         }
                     }
-
-
                 }
                 catch (Exception ex)
                 {

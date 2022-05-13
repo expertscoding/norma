@@ -75,7 +75,7 @@ namespace EC.Norma.Core
 
             if (policy == null)
             {
-                logger.LogTrace("No Permissions found, so result is defined by NoPermissionAction in Options (better define some permissions if you don't want this default behavior)");
+                logger.LogWarning("No Permissions found, so result is defined by NoPermissionAction in Options (better define some permissions if you don't want this default behavior)");
                 result = normaOptions.NoPermissionAction == NoPermissionsBehaviour.Success ? AuthorizationResult.Success() : AuthorizationResult.Failed();
             }
             else

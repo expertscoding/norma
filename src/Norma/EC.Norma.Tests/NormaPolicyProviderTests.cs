@@ -34,8 +34,8 @@ namespace EC.Norma.Tests
            
             var policy = await policyProvider.GetPolicyAsync($"{nameof(TestController.PlainAction)}|{TestController.Name}");
 
-             policy.Should().NotBeNull();
-            policy.Requirements.Count.Should().Be(2);
+            policy.Should().NotBeNull();
+            policy.Requirements.Count.Should().Be(3);
             var requirement = policy.Requirements[0];
             requirement.Should().BeOfType<HasPermissionRequirement>();
             ((HasPermissionRequirement)requirement).Action.Should().Be(nameof(TestController.PlainAction));
@@ -92,7 +92,7 @@ namespace EC.Norma.Tests
             cacheService.Should().NotBeNull();
 
             cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Should().NotBeNull();
-            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Count().Should().Be(2);
+            cacheService.Get<ICollection<Requirement>>(cacheKeyRequirements).Count().Should().Be(3);
 
         }
 
