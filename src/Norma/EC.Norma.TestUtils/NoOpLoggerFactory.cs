@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace EC.Norma.TestUtils
 {
@@ -13,6 +15,12 @@ namespace EC.Norma.TestUtils
         /// </remarks>
         public ILogger CreateLogger(string name)
         {
+            var filter = new[] { "Microsoft", "System" };
+            if (filter.Any(f => name.StartsWith(f, StringComparison.OrdinalIgnoreCase)))
+            {
+                return NullLogger.Instance;
+            }
+
             return (ILogger) NoOpLogger.Instance;
         }
 
