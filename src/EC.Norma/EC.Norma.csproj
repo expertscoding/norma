@@ -16,9 +16,9 @@
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="[6.0.0,7.0)" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="[6.0.0,7.0)" />
+		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="[6.0.0,7.0)" />
 	</ItemGroup>
 
 	
