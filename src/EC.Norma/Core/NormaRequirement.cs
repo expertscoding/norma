@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EC.Norma.Core
 {
@@ -17,10 +14,7 @@ namespace EC.Norma.Core
 
         public bool IsDefault { get; set; }
 
-        public NormaRequirement()
-        {
-
-        }
+        public NormaRequirement() { }
 
         public NormaRequirement(string action, string resource)
         {

@@ -10,8 +10,6 @@ namespace EC.Norma.EF.Configuration
         {
             builder.ToTable("PriorityGroups");
             builder.HasKey(a => a.Id);
-
-
         }
     }
 }

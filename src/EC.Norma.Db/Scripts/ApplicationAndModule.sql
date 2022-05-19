@@ -26,30 +26,6 @@ WHEN NOT MATCHED BY TARGET THEN
 
 SET IDENTITY_INSERT [norma].[Modules] OFF
 
-
-GO
-PRINT N'Dropping Foreign Key [norma].[FK_Actions_Modules]...';
-
-GO
-ALTER TABLE [norma].[Actions] DROP CONSTRAINT [FK_Actions_Modules];
-
-GO
-PRINT N'Altering Table [norma].[Actions]... [IdModule] to NOT NULL';
-
-UPDATE [norma].[Actions] SET [IdModule] = -1 WHERE [IdModule] IS NULL
-
-GO
-ALTER TABLE [norma].[Actions] ALTER COLUMN [IdModule] INT NOT NULL;
-
-
-GO
-PRINT N'Creating Foreign Key [norma].[FK_Actions_Modules]...';
-
-GO
-ALTER TABLE [norma].[Actions] WITH NOCHECK
-    ADD CONSTRAINT [FK_Actions_Modules] FOREIGN KEY ([IdModule]) REFERENCES [norma].[Modules] ([Id]);
-
-
 GO
 PRINT N'Dropping Foreign Key [norma].[FK_Resources_Modules]...';
 
@@ -67,13 +43,9 @@ ALTER TABLE [norma].[Resources] ALTER COLUMN [IdModule] INT NOT NULL;
 GO
 PRINT N'Creating Foreign Key [norma].[FK_Resources_Modules]...';
 
-
 GO
 ALTER TABLE [norma].[Resources] WITH NOCHECK
     ADD CONSTRAINT [FK_Resources_Modules] FOREIGN KEY ([IdModule]) REFERENCES [norma].[Modules] ([Id]);
-
-GO
-ALTER TABLE [norma].[Actions] WITH CHECK CHECK CONSTRAINT [FK_Actions_Modules];
 
 ALTER TABLE [norma].[Resources] WITH CHECK CHECK CONSTRAINT [FK_Resources_Modules];
 

@@ -11,6 +11,5 @@ namespace EC.Norma.Metadata
         {
             Action = action;
         }
-
     }
 }

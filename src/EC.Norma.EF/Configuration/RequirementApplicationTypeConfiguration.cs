@@ -6,7 +6,7 @@ namespace EC.Norma.EF.Configuration
 {
     public class RequirementApplicationTypeConfiguration : IEntityTypeConfiguration<RequirementApplication>
     {
-        private string applicationKey;
+        private readonly string applicationKey;
 
         public RequirementApplicationTypeConfiguration(string applicationKey )
         {

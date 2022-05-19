@@ -6,7 +6,7 @@ namespace EC.Norma.EF.Configuration
 {
     public class PermissionRequirementTypeConfiguration : IEntityTypeConfiguration<PermissionRequirement>
     {
-        private string applicationKey;
+        private readonly string applicationKey;
 
         public PermissionRequirementTypeConfiguration(string applicationKey)
         {
