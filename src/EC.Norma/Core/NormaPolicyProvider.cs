@@ -73,7 +73,7 @@ namespace EC.Norma.Core
 
                     logger.LogTrace("Requirement acquired. Getting Permissions.");
 
-                    string cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";
+                    var cacheKey = $"{CacheKeys.NormaPermissions}|{action}|{resource ?? ""}";
 
                     var permissions = cache.Get<ICollection<Permission>>(cacheKey);
                     if (permissions == null)
@@ -131,15 +131,14 @@ namespace EC.Norma.Core
         private IEnumerable<Requirement> GetNormaRequirements(string action, string resource)
         {
             logger.LogTrace("Getting Norma Requirements");
-            string cacheKey = $"{CacheKeys.NormaRequirements}|{action}|{resource ?? ""}";
+            var cacheKey = $"{CacheKeys.NormaRequirements}|{action}|{resource ?? ""}";
 
             var policies = cache.Get<ICollection<Requirement>>(cacheKey);
             if (policies == null)
             {
-                if (string.IsNullOrWhiteSpace(resource))
-                    policies = provider.GetRequirementsForPermission(action);
-                else
-                    policies = provider.GetRequirementsForActionResource(action, resource).Union(provider.GetDefaultRequirements().Select(x => { x.IsDefault = true; return x; })).ToArray();
+                policies = string.IsNullOrWhiteSpace(resource)
+                    ? provider.GetRequirementsForPermission(action)
+                    : provider.GetRequirementsForActionResource(action, resource).Union(provider.GetDefaultRequirements().Select(x => { x.IsDefault = true; return x; })).ToArray();
 
                 cache.Set(cacheKey, policies, DateTime.Now.AddSeconds(normaOptions.CacheExpiration));
             }

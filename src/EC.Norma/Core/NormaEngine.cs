@@ -57,9 +57,9 @@ namespace EC.Norma.Core
                 return null;
             }
 
-            logger.LogTrace("Querying Permisions");
+            logger.LogTrace("Querying Permissions");
             var permissions = GetPermissions(endpoint);
-            logger.LogInformation("Queried Permisions");
+            logger.LogInformation("Queried Permissions");
             
             logger.LogTrace("Querying Actions");
             var actions = GetActions(endpoint);

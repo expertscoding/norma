@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NormaSample.Web", "NormaSam
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Norma", "Norma", "{4D221E4D-905C-4B04-A9CB-BBC4B43438A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma", "..\..\src\Norma\EC.Norma\EC.Norma.csproj", "{AF741C6F-AC44-41A3-BE35-A3BF54616737}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma", "..\src\EC.Norma\EC.Norma.csproj", "{AF741C6F-AC44-41A3-BE35-A3BF54616737}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.EF", "..\..\src\Norma\EC.Norma.EF\EC.Norma.EF.csproj", "{33B411DC-D250-4150-A021-FB346964871C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.EF", "..\src\EC.Norma.EF\EC.Norma.EF.csproj", "{33B411DC-D250-4150-A021-FB346964871C}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "EC.Norma.Db", "..\..\src\Norma\EC.Norma.Db\EC.Norma.Db.sqlproj", "{C65C1EE0-63A6-44E2-B479-5A9217BF6D23}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "EC.Norma.Db", "..\src\EC.Norma.Db\EC.Norma.Db.sqlproj", "{C65C1EE0-63A6-44E2-B479-5A9217BF6D23}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "NormaSample.Db", "NormaSample.Db\NormaSample.Db.sqlproj", "{93A8D0A5-3F60-4C0D-8684-6FAB8E7786ED}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,17 +20,17 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "NormaSample.Db", "NormaSamp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A656A948-7B8C-44B0-94AD-83A7A61430F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.Tests", "..\..\src\Norma\EC.Norma.Tests\EC.Norma.Tests.csproj", "{B1E6518D-A829-4906-81FC-977F1863317F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.Tests", "..\src\EC.Norma.Tests\EC.Norma.Tests.csproj", "{B1E6518D-A829-4906-81FC-977F1863317F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.Options.Tests", "..\..\src\Norma\EC.Norma.Options.Tests\EC.Norma.Options.Tests.csproj", "{88474B51-76FF-4CFE-B1BE-D9367D062C85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.Options.Tests", "..\src\EC.Norma.Options.Tests\EC.Norma.Options.Tests.csproj", "{88474B51-76FF-4CFE-B1BE-D9367D062C85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ec.Norma.Json", "..\..\src\Norma\Ec.Norma.Json\Ec.Norma.Json.csproj", "{75112561-012D-4A92-B6F7-1AC244161715}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ec.Norma.Json", "..\src\Ec.Norma.Json\Ec.Norma.Json.csproj", "{75112561-012D-4A92-B6F7-1AC244161715}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.TestUtils", "..\..\src\Norma\EC.Norma.TestUtils\EC.Norma.TestUtils.csproj", "{8DA225CB-4F54-4FF1-8FEB-2C8198F5EB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EC.Norma.TestUtils", "..\src\EC.Norma.TestUtils\EC.Norma.TestUtils.csproj", "{8DA225CB-4F54-4FF1-8FEB-2C8198F5EB7A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{013FCDB2-05EC-49F6-AD04-FB12C1837CB1}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\.editorconfig = ..\..\.editorconfig
+		..\.editorconfig = ..\.editorconfig
 	EndProjectSection
 EndProject
 Global

@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using EC.Norma;
 using EC.Norma.EF;
-using EC.Norma.Json;
-using EC.Norma.Json.Entities;
 using EC.Norma.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-
-using EC.Norma.EF;
-using Microsoft.EntityFrameworkCore;
 
 namespace NormaSample.Web
 {
@@ -31,11 +24,13 @@ namespace NormaSample.Web
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews(options => options.Filters.Add(new AuthorizeFilter()));
+            // Alternatively Norma can be added as a MVC filter to your controllers
+            //services.AddControllersWithViews(options => options.Filters.Add(typeof(NormaActionFilter)));
+            services.AddControllersWithViews();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

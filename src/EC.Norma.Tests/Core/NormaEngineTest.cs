@@ -2,10 +2,8 @@
 using EC.Norma.Metadata;
 using EC.Norma.Options;
 using FluentAssertions;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -23,6 +21,7 @@ namespace EC.Norma.Tests.Core
     [Collection("TestServer collection")]
     public class NormaEngineTest
     {
+        private readonly NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement;
 
         private Mock<NormaEngine> cut;
         protected IAuthorizationPolicyProvider mPolicyProvider;
@@ -31,12 +30,9 @@ namespace EC.Norma.Tests.Core
         protected IOptionsMonitor<NormaOptions> mNormaOptions;
         protected ILogger mLogger;
 
-        private readonly NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement;
-
         public NormaEngineTest(NormaTestsFixtureWithDefaultRequirement<Startup> fixtureWithDefaultRequirement)
         {
             this.fixtureWithDefaultRequirement = fixtureWithDefaultRequirement;
-
             CreateCUT();
         }
 
@@ -70,16 +66,15 @@ namespace EC.Norma.Tests.Core
         {
             await Record.ExceptionAsync(() => cut.Object.EvalPermissions(null));
 
-            var logEntry = ((NoOpLogger)mLogger).LogEvents.FirstOrDefault();
+            var logEntry = ((NoOpLogger)mLogger).LogEvents.LastOrDefault(l => l.Message.Equals("Beginning NormaEngine evaluation:", StringComparison.OrdinalIgnoreCase));
             logEntry.Should().NotBeNull();
             logEntry.Level.Should().Be(LogLevel.Information);
-            logEntry.Message.Should().StartWith("Beginning");
         }
 
         [Fact]
         public async void EvalPermissions_NoEndpoint_ThrowsException()
         {
-            HttpContext context = Mock.Of<HttpContext>();
+            var context = Mock.Of<HttpContext>();
 
             cut.Protected().Setup<Endpoint>("GetEndpoint", context).Returns(null as Endpoint);
 
@@ -91,9 +86,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_ByPassedIsTrue_LogByPass()
         {
-            Endpoint endpoint = CreateEndpoint(new ByPassNormaAttribute());
-
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint(new ByPassNormaAttribute());
+            var context = GetHttpContext(endpoint: endpoint);
 
             await cut.Object.EvalPermissions(context);
 
@@ -106,9 +100,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_ByPassedIsTrue_ReturnsNull()
         {
-            Endpoint endpoint = CreateEndpoint(new ByPassNormaAttribute());
-
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint(new ByPassNormaAttribute());
+            var context = GetHttpContext(endpoint: endpoint);
 
             var result = await cut.Object.EvalPermissions(context);
 
@@ -120,8 +113,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_BpF_Always_CallsGetPermission()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             await cut.Object.EvalPermissions(context);
 
@@ -131,8 +124,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_BpF_Always_CallsGetActions()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             await cut.Object.EvalPermissions(context);
 
@@ -142,8 +135,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_BpF_Always_CallsGetResource()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             await cut.Object.EvalPermissions(context);
 
@@ -153,8 +146,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_BpF_Always_CallsGetCombinedPolicy()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             await cut.Object.EvalPermissions(context);
 
@@ -165,8 +158,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_CombinedPolicyIsNull_LogNoPermissionsFound()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             cut.Protected()
                 .Setup<Task<AuthorizationPolicy>>("GetCombinedPolicyAsync"
@@ -188,8 +181,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_CombinedPolicyIsNullAndNoPermissionActionIsSuccess_ReturnsSuccess()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             cut.Protected()
                 .Setup<Task<AuthorizationPolicy>>("GetCombinedPolicyAsync"
@@ -208,8 +201,8 @@ namespace EC.Norma.Tests.Core
         {
             CreateCUT(false);
 
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             cut.Protected()
                 .Setup<Task<AuthorizationPolicy>>("GetCombinedPolicyAsync"
@@ -229,8 +222,8 @@ namespace EC.Norma.Tests.Core
             // Arrange
             CreateCUT(false);
 
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new HasPermissionRequirement())
@@ -258,8 +251,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_CombinedPolicyIsNotNullAndAuthorizeAsyncSuccess_ReturnsSuccess()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new HasPermissionRequirement())
@@ -288,8 +281,8 @@ namespace EC.Norma.Tests.Core
         [Fact]
         public async void EvalPermissions_CombinedPolicyWithTwoPriorities_MIN_PriorityRequirement_ReturnsSuccess()
         {
-            Endpoint endpoint = CreateEndpoint();
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint();
+            var context = GetHttpContext(endpoint: endpoint);
 
             var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new HasPermissionRequirement())
@@ -319,8 +312,8 @@ namespace EC.Norma.Tests.Core
             // Arrange
             CreateCUT(false);
 
-            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoRequirementsAction-Test") });
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint(new NormaPermissionAttribute("TwoRequirementsAction-Test"));
+            var context = GetHttpContext(endpoint: endpoint);
 
             var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new HasPermissionRequirement() { Priority = 2 })
@@ -355,8 +348,8 @@ namespace EC.Norma.Tests.Core
             // Arrange
             CreateCUT(false);
 
-            Endpoint endpoint = CreateEndpoint(new object[] { new NormaPermissionAttribute("TwoRequirementsAction-Test") });
-            HttpContext context = GetHttpContext(endpoint: endpoint);
+            var endpoint = CreateEndpoint(new NormaPermissionAttribute("TwoRequirementsAction-Test"));
+            var context = GetHttpContext(endpoint: endpoint);
 
             var policy = new AuthorizationPolicyBuilder()
                 .AddRequirements(new HasPermissionRequirement() { Priority = 2 })
@@ -388,20 +381,12 @@ namespace EC.Norma.Tests.Core
             authService.Verify(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<IEnumerable<IAuthorizationRequirement>>()), Times.Exactly(2));
         }
 
-
-        private AuthorizationMiddleware CreateMiddleware(RequestDelegate requestDelegate = null, IAuthorizationPolicyProvider policyProvider = null)
-        {
-            requestDelegate ??= context => Task.CompletedTask;
-
-            return new AuthorizationMiddleware(requestDelegate, policyProvider);
-        }
-
         private Endpoint CreateEndpoint(params object[] metadata)
         {
-            return new Endpoint(context => Task.CompletedTask, new EndpointMetadataCollection(metadata), "Test endpoint");
+            return new Endpoint(_ => Task.CompletedTask, new EndpointMetadataCollection(metadata), "Test endpoint");
         }
 
-        private HttpContext GetHttpContext(bool anonymous = false, Action<IServiceCollection> registerServices = null, Endpoint endpoint = null, IAuthenticationService authenticationService = null)
+        private HttpContext GetHttpContext(bool anonymous = false, Endpoint endpoint = null)
         {
             var basicPrincipal = new ClaimsPrincipal(
                 new ClaimsIdentity(
@@ -423,52 +408,20 @@ namespace EC.Norma.Tests.Core
 
             validUser.AddIdentity(bearerIdentity);
 
-            // ServiceProvider
-            var serviceCollection = new ServiceCollection();
-
-            authenticationService ??= Mock.Of<IAuthenticationService>();
-
-            serviceCollection.AddSingleton(authenticationService);
-            serviceCollection.AddOptions();
-            serviceCollection.AddLogging();
-            serviceCollection.AddAuthorization();
-            registerServices?.Invoke(serviceCollection);
-
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-
             var httpContext = new DefaultHttpContext();
             if (endpoint != null)
             {
                 httpContext.SetEndpoint(endpoint);
             }
-            httpContext.RequestServices = serviceProvider;
+
+            httpContext.RequestServices = fixtureWithDefaultRequirement.WebAppFactory.Services;
+
             if (!anonymous)
             {
                 httpContext.User = validUser;
             }
 
             return httpContext;
-        }
-
-        private class TestRequestDelegate
-        {
-            private readonly int statusCode;
-
-            public bool Called => CalledCount > 0;
-
-            public int CalledCount { get; private set; }
-
-            public TestRequestDelegate(int statusCode = 200)
-            {
-                this.statusCode = statusCode;
-            }
-
-            public Task Invoke(HttpContext context)
-            {
-                CalledCount++;
-                context.Response.StatusCode = statusCode;
-                return Task.CompletedTask;
-            }
         }
     }
 }
