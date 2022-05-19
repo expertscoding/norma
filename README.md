@@ -12,22 +12,22 @@ The main concepts in Norma are:
 - **Application**: just this, is an application registered with a code capable to use norma as the source of its authorization.
 - **Resource**: Something you want to secure. Usually, views, documents, or business data (we are talking about software!).
 - **Action**: What you want to do with a resource. Read it, modify it...
-- **Permission**: The relation of a resource with an action. Search employees or view details of an employee. This is one of the key concepts in **Norma**.
-- **Profile**: The role you are assigning permissions to. For example, the reader profile usually has only permissions that read data (resources).
-- **Assignment**:  Is the relation between a profile and permission.
+- **Permission**: The relation between a resource and an action. To search employees, to view details of an employee, etc. This is one of the key concepts in **Norma**.
+- **Profile**: The role you are assigning permissions to. For example, the reader profile usually has only permissions to read data (resources).
+- **Assignment**:  Is the relation between a profile and a permission.
 - **Requirement**: Validation to carry out to permission. The main, and virtually the only, requirement is to have an allowing assignment to permission in any of your profiles. But this concept is for extension in special cases within an application.
 
 So, in the basic use, **Norma** is about knowing if a user (with some profiles attached) has permission to allow an action over a resource.
 
 Other auxiliary concepts in **Norma** are:
 
-- **Module**: Set of resources to group them in order to facilitate their maintenance. A module is always dependent on an Application.
+- **Module**: a set of resources grouped to facilitate their maintenance. A module is always dependent on an Application.
 
 
-If we translate the concepts to a normal LOB web application, for example, a small application to manage the projects an employee is assigned to in a consultancy firm, we will have:
+If we take norma concepts into a normal LOB web application, as a small application to manage employee's asignemets to projects in a consultancy firm, for example, we will have:
 - Resources: typically, each business entity is a resource. Employees, Projects...
 - Actions: Search, ReadDetail, Modify, Create and Delete are typical actions.
-- Permissions: here are the relations between every resource with every employee. Depending on other company applications, you may lack the permissions to create, modify and delete employees that will be read directly from these other sources.
+- Permissions: the relations between every resource with every employee. Depending on other company applications, you may lack the permissions to create, modify and delete employees that will be read directly from these other sources.
 - Profile: Reader and Manager would be two valid profiles for this app.
 - Assignments: Reader profile only will have assignments to permissions with Search and ReadDetail actions. Manager profile will have an assignment to all the permissions. All assignments allow access to a resource.
 - Requirements: Only one requirement is needed. This Requirement will check that the user has a profile that has an assignment to the permission that relates to the performed action over the selected resource. This requirement is built-in into **Norma**.
@@ -228,19 +228,20 @@ public class HasLegalAgeHandler : AuthorizationHandler<HasLegalAgeRequirement>
 }
 ```
 
-Finally, to **Norma** evaluate your requirement, you have to register the requirement handler as usually in the Startup .NET code.
+Finally, to **Norma** can evaluate your requirement, you have to register the requirement handler as usually in the Startup .NET code.
 
 ```csharp
 services.AddTransient<IAuthorizationHandler, HasLegalAgeRequirement>();
 ```
 
-To **Norma** be aware of your implementation, you have to populate the Requirements table with your requirement class name, and relate your requirement with an action.
+In order to **Norma** can be aware of your implementation, you have to populate the Requirements table with your requirement class name, and relate your requirement with an action.
 
 # Future features
 
-We still have a lot of plans about **Norma** and we will be very pleased to hear from you about your desires about **Norma** evolution.
+We have many ideas for **Norma** next steps, but we are also looking forward to receive comments and ideas from you all.
+
 
 In the near future, we plan to:
 
 - Support OAuth2 to extend authorization in M2M (Integrated with Identity Server)
-- Use with standard ASP.Net  Core Attributes
+- Use with standard ASP.Net Core Attributes
