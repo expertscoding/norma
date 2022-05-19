@@ -10,16 +10,14 @@ namespace EC.Norma.EF
 {
     public class NormaContext : DbContext
     {
-        readonly ILoggerFactory loggerFactory;
-        readonly NormaOptions normaOptions;
-        readonly string ApplicationKey;
+        private readonly ILoggerFactory loggerFactory;
+        private readonly string applicationKey;
 
         public NormaContext(IOptions<NormaOptions> normaOptions, ILoggerFactory loggerFactory = null, DbContextOptions<NormaContext> options = null) : base(options)
         {   
             this.loggerFactory = loggerFactory;
-            this.normaOptions = normaOptions.Value;
 
-            ApplicationKey = this.normaOptions.ApplicationKey;
+            applicationKey = normaOptions.Value.ApplicationKey;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -33,7 +31,7 @@ namespace EC.Norma.EF
 
             if (optionsBuilder.Options.FindExtension<ProxiesOptionsExtension>() == null)
             {
-                optionsBuilder.UseLazyLoadingProxies(true);
+                optionsBuilder.UseLazyLoadingProxies();
             }
 
             base.OnConfiguring(optionsBuilder);
@@ -72,19 +70,19 @@ namespace EC.Norma.EF
             base.OnModelCreating(modelBuilder);
             modelBuilder.HasDefaultSchema("norma");
 
-            modelBuilder.ApplyConfiguration(new ActionTypeConfiguration(ApplicationKey));
-            modelBuilder.ApplyConfiguration(new ActionRequirementTypeConfiguration(ApplicationKey));
-            modelBuilder.ApplyConfiguration(new ApplicationTypeConfiguration(ApplicationKey));
-            modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(ApplicationKey));
-            modelBuilder.ApplyConfiguration(new ModuleTypeConfiguration(ApplicationKey));
-            modelBuilder.ApplyConfiguration(new PermissionRequirementTypeConfiguration(ApplicationKey));
-            modelBuilder.ApplyConfiguration(new PermissionTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new ActionTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ActionRequirementTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ApplicationTypeConfiguration(applicationKey));
+            modelBuilder.ApplyConfiguration(new AssignmentTypeConfiguration(applicationKey));
+            modelBuilder.ApplyConfiguration(new ModuleTypeConfiguration(applicationKey));
+            modelBuilder.ApplyConfiguration(new PermissionRequirementTypeConfiguration(applicationKey));
+            modelBuilder.ApplyConfiguration(new PermissionTypeConfiguration(applicationKey));
             modelBuilder.ApplyConfiguration(new RequirementTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration(applicationKey));
             modelBuilder.ApplyConfiguration(new PriorityGroupTypeConfiguration());
             modelBuilder.ApplyConfiguration(new RequirementPriorityGroupTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new RequirementApplicationTypeConfiguration(ApplicationKey));
+            modelBuilder.ApplyConfiguration(new RequirementApplicationTypeConfiguration(applicationKey));
 
         }
 

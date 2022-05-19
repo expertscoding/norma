@@ -1,5 +1,4 @@
-﻿
-namespace EC.Norma.Entities
+﻿namespace EC.Norma.Entities
 {
     public class Profile
     {

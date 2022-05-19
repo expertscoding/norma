@@ -7,9 +7,7 @@
         public int IdPriorityGroup { get; set; }
         public virtual PriorityGroup PriorityGroup { get; set; }
 
-
         public int IdRequirement { get; set; }
         public virtual Requirement Requirement { get; set; }
-
     }
 }

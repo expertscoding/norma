@@ -60,7 +60,6 @@ namespace EC.Norma.Core
                 return FallbackPolicyProvider.GetPolicyAsync(policyName);
             }
 
-
             foreach (var requirement in requirements)
             {
                 try
@@ -185,11 +184,9 @@ namespace EC.Norma.Core
                 logger.LogTrace("Getting priorities from Requirement's PriorityGroups");
                 return requirement.RequirementsPriorityGroups.Select(x => x.PriorityGroup.Priority).Distinct().ToArray();
             }
-            else
-            {
-                logger.LogTrace("No priorities defined");
-                return new[] { requirement.RequirementsApplications != null && requirement.RequirementsApplications.Any(x => x.IsDefault) ? int.MaxValue : 0 };
-            }
+
+            logger.LogTrace("No priorities defined");
+            return new[] { requirement.RequirementsApplications != null && requirement.RequirementsApplications.Any(x => x.IsDefault) ? int.MaxValue : 0 };
         }
     }
 }

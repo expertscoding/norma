@@ -10,6 +10,5 @@
 
         public int IdRequirement { get; set; }
         public virtual Requirement Requirement { get; set; }
-
     }
 }

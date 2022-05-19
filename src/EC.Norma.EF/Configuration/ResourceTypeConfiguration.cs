@@ -6,7 +6,7 @@ namespace EC.Norma.EF.Configuration
 {
     public class ResourceTypeConfiguration : IEntityTypeConfiguration<Resource>
     {
-        private string applicationKey;
+        private readonly string applicationKey;
 
         public ResourceTypeConfiguration(string applicationKey)
         {

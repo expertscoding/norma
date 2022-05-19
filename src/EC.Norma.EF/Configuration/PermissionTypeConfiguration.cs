@@ -6,7 +6,7 @@ namespace EC.Norma.EF.Configuration
 {
     public class PermissionTypeConfiguration : IEntityTypeConfiguration<Permission>
     {
-        private string applicationKey;
+        private readonly string applicationKey;
 
         public PermissionTypeConfiguration(string applicationKey)
         {
@@ -21,10 +21,7 @@ namespace EC.Norma.EF.Configuration
             builder.HasOne(a => a.Action).WithMany().HasForeignKey(a => a.IdAction);
             builder.HasOne(a => a.Resource).WithMany().HasForeignKey(a => a.IdResource);
 
-
             builder.HasQueryFilter(a => a.Resource.Module.Application.Key == applicationKey);
-
         }
-    
     }
 }

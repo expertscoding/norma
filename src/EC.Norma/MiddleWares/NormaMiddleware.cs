@@ -29,7 +29,7 @@ namespace EC.Norma.MiddleWares
                 throw new ArgumentNullException(nameof(context));
             }
 
-            AuthorizationResult result = await base.EvalPermissions(context);
+            var result = await base.EvalPermissions(context);
 
             if (result == null || result.Succeeded)
             {
@@ -39,7 +39,5 @@ namespace EC.Norma.MiddleWares
 
             await context.ForbidAsync();
         }
-
- 
     }
 }

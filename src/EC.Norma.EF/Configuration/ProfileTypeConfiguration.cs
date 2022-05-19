@@ -10,8 +10,6 @@ namespace EC.Norma.EF.Configuration
         {
             builder.ToTable("Profiles");
             builder.HasKey(a => a.Id);
-
-
         }
     }
 }

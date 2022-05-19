@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace EC.Norma.EF.Providers
 {
     public class EFNormaProvider : INormaProvider

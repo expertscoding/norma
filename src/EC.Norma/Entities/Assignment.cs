@@ -9,7 +9,5 @@
 
         public int IdProfile { get; set; }
         public virtual Profile Profile { get; set; }
-
-
     }
 }
