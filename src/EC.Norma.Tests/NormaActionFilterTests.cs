@@ -49,106 +49,6 @@ namespace EC.Norma.Tests
             Mock.Get(actionDelegate).Verify(a => a.Invoke());
         }
 
-
-        //[Fact]
-        //public async void OnActionExecute_WithoutPermissionsDefinedAndNoPermissionActionFailure_ForbbidenResult()
-        //{
-        //    var services = fixture.WebAppFactory.Services;
-
-        //    NormaOptions normaOptions = new NormaOptions
-        //    {
-        //        NoPermissionAction = NoPermissionsBehaviour.Failure
-        //    };
-        //    var monitor = Mock.Of<IOptionsMonitor<NormaOptions>>(opt => opt.CurrentValue == normaOptions);
-
-
-        //    var action = new NormaActionFilter(services.GetService<IAuthorizationService>(),
-        //        services.GetService<IAuthorizationPolicyProvider>(), services.GetService<INormaProvider>(),
-        //         monitor, NullLogger<NormaActionFilter>.Instance);
-
-        //    var actionDelegate = Mock.Of<ActionExecutionDelegate>();
-        //    var context = GetMockActionExecutingContext(typeof(TestController), nameof(TestController.WithoutPermissions));
-
-        //    await action.OnActionExecutionAsync(context, actionDelegate);
-
-        //    context.Result.Should().BeOfType(typeof(ForbidResult));
-        //}
-
-        //[Fact]
-        //public async void OnActionExecute_WithPermissionsDefinedButWithoutAssignment_ExecutionNotAllowed()
-        //{
-        //    var services = fixture.WebAppFactory.Services;
-
-        //    var monitor = Mock.Of<IOptionsMonitor<NormaOptions>>(opt => opt.CurrentValue == new NormaOptions());
-
-        //    var action = new NormaActionFilter(services.GetService<IAuthorizationService>(),
-        //        services.GetService<IAuthorizationPolicyProvider>(), services.GetService<INormaProvider>(),
-        //        monitor, NullLogger<NormaActionFilter>.Instance);
-
-        //    var actionDelegate = new Mock<ActionExecutionDelegate>();
-        //    var actionCalled = false;
-        //    actionDelegate.Setup(a => a.Invoke()).Callback(() => actionCalled = true);
-        //    var context = GetMockActionExecutingContext(typeof(TestController), nameof(TestController.AnnotatedAction));
-
-        //    await action.OnActionExecutionAsync(context, actionDelegate.Object);
-        //    context.Result.Should().BeOfType<ForbidResult>();
-        //    actionCalled.Should().BeFalse();
-        //}
-
-        //[Fact]
-        //public async void OnActionExecute_WithPermissionsDefined_AllowActionExecution()
-        //{
-        //    var services = fixture.WebAppFactory.Services;
-        //    var monitor = Mock.Of<IOptionsMonitor<NormaOptions>>(opt => opt.CurrentValue == new NormaOptions());
-        //    var action = new NormaActionFilter(services.GetService<IAuthorizationService>(),
-        //        services.GetService<IAuthorizationPolicyProvider>(), services.GetService<INormaProvider>(),
-        //        monitor, NullLogger<NormaActionFilter>.Instance);
-
-        //    var actionDelegate = Mock.Of<ActionExecutionDelegate>();
-        //    var context = GetMockActionExecutingContext(typeof(TestController), nameof(TestController.PlainAction));
-
-        //    await action.OnActionExecutionAsync(context, actionDelegate);
-
-        //    Mock.Get(actionDelegate).Verify(a => a.Invoke());
-        //}
-
-
-        //[Fact]
-        //public async void OnActionExecute_WithOutPermissionsButByPassed_ExecutionAllowed()
-        //{
-        //    var services = fixture.WebAppFactory.Services;
-        //    var monitor = Mock.Of<IOptionsMonitor<NormaOptions>>(opt => opt.CurrentValue == new NormaOptions());
-        //    var action = new NormaActionFilter(services.GetService<IAuthorizationService>(),
-        //        services.GetService<IAuthorizationPolicyProvider>(), services.GetService<INormaProvider>(),
-        //        monitor, NullLogger<NormaActionFilter>.Instance);
-
-        //    var actionDelegate = Mock.Of<ActionExecutionDelegate>();
-        //    var context = GetMockActionExecutingContext(typeof(TestController), nameof(TestController.ByPassedAction));
-
-        //    await action.OnActionExecutionAsync(context, actionDelegate);
-
-        //    Mock.Get(actionDelegate).Verify(a => a.Invoke());
-        //}
-
-
-        //[Fact]
-        //public async void OnActionExecute_WithOutPermissionsWithNormaActionTagButByPassed_ExecutionAllowed()
-        //{
-        //    var services = fixture.WebAppFactory.Services;
-        //    var monitor = Mock.Of<IOptionsMonitor<NormaOptions>>(opt => opt.CurrentValue == new NormaOptions());
-        //    var action = new NormaActionFilter(services.GetService<IAuthorizationService>(),
-        //        services.GetService<IAuthorizationPolicyProvider>(), services.GetService<INormaProvider>(),
-        //        monitor, NullLogger<NormaActionFilter>.Instance);
-
-        //    var actionDelegate = Mock.Of<ActionExecutionDelegate>();
-        //    var context = GetMockActionExecutingContext(typeof(TestController), nameof(TestController.ByPassedAnnotatedAction));
-
-        //    await action.OnActionExecutionAsync(context, actionDelegate);
-
-        //    Mock.Get(actionDelegate).Verify(a => a.Invoke());
-        //}
-
-
         private ActionExecutingContext GetMockActionExecutingContext(Type controller, string method)
         {
             const string ctrConst = "Controller";
@@ -166,9 +66,9 @@ namespace EC.Norma.Tests
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
             {
-                new Claim(JwtClaimTypes.Name, "Manu"), 
-                new Claim(JwtClaimTypes.Email, "none@none.com"),
-                new Claim(JwtClaimTypes.Role, "User")
+                new(JwtClaimTypes.Name, "Manu"), 
+                new(JwtClaimTypes.Email, "none@none.com"),
+                new(JwtClaimTypes.Role, "User")
             }));
             var values = new[] {new KeyValuePair<string, object>(ctrConst, controllerName), new KeyValuePair<string, object>("Action", method)};
             var routeData = new RouteData(RouteValueDictionary.FromArray(values));
