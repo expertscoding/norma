@@ -4,6 +4,7 @@ using EC.Norma.Core;
 using EC.Norma.EF;
 using EC.Norma.EF.Providers;
 using EC.Norma.Filters;
+using EC.Norma.TestUtils;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +12,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace EC.Norma.Tests
 {
@@ -56,6 +59,8 @@ namespace EC.Norma.Tests
             var dbName = Configuration.GetValue<string>("dbName") ?? "TestNorma";
             services.AddDbContext<NormaContext>(options => options.UseInMemoryDatabase(dbName));
 
+            services.AddTransient<NormaEngine>();
+
             services.AddMemoryCache();
         }
 
@@ -94,6 +99,10 @@ namespace EC.Norma.Tests
     {
         public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder();
+        public static IHostBuilder CreateHostBuilder( string[] args ) => new HostBuilder().ConfigureLogging(builder =>
+        {
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerFactory>(NoOpLoggerFactory.Instance));
+            builder.Services.AddSingleton<ILogger>(NoOpLogger.Instance);
+        });
     }
 }

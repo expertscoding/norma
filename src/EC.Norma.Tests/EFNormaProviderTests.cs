@@ -30,7 +30,7 @@ namespace EC.Norma.Tests
             permissions.Count.Should().Be(1);
             permissions.FirstOrDefault().Action.Name.Should().Be(nameof(TestController.PlainAction));
             permissions.FirstOrDefault().Resource.Name.Should().Be(TestController.Name);
-            permissions.FirstOrDefault().Action.Module.Application.Name.Should().Be("application1");
+            permissions.FirstOrDefault().Resource.Module.Application.Name.Should().Be("application1");
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace EC.Norma.Tests
             permissions.Count.Should().Be(1);
             permissions.FirstOrDefault().Action.Name.Should().Be(nameof(TestController.PlainAction));
             permissions.FirstOrDefault().Resource.Name.Should().Be(TestController.Name);
-            permissions.FirstOrDefault().Action.Module.Application.Name.Should().Be("application1");
+            permissions.FirstOrDefault().Resource.Module.Application.Name.Should().Be("application1");
         }
 
         [Fact]
@@ -64,8 +64,8 @@ namespace EC.Norma.Tests
 
             var policies = provider.GetRequirementsForActionResource(nameof(TestController.PlainAction), TestController.Name);
 
-            policies.Count.Should().Be(1);
-            policies.FirstOrDefault().Name.Should().Be("HasPermission");
+            policies.Count.Should().Be(2);
+            policies.Where(x => x.Name == "HasPermission").Count().Should().Be(2);
         }
 
 

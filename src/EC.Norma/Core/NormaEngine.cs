@@ -57,9 +57,9 @@ namespace EC.Norma.Core
                 return null;
             }
 
-            logger.LogTrace("Querying Permisions");
+            logger.LogTrace("Querying Permissions");
             var permissions = GetPermissions(endpoint);
-            logger.LogInformation("Queried Permisions");
+            logger.LogInformation("Queried Permissions");
             
             logger.LogTrace("Querying Actions");
             var actions = GetActions(endpoint);
@@ -75,7 +75,7 @@ namespace EC.Norma.Core
 
             if (policy == null)
             {
-                logger.LogTrace("No Permissions found, so result is defined by NoPermissionAction in Options (better define some permissions if you don't want this default behavior)");
+                logger.LogWarning("No Permissions found, so result is defined by NoPermissionAction in Options (better define some permissions if you don't want this default behavior)");
                 result = normaOptions.NoPermissionAction == NoPermissionsBehaviour.Success ? AuthorizationResult.Success() : AuthorizationResult.Failed();
             }
             else
