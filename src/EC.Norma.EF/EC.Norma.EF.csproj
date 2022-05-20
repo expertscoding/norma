@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Authors>Experts Coding</Authors>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>Entity Framework based provider for Norma</Description>
+		<PackageProjectUrl>https://github.com/expertscoding/norma</PackageProjectUrl>
+		<IsPackable>true</IsPackable>
+		<RepositoryUrl>https://github.com/expertscoding/norma</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>authorization rbac aspnetcore efcore</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="[6.0.0,7.0)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="[6.0.0,7.0)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[6.0.0,7.0)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[6.0.0,7.0)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\build\**\*.dacpac" Pack="true" PackagePath="tools" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EC.Norma\EC.Norma.csproj" />
+	</ItemGroup>
+</Project>

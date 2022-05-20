@@ -1,0 +1,64 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  - develop
+  
+name: dev-$(Year:yy)$(DayOfYear)-$(Rev:r)
+
+variables:
+  buildConfiguration: 'Debug'
+  packageVersion: $[ format('{0}-{1}', variables['NormaPackageVersion'], variables['build.BuildNumber'])]
+
+pool:
+  vmImage: windows-latest
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: |
+      **/EC.Norma.csproj
+      **/Ec.Norma.Json.csproj
+      **/EC.Norma.EF.csproj
+      **/Ec.Norma.Db.Build.csproj
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build $(buildConfiguration)'
+  inputs:
+    command: 'build'
+    projects: |
+      **/EC.Norma.csproj
+      **/Ec.Norma.Json.csproj
+      **/EC.Norma.EF.csproj
+      **/Ec.Norma.Db.Build.csproj
+    arguments: '--configuration $(buildConfiguration)'
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack version:$(packageVersion)'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/EC.Norma.csproj;**/Ec.Norma.Json.csproj;**/EC.Norma.EF.csproj'
+    nobuild: true
+    includesymbols: true
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'packageVersion'
+
+- task: NuGetCommand@2
+  displayName: 'nuget push'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '$(VstsFeed)'

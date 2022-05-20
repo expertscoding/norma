@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Authors>Experts Coding</Authors>
+		<Description>Norma is a role-based access control (RBAC) framework for authorization on .Net 6</Description>
+		<PackageTags>authorization rbac aspnetcore</PackageTags>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/expertscoding/norma</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<IsPackable>true</IsPackable>
+		<RepositoryUrl>https://github.com/expertscoding/norma</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="[6.0.0,7.0)" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="[6.0.0,7.0)" />
+		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="[6.0.0,7.0)" />
+	</ItemGroup>
+
+	
+</Project>

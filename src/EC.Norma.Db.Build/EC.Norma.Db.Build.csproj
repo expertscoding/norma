@@ -1,0 +1,18 @@
+<Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+	<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+	<SqlServerVersion>Sql150</SqlServerVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputPath>..\build</OutputPath>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="..\Ec.Norma.Db\**\*.sql" Exclude="..\Ec.Norma.Db\scripts\*.sql" />
+		<None Include="..\Ec.Norma.Db\scripts\*.sql"/>
+		<PostDeploy Include="..\Ec.Norma.Db\scripts\01.PostDeployment.sql" />
+	</ItemGroup>
+</Project>

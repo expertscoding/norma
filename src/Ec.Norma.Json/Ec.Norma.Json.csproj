@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Experts Coding</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/expertscoding/norma</PackageProjectUrl>
+    <PackageTags>authorization rbac aspnetcore</PackageTags>
+    <Description>JSON based provider for Norma</Description>
+    <RepositoryUrl>https://github.com/expertscoding/norma</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EC.Norma\EC.Norma.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="3ee33940-5d54-4902-9f10-d166245a9d40" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[Policies]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[norma]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[Requirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1105b767-5f81-4c39-a78b-88fb4e81c7e5" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[PK_Policies]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[norma].[Requirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PK_Requirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4dda9938-a13b-4074-91f1-6ee4d073d542" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[ActionsPolicies]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[norma]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ActionsRequirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2ab675f7-4f0d-47ab-8f82-7ddd7faad056" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[ActionsRequirements].[IdPolicy]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[norma].[ActionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdRequirement" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0ef5ecba-03cd-44d7-8701-fee44f31cd78" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[PK_ActionsPolicies]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[norma].[ActionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PK_ActionsRequirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bb475292-44ec-42f1-ac2d-ac09200890a1" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[ActionsRequirements].[IX_ActionsPolicies]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[norma].[ActionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_ActionsRequirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e8b2866d-fee6-4298-a513-73983eeaa4fd" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[FK_ActionsPolicies_Actions]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[norma].[ActionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_ActionsRequirements_Actions]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ac17f5f8-cdc1-4f60-9116-f4ec27ea0949" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[FK_ActionsRequirements_Requirements]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[norma].[ActionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_ActionsRequirements_Requirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="025da142-1a1f-448b-82d7-a55816284c83" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[PermissionsPolicies]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[norma]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[PermissionsRequirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="65cf22bc-9dcc-4f30-baff-e33cbf95b1af" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[PermissionsRequirements].[IdPolicy]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[norma].[PermissionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdRequirement" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="84a63aea-8f87-4579-9e4f-c5960be466ab" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[PK_PermissionsPolicies]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[norma].[PermissionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PK_PermissionsRequirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dadcf1fa-6ea3-4f80-9786-8046e483d8ee" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[PermissionsRequirements].[IX_PermissionsPolicies]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[norma].[PermissionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_PermissionsRequirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9491b262-e473-4694-a56e-839a1ebfdcf8" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[FK_PermissionsPolicies_Permissions]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[norma].[PermissionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_PermissionsRequirements_Permissions]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="faa8675f-eed8-40b6-931b-42539735479f" ChangeDateTime="04/12/2022 08:00:00">
+    <Property Name="ElementName" Value="[norma].[FK_PermissionsPolicies_Policies]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[norma].[PermissionsRequirements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_PermissionsRequirements_Requirements]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="172be691-fa1d-49dd-bc14-d6c1db9a2a3f" ChangeDateTime="04/13/2022 11:21:08">
+    <Property Name="ElementName" Value="[norma].[Applications].[ApplicationId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[norma].[Applications]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Key" />
+  </Operation>
+</Operations>
