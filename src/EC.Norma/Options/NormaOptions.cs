@@ -14,5 +14,7 @@
         public int CacheExpiration { get; set; } = 300;
 
         public string ApplicationKey { get; set; } = string.Empty;
+
+        public string ProfileClaim { get; set; } = "role";
     }
 }
