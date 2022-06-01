@@ -51,10 +51,10 @@ namespace EC.Norma.Tests
             });
 
             services.AddNorma(config =>
-                {
-                    config.CacheExpiration = 10;
-                    config.ApplicationKey = "application1";
-                });
+            {
+                config.CacheExpiration = 10;
+                config.ApplicationKey = "application1";
+            });
             services.AddTransient<INormaProvider, EFNormaProvider>();
             var dbName = Configuration.GetValue<string>("dbName") ?? "TestNorma";
             services.AddDbContext<NormaContext>(options => options.UseInMemoryDatabase(dbName));
@@ -99,7 +99,7 @@ namespace EC.Norma.Tests
     {
         public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
-        public static IHostBuilder CreateHostBuilder( string[] args ) => new HostBuilder().ConfigureLogging(builder =>
+        public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder().ConfigureLogging(builder =>
         {
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerFactory>(NoOpLoggerFactory.Instance));
             builder.Services.AddSingleton<ILogger>(NoOpLogger.Instance);
