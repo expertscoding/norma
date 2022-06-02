@@ -75,4 +75,10 @@
     <None Include="Scripts\Applications.sql" />
     <None Include="Scripts\Modules.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PriorityGroups.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\RequirementsPriorityGroups.sql" />
+  </ItemGroup>
 </Project>
