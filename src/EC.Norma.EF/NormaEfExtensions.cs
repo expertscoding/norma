@@ -7,13 +7,13 @@ namespace EC.Norma.EF
 {
     public static class NormaEfExtensions
     {
-        public static IServiceCollection AddNormaEFStore(this IServiceCollection services, System.Action<DbContextOptionsBuilder> options)
+        public static INormaBuilder AddNormaEFStore(this INormaBuilder builder, System.Action<DbContextOptionsBuilder> options)
         {
-            services.AddSingleton<INormaProvider, EFNormaProvider>();
+            builder.Services.AddSingleton<INormaProvider, EFNormaProvider>();
 
-            services.AddDbContext<NormaContext>(options, ServiceLifetime.Singleton);
+            builder.Services.AddDbContext<NormaContext>(options, ServiceLifetime.Singleton);
             
-            return services;
+            return builder;
         }
     }
 }

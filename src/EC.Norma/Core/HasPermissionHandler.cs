@@ -1,9 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using EC.Norma.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace EC.Norma.Core
 {
@@ -11,25 +10,24 @@ namespace EC.Norma.Core
     {
         private readonly INormaProvider provider;
         private readonly ILogger<HasPermissionHandler> logger;
-        private readonly NormaOptions normaOptions;
+        private readonly IProfileService profileService;
 
-        public HasPermissionHandler(INormaProvider provider, ILogger<HasPermissionHandler> logger,
-            IOptionsMonitor<NormaOptions> normaOptions)
+        public HasPermissionHandler(INormaProvider provider, ILogger<HasPermissionHandler> logger, IProfileService profileService)
         {
             this.provider = provider;
             this.logger = logger;
-            this.normaOptions = normaOptions.CurrentValue;
+            this.profileService = profileService;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, HasPermissionRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, HasPermissionRequirement requirement)
         {
             logger.LogTrace("Checking HasPermission ( for {permission}) requirement.", requirement.Permission);
 
-            var claimValues = context.User.Claims.Where(c => c.Type == normaOptions.ProfileClaim).Select(c => c.Value).Distinct().ToArray();
+            var profiles = (await profileService.GetProfilesAsync(context))?.ToList() ?? new List<string>();
 
-            logger.LogTrace("Got profiles [{profiles} ]", claimValues.Aggregate("", (s,p) => string.Concat(s," ", p)));
+            logger.LogTrace("Got profiles [{profiles} ]", profiles.Aggregate("", (s,p) => string.Concat(s," ", p)));
 
-            var assignments = provider.GetAssignmentsForRoles(requirement.Permission, claimValues);
+            var assignments = provider.GetAssignmentsForRoles(requirement.Permission, profiles);
 
             logger.LogTrace("Got permissions for profiles  [{permissions} ]", assignments.Select(a => a.Permission.Name).Aggregate("", (s, p) => string.Concat(s, " ", p)));
 
@@ -43,8 +41,6 @@ namespace EC.Norma.Core
             }
 
             logger.LogTrace("Requirement result is {result}", context.HasSucceeded);
-
-            return Task.CompletedTask;
         }
     }
 }
