@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [norma].[Permissions]
 (
 	[Id] INT NOT NULL IDENTITY,
-	[Name] NVARCHAR(1024) NOT NULL,
+	[Name] VARCHAR(20) NOT NULL,
 	[IdAction] INT NOT NULL,
 	[IdResource] INT NOT NULL, 
     CONSTRAINT [PK_Permissions] PRIMARY KEY ([Id]),
