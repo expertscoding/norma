@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using EC.Norma;
+using EC.Norma.Core;
 using EC.Norma.EF;
 using EC.Norma.Filters;
 using EC.Norma.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -32,7 +34,8 @@ namespace NormaSample.Web
         {
             // Alternatively Norma can be added as a MVC filter to your controllers
             //services.AddControllersWithViews(options => options.Filters.Add(typeof(NormaActionFilter)));
-            services.AddControllersWithViews(options => options.Filters.Add(new AuthorizeFilter()));
+            //services.AddControllersWithViews(options => options.Filters.Add(new AuthorizeFilter()));
+            services.AddControllersWithViews();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -81,7 +84,7 @@ namespace NormaSample.Web
                     opt.MissingRequirementAction = MissingRequirementBehaviour.LogOnly;
                     opt.NoPermissionAction = NoPermissionsBehaviour.Failure;
                     opt.ApplicationKey = Configuration.GetValue<string>("AppGlobal:ApplicationKey");
-                    opt.AdministratorRoleName = "Administrador";
+                    //opt.AdministratorRoleName = "Administrador";
                 })
                 .AddNormaEFStore(opt =>
                 {
@@ -89,6 +92,9 @@ namespace NormaSample.Web
                     opt.EnableSensitiveDataLogging();
                 });
                 /*.AddNormaJsonStore(Configuration.GetSection("profiles").Get<List<Profile>>());*/
+
+            services.AddTransient<HeadQuartersRequirement>();
+            services.AddTransient<IAuthorizationHandler, HeadQuartersHandler>();
 
             services.AddMemoryCache();
         }
@@ -111,9 +117,10 @@ namespace NormaSample.Web
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseNorma();
 
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

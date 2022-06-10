@@ -1,6 +1,7 @@
 ﻿MERGE INTO [norma].[Applications] AS Target
 USING ( VALUES 
-	('DefaultApplication', '1234567890')
+	('DefaultApplication without default requirements', 'APPKEY-WITHOUT-DEFAULT-REQUIREMENTS'),
+	('DefaultApplication with default requirements', 'APPKEY-WITH-DEFAULT-REQUIREMENTS')
 )
 AS Source ([Name], [Key])
 ON Target.[Name] = Source.[Name]

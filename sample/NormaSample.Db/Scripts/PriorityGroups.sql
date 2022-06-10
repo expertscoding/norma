@@ -1,7 +1,7 @@
 ﻿MERGE INTO [norma].[PriorityGroups] AS Target
 USING ( VALUES 
 	('Priority Group 1', 1),
-    ('Priority Group 2', 2)
+    ('Priority Group 2', 10)
 )
 AS Source ([Name], [Priority])
 ON Target.[Name] = Source.[Name]

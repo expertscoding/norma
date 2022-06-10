@@ -81,4 +81,7 @@
   <ItemGroup>
     <None Include="Scripts\RequirementsPriorityGroups.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\RequirementsApplications.sql" />
+  </ItemGroup>
 </Project>

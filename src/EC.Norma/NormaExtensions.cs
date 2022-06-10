@@ -11,9 +11,26 @@ namespace EC.Norma
 {
     public static class NormaExtensions
     {
-        public static INormaBuilder AddNorma(this IServiceCollection services)
+        public static INormaBuilder AddNorma(this IServiceCollection services, Action<NormaOptions> normaOptions = null, Action<AuthorizationOptions> authOptions = null)
+        {
+            var builder = services.AddNormaCore(normaOptions);
+
+            authOptions ??= options => options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            builder.Services.AddAuthorization(authOptions);
+
+            return builder;
+        }
+
+        public static INormaBuilder AddNormaCore(this IServiceCollection services, Action<NormaOptions> normaOptions = null)
         {
             var builder = new NormaBuilder(services);
+
+            builder.Services.AddOptions();
+
+            if (normaOptions != null)
+            {
+                builder.Services.Configure(normaOptions);
+            }
 
             services.AddTransient<HasPermissionRequirement>();
             services.AddTransient<IsAdminRequirement>();
@@ -24,15 +41,6 @@ namespace EC.Norma
             services.AddTransient<IProfileService, DefaultProfileService>();
 
             services.AddSingleton<IAuthorizationPolicyProvider, NormaPolicyProvider>();
-
-            return builder;
-        }
-
-        public static INormaBuilder AddNorma(this IServiceCollection services, Action<NormaOptions> options)
-        {
-            var builder = services.AddNorma();
-
-            builder.Services.Configure(options);
 
             return builder;
         }

@@ -16,7 +16,7 @@ namespace EC.Norma.Tests
         public void EditTestData()
         {
             var db = WebAppFactory.Services.GetRequiredService<NormaContext>();
-            db.RequirementsApplications.Where(ra => ra.IsDefault).ForEachAsync(ra => ra.IsDefault = false).ConfigureAwait(false).GetAwaiter();
+            db.RequirementsApplications.ForEachAsync(ra => db.RequirementsApplications.Remove(ra)).ConfigureAwait(false).GetAwaiter();
             db.SaveChanges();
         }
     }

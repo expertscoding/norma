@@ -3,7 +3,9 @@ USING ( VALUES
 	('Listar'),
 	('Consultar'),
 	('Edit'),
-	('Delete')
+	('Delete'),
+    ('Protect'),
+    ('Manage')
 )
 AS Source ([Name])
 ON Target.[Name] = Source.[Name]
