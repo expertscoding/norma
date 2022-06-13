@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using EC.Norma.Metadata;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NormaSample.Web.Models;
@@ -21,6 +23,7 @@ namespace NormaSample.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
@@ -35,8 +38,20 @@ namespace NormaSample.Web.Controllers
         [ByPassNorma]
         public IActionResult AccessDenied()
         {
-            // Here we will trace the atempt for auditory pourposes
+            // Here we will trace the attempt for auditory purposes
             return View();
+        }
+        
+        [ByPassNorma]
+        public IActionResult UserInfo()
+        {
+            return View();
+        }
+
+        [ByPassNorma]
+        public IActionResult Logout()
+        {
+            return new SignOutResult(new[] { "oidc", "Cookies" });
         }
     }
 }

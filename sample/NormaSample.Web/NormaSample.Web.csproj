@@ -22,6 +22,14 @@
     <ProjectReference Include="..\..\src\Ec.Norma.Json\Ec.Norma.Json.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Home\UserInfo.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Home\UserInfo.cshtml" />
+  </ItemGroup>
+
 
 
 </Project>

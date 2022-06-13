@@ -22,12 +22,14 @@ Post-Deployment Script Template
 
 :r ./Scripts/Requirements.sql
 
-:r ./Scripts/RequirementsPriorityGroups.sql
-
 :r ./Scripts/Permissions.sql
 
 :r ./Scripts/PriorityGroups.sql
 
+:r ./Scripts/RequirementsPriorityGroups.sql
+
 :r ./Scripts/Assignments.sql
 
 :r ./Scripts/ActionsRequirements.sql
+
+:r ./Scripts/RequirementsApplications.sql
