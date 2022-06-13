@@ -38,7 +38,7 @@ namespace NormaSample.Web.Controllers
         //[NormaAction("NoDefinido")] // Intentionally commented to illustrate the configuration usage of NormaOptions.NoPermissionAction; 
         public ActionResult NotDefined()
         {
-            return View("Index");
+            return View("NotAccesible");
         }
 
         public ActionResult Manage()
