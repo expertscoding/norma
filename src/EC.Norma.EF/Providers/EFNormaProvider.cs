@@ -89,7 +89,6 @@ namespace EC.Norma.EF.Providers
                         .Include(x => x.Requirement.RequirementsApplications)
                         .Include(x => x.Requirement.RequirementsPriorityGroups)
                         .ThenInclude(x => x.PriorityGroup)
-                        .Where(x => x.IsDefault)
                         .Select(x => x.Requirement);
 
             return list.ToList();

@@ -11,7 +11,7 @@ namespace NormaSample.Web.Controllers
             return View();
         }
 
-        [NormaAction("Detalles")]
+        [NormaAction("Consultar")]
         public ActionResult Details(int id)
         {
             return View(id);
@@ -25,6 +25,25 @@ namespace NormaSample.Web.Controllers
         public ActionResult Delete(int id)
         {
             return View(id);
+        }
+
+        [NormaAction("Protect")]
+        [NormaResource("B")]
+        //[NormaPermission("VerySpecialPermission")] // To test a specific permission in App 'APPKEY-WITH-DEFAULT-REQUIREMENTS'
+        public ActionResult Protect()
+        {
+            return View();
+        }
+
+        //[NormaAction("NoDefinido")] // Intentionally commented to illustrate the configuration usage of NormaOptions.NoPermissionAction; 
+        public ActionResult NotDefined()
+        {
+            return View("NotAccesible");
+        }
+
+        public ActionResult Manage()
+        {
+            return View();
         }
     }
 }

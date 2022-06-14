@@ -53,7 +53,7 @@ namespace EC.Norma.Core
 
             if (ByPassed(endpoint))
             {
-                logger.LogTrace("ByPassed by attribute");
+                logger.LogTrace("ByPassed by attribute or AllowAnonymous");
                 return null;
             }
 
@@ -122,7 +122,8 @@ namespace EC.Norma.Core
 
         protected virtual bool ByPassed(Endpoint endpoint)
         {
-            return endpoint.Metadata.GetOrderedMetadata<ByPassNormaAttribute>().Any();
+            return endpoint.Metadata.GetOrderedMetadata<ByPassNormaAttribute>().Any()
+                || endpoint.Metadata.GetMetadata<IAllowAnonymous>() != null;
         }
 
         protected virtual async Task<AuthorizationPolicy> GetCombinedPolicyAsync(IEnumerable<string> permissions, string resource, IEnumerable<string> actions)

@@ -9,13 +9,13 @@ namespace EC.Norma.Json
     public static class NormaJsonExtensions
     {
 
-        public static IServiceCollection AddNormaJsonStore(this IServiceCollection services, IEnumerable<Profile> profiles)
+        public static INormaBuilder AddNormaJsonStore(this INormaBuilder builder, IEnumerable<Profile> profiles)
         {
-            services.AddSingleton(sp => new NormaContext(profiles));
+            builder.Services.AddSingleton(sp => new NormaContext(profiles));
 
-            services.AddSingleton<INormaProvider, JsonNormaProvider>();
+            builder.Services.AddSingleton<INormaProvider, JsonNormaProvider>();
 
-            return services;
+            return builder;
         }
     }
 }

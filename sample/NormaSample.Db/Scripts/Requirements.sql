@@ -1,7 +1,8 @@
 ﻿MERGE INTO [norma].[Requirements] AS Target
 USING ( VALUES 
 	('HasPermission'),
-	('IsAdmin')
+	('IsAdmin'),
+    ('HeadQuarters')
 )
 AS Source (Name)
 ON Target.[Name] = Source.[Name]
