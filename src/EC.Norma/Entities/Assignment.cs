@@ -1,4 +1,6 @@
-﻿namespace EC.Norma.Entities
+﻿using System;
+
+namespace EC.Norma.Entities
 {
     public class Assignment
     {
@@ -9,5 +11,9 @@
 
         public int IdProfile { get; set; }
         public virtual Profile Profile { get; set; }
+
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
     }
 }
