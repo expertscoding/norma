@@ -25,11 +25,10 @@ namespace EC.Norma
         {
             var builder = new NormaBuilder(services);
 
-            builder.Services.AddOptions();
-
+            var optionsBuilder = builder.Services.AddOptions<NormaOptions>();
             if (normaOptions != null)
             {
-                builder.Services.Configure(normaOptions);
+                optionsBuilder.Configure(normaOptions);
             }
 
             services.AddTransient<HasPermissionRequirement>();
