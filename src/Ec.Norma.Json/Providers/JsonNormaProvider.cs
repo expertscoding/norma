@@ -1,5 +1,6 @@
 ﻿using EC.Norma.Core;
 using EC.Norma.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +17,9 @@ namespace EC.Norma.Json.Providers
 
         public ICollection<Assignment> GetAssignmentsForRoles(string permissionName, IEnumerable<string> profiles)
         {
-            return context.Assignments.Where(a => a.Permission.Name == permissionName && profiles.Contains(a.Profile.Name)).ToList();
+            return context.Assignments.Where(a => a.Permission.Name == permissionName && profiles.Contains(a.Profile.Name))
+                                      .Where(a => (a.StartDate == null && a.EndDate == null) || (a.StartDate <= DateTime.UtcNow && a.EndDate >= DateTime.UtcNow))
+                                      .ToList();
         }
         
         public ICollection<Permission> GetPermissions(string action, string resource)
